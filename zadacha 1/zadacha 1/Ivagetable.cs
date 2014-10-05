@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace zadacha_1
+namespace zadacha
 {
     interface Ivagetable
     {
-        int getColorii();
-        string getIso();
-        string getName();
-
-
+    //    double getCalories(double proteins, double fats, double carbohydrates);
+    //    double getProteins(double proteins, double massa);
+    //    double getFats(double fats, double massa);
+     //   double getCarbohydrates(double carbohydrates, double massa);
+       // double getEnergeticValue(double massa, double proteins, double fats, double carbohydrates);
     }
 }
