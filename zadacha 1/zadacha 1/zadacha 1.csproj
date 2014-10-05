@@ -44,9 +44,11 @@
     <Compile Include="BaseClass.cs" />
     <Compile Include="Cruciferous vegetables.cs" />
     <Compile Include="Ivagetable.cs" />
+    <Compile Include="Leguminousvegetables.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Root vegetables.cs" />
+    <Compile Include="Tomato.cs" />
     <Compile Include="Tubers.cs" />
   </ItemGroup>
   <ItemGroup>
