@@ -7,26 +7,53 @@ using System.Threading.Tasks;
 namespace zadacha
 {
     class BaseClass  //: Ivagetable
-    {
-        protected double getCalories(double proteins, double fats, double carbohydrates)
+     {
+        protected double proteins, fats, carbohydrates, massa;
+        protected string vegetableType, vegetableName, vegetableIso;
+
+        public BaseClass(string vegetableType, string vegetableName, string vegetableIso, 
+            double proteins, double fats, double carbohydrates, double massa)
+        {
+            this.vegetableType = vegetableType;
+            this.vegetableName = vegetableName;
+            this.vegetableIso = vegetableIso;
+            this.proteins = proteins;
+            this.fats = fats;
+            this.carbohydrates = carbohydrates;
+            this.massa = massa;
+        }
+
+        public virtual double getCalories()
         {
             return 4 * proteins + 9 * fats + 4 * carbohydrates;
         }
-        protected double getProteins(double proteins, double massa)
+        public double getProteins()
         {
             return proteins * massa / 100;
         }
-        protected double getFats(double fats, double massa)
+        public double getFats()
         {
             return fats * massa / 100;
         }
-        protected double getCarbohydrates(double carbohydrates, double massa)
+        public double getCarbohydrates()
         {
             return carbohydrates * massa / 100;
         }
-        protected double getEnergeticValue(double massa, double proteins, double fats, double carbohydrates)
+        public double getEnergeticValue()
         {
-            return massa * getCalories(proteins, fats, carbohydrates) / 100;
-        }  
+            return massa * getCalories() / 100;
+        } 
+        public string getVegetableType()
+        {
+            return vegetableType;
+        }
+        public string getVegetableName()
+        {
+            return vegetableName;
+        }
+        public string getVegetableIso()
+        {
+            return vegetableIso;
+        }
     }
 }
