@@ -30,5 +30,63 @@ namespace zadacha
         {
         }
     }
+
+    class Potatoes : BaseClass
+    {
+        public Potatoes(double massa)
+            : base("Tubers (корнеплоды)", "Potatoes (картофель лтварной)", "326412841", 2.0, 0.4, 16.7, massa)
+        {
+        }
+    }
+
+    class Cabbage : BaseClass
+    {
+        public Cabbage(double massa)
+            : base("Cruciferous vegetables (капустные)", "Cabbage (капуста белокачанная)", "32621735", 1.8, 0.1, 4.7, massa)
+        {
+        }
+    }
+
     
+    class ChineseCabbage : BaseClass
+    {
+        public ChineseCabbage(double massa)
+            : base("Cruciferous vegetables (капустные)", "ChineseCabbage (капуста пекинская)", "3107373", 1.2, 0.2, 2.2, massa)
+        {
+        }
+    }
+
+    
+    class Sauerkraut : BaseClass
+    {
+        public Sauerkraut(double massa)
+            : base("Cruciferous vegetables (капустные)", "Sauerkraut (капуста квашенная)", "32290472", 1.8, 0, 2.2, massa)
+        {
+        }
+    }
+
+    class Tomatoes : BaseClass
+    {
+        public Tomatoes(double massa)
+            : base("Tomato vegetables (томатные)", "Tomatoes (помидоры)", "122934523", 1.1, 0.2, 3.8, massa)
+        {
+        }
+    }
+
+    class Onions : BaseClass
+    {
+        public Onions(double massa)
+            : base("Tomato vegetables (томатные)", "Onions (лук репчатый)", "1239617563", 1.4, 0, 9.1, massa)
+        {
+        }
+    }
+
+    class Lettuce : BaseClass
+    {
+        public Lettuce(double massa)
+            : base("Salad vegetables  (салатные)", "Lettuce (салат)", "1239617563", 0.5, 0.2, 2.3, massa)
+        {
+        }
+    }
+
 }

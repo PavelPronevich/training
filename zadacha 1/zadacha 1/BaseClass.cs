@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace zadacha
 {
-    class BaseClass  //: Ivagetable
+    class BaseClass  : Ivagetable, IComparable
      {
         protected double proteins, fats, carbohydrates, massa;
         protected string vegetableType, vegetableName, vegetableIso;
@@ -23,7 +23,7 @@ namespace zadacha
             this.massa = massa;
         }
 
-        public virtual double getCalories()
+        public virtual double getCalories() 
         {
             return 4 * proteins + 9 * fats + 4 * carbohydrates;
         }
@@ -47,13 +47,26 @@ namespace zadacha
         {
             return vegetableType;
         }
-        public string getVegetableName()
+        public string getName()
         {
             return vegetableName;
         }
-        public string getVegetableIso()
+        public string getIso()
         {
             return vegetableIso;
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is BaseClass)
+            {
+                BaseClass other = obj as BaseClass;
+                return (this.getProteins()).CompareTo(other.getProteins());
+            }
+            else
+            {
+                throw new ArgumentException("Object to compare to is not a BaseClass object.");
+            }
         }
     }
 }
