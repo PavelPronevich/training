@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace zadacha
 {
-    class BaseClass  : Ivagetable, IComparable
+    class FoodStuff : IFoodStuff, IComparable
      {
-        protected double proteins, fats, carbohydrates, massa;
-        protected string vegetableType, vegetableName, vegetableIso;
+        private double proteins, fats, carbohydrates, massa;
+        private string vegetableType, vegetableName, vegetableIso;
 
-        public BaseClass(string vegetableType, string vegetableName, string vegetableIso, 
+        public FoodStuff(string vegetableType, string vegetableName, string vegetableIso, 
             double proteins, double fats, double carbohydrates, double massa)
         {
             this.vegetableType = vegetableType;
@@ -23,45 +23,63 @@ namespace zadacha
             this.massa = massa;
         }
 
-        public virtual double getCalories() 
+        public double GetCalories() 
         {
             return 4 * proteins + 9 * fats + 4 * carbohydrates;
         }
-        public double getProteins()
+
+        public double GetProteinsNorm()
+        {
+            return proteins;
+        }
+
+        public double GetProteins()
         {
             return proteins * massa / 100;
         }
-        public double getFats()
+        public double GetFatsNorm()
+        {
+            return fats;
+        }
+        public double GetFats()
         {
             return fats * massa / 100;
         }
-        public double getCarbohydrates()
+        public double GetCarbohydratesNorm()
+        {
+            return carbohydrates;
+        }
+        public double GetCarbohydrates()
         {
             return carbohydrates * massa / 100;
         }
-        public double getEnergeticValue()
+        public double GetMassa()
         {
-            return massa * getCalories() / 100;
+            return massa;
+        }
+        public double GetEnergeticValue()
+        {
+            return massa * GetCalories() / 100;
         } 
-        public string getVegetableType()
+        public string GetVegetableType()
         {
             return vegetableType;
         }
-        public string getName()
+        public string GetName()
         {
             return vegetableName;
         }
-        public string getIso()
+        public string GetIso()
         {
             return vegetableIso;
         }
 
         public int CompareTo(object obj)
         {
-            if (obj is BaseClass)
+            if (obj is FoodStuff)
             {
-                BaseClass other = obj as BaseClass;
-                return (this.getProteins()).CompareTo(other.getProteins());
+                FoodStuff other = obj as FoodStuff;
+                return (this.GetProteinsNorm()).CompareTo(other.GetProteinsNorm());
             }
             else
             {
