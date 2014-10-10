@@ -11,6 +11,7 @@ namespace zadacha
         private double proteins, fats, carbohydrates, massa;
         private string vegetableType, vegetableName, vegetableIso;
 
+       
         public FoodStuff(string vegetableType, string vegetableName, string vegetableIso, 
             double proteins, double fats, double carbohydrates, double massa)
         {
@@ -24,6 +25,10 @@ namespace zadacha
         }
 
         public double GetCalories() 
+        {
+            return GetCaloriesNorm() * massa / 100;
+        }
+        public double GetCaloriesNorm()
         {
             return 4 * proteins + 9 * fats + 4 * carbohydrates;
         }
@@ -57,10 +62,10 @@ namespace zadacha
         {
             return massa;
         }
-        public double GetEnergeticValue()
-        {
-            return massa * GetCalories() / 100;
-        } 
+        //public double GetEnergeticValue()
+       // {
+       //     return massa * GetCalories() / 100;
+       // } 
         public string GetVegetableType()
         {
             return vegetableType;
@@ -83,7 +88,7 @@ namespace zadacha
             }
             else
             {
-                throw new ArgumentException("Object to compare to is not a BaseClass object.");
+                throw new ArgumentException("Object to compare to is not a FoodStuff object.");
             }
         }
     }

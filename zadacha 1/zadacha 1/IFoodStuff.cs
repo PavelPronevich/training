@@ -12,7 +12,7 @@ namespace zadacha
           double GetProteins();
           double GetFats();
           double GetCarbohydrates();
-          double GetEnergeticValue();
+          //double GetEnergeticValue();
           string GetName();
 
     }
