@@ -84,7 +84,7 @@ namespace zadacha
             if (obj is FoodStuff)
             {
                 FoodStuff other = obj as FoodStuff;
-                return (this.GetProteinsNorm()).CompareTo(other.GetProteinsNorm());
+                return (this.GetCaloriesNorm()).CompareTo(other.GetCaloriesNorm());
             }
             else
             {

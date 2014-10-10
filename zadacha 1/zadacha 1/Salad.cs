@@ -149,5 +149,25 @@ namespace zadacha
         {
             salat.Sort();
         }
+
+        public List<FoodStuff> RangeOfValues(double a, double b)
+        {
+            List<FoodStuff> salatt = new List<FoodStuff>();
+            foreach (FoodStuff ingr in salat)
+            {
+                if (ingr.GetCaloriesNorm()>=a && ingr.GetCaloriesNorm()<=b)
+                {
+                    salatt.Add(ingr);
+                    
+                }
+            }
+            foreach (FoodStuff ingr in salatt)
+            {
+                Console.WriteLine("{0},{1}",ingr.GetName(), ingr.GetCaloriesNorm());
+            }
+            return salatt;
+        }
+
+
     }
 }
