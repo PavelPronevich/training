@@ -91,33 +91,29 @@ namespace zadacha
             throw new NotImplementedException();
         }
 
-        public double GetCalories()
-        {
-            return 4*this.GetProteins()+9*this.GetFats()+4*this.GetCarbohydrates();
-        }
+
 
         public double GetMassa()
         {
-            double massa=0;
+            double massa = 0;
             foreach (FoodStuff ingr in salat)
             {
                 massa += ingr.GetMassa();
             }
             return massa;
         }
-        public double GetCaloriesNorm()
-        {
-            return this.GetCalories()/GetMassa()*100;
-        }
-
         public double GetProteins()
         {
             double proteins = 0;
             foreach (FoodStuff ingr in salat)
             {
-                proteins+= ingr.GetProteins();
+                proteins += ingr.GetProteins();
             }
             return proteins;
+        }
+        public double GetProteinsNorm()
+        {
+            return GetProteins()/GetMassa()*100;
         }
 
         public double GetFats()
@@ -129,6 +125,10 @@ namespace zadacha
             }
             return fats;
         }
+        public double GetFatsNorm()
+        {
+            return GetFats() / GetMassa() * 100;
+        }
 
         public double GetCarbohydrates()
         {
@@ -139,6 +139,22 @@ namespace zadacha
             }
             return carbohydrates;
         }
+        public double GetCarbohydratesNorm()
+        {
+            return GetCarbohydrates() / GetMassa() * 100;
+        }
+
+        public double GetCalories()
+        {
+            return 4*this.GetProteins()+9*this.GetFats()+4*this.GetCarbohydrates();
+        }
+
+        
+        public double GetCaloriesNorm()
+        {
+            return this.GetCalories()/GetMassa()*100;
+        }
+               
 
         public string GetName()
         {
@@ -150,7 +166,7 @@ namespace zadacha
             salat.Sort();
         }
 
-        public List<FoodStuff> RangeOfValues(double a, double b)
+        public List<FoodStuff> RangeOfValuesToList(double a, double b)
         {
             List<FoodStuff> salatt = new List<FoodStuff>();
             foreach (FoodStuff ingr in salat)
@@ -158,16 +174,25 @@ namespace zadacha
                 if (ingr.GetCaloriesNorm()>=a && ingr.GetCaloriesNorm()<=b)
                 {
                     salatt.Add(ingr);
-                    
                 }
             }
-            foreach (FoodStuff ingr in salatt)
-            {
-                Console.WriteLine("{0},{1}",ingr.GetName(), ingr.GetCaloriesNorm());
-            }
+            
             return salatt;
         }
 
+        public void RangeOfValuesToType(double a, double b)
+        {
+            Console.WriteLine("Ingredients of salad \"{0}\"  with calorie \nfrom {1} to {2} kilocalories in 100 gramms", 
+                this.GetName(), a, b);
+            
+            foreach (FoodStuff ingr in salat)
+            {
+                if (ingr.GetCaloriesNorm() >= a && ingr.GetCaloriesNorm() <= b)
+                {
+                    Console.WriteLine("{0}, {1}", ingr.GetName(), ingr.GetCaloriesNorm());
+                }
+            }
+        }
 
     }
 }

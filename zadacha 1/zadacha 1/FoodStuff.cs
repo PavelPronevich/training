@@ -62,10 +62,7 @@ namespace zadacha
         {
             return massa;
         }
-        //public double GetEnergeticValue()
-       // {
-       //     return massa * GetCalories() / 100;
-       // } 
+        
         public string GetVegetableType()
         {
             return vegetableType;
