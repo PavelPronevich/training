@@ -81,6 +81,7 @@ namespace zadacha
             return salat.Remove(item);
         }
 
+
         public IEnumerator<X> GetEnumerator()
         {
             return salat.GetEnumerator();

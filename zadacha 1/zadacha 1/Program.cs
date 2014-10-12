@@ -13,7 +13,7 @@ namespace zadacha
         static void Main(string[] args)
         {
             
-            Saladd<FoodStuff> salad = new Saladd<FoodStuff>();
+            Salad<FoodStuff> salad = new Salad<FoodStuff>();
             salad.Name = "All Inclusive";
             salad.Add(new Tomatoes(230));
             salad.Add(new ChineseCabbage(140));
