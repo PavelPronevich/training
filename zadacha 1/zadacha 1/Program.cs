@@ -13,7 +13,7 @@ namespace zadacha
         static void Main(string[] args)
         {
             
-            Salad<FoodStuff> salad = new Salad<FoodStuff>();
+            Saladd<FoodStuff> salad = new Saladd<FoodStuff>();
             salad.Name = "All Inclusive";
             salad.Add(new Tomatoes(230));
             salad.Add(new ChineseCabbage(140));
@@ -48,6 +48,8 @@ namespace zadacha
             Console.WriteLine("\n");
 
 
+            //Console.ReadKey();
+            //Console.WriteLine("\n"); 
             //IList<FoodStuff> salat3 = salad.RangeOfValuesToList(15, 35);
             //foreach (FoodStuff ingr in salat3)
             //{

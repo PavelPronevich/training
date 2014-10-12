@@ -3,94 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+ 
 namespace zadacha
 {
-    class Salad<X> : IFoodStuff, IList<X> where X : FoodStuff
+    class Saladd<X>:IFoodStuff where X : FoodStuff
     {
-        public string Name;
+        public string Name="Unnown";
 
-        private List<X> salat= new List<X>();
-        public List<X> Salat
-        {
-            get
-            {
-                return salat;
-            }
-        }
+        private List<X> salat = new List<X>();
         
-        public int IndexOf(X item)
-        {
-            return salat.IndexOf(item);
-        }
-
-        public void Insert(int index, X item)
-        {
-            salat.Insert(index, item);
-        }
-
-        public void RemoveAt(int index)
-        {
-            salat.RemoveAt(index);
-        }
-
-        public X this[int index]
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+               
         public void Add(X item)
         {
             salat.Add(item);
         }
-       
-        public void Clear()
-        {
-            salat.Clear();
-        }
 
-        public bool Contains(X item)
-        {
-            return salat.Contains(item);
-        }
-
-        public void CopyTo(X[] array, int arrayIndex)
-        {
-            salat.CopyTo(array, arrayIndex);
-        }
-
-        public int Count
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public bool IsReadOnly
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public bool Remove(X item)
-        {
-            return salat.Remove(item);
-        }
-
-        public IEnumerator<X> GetEnumerator()
+        public IEnumerator<FoodStuff> GetEnumerator()
         {
             return salat.GetEnumerator();
         }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
-
 
 
         public double GetMassa()
@@ -113,7 +44,7 @@ namespace zadacha
         }
         public double GetProteinsNorm()
         {
-            return GetProteins()/GetMassa()*100;
+            return GetProteins() / GetMassa() * 100;
         }
 
         public double GetFats()
@@ -146,46 +77,47 @@ namespace zadacha
 
         public double GetCalories()
         {
-            return 4*this.GetProteins()+9*this.GetFats()+4*this.GetCarbohydrates();
+            return 4 * this.GetProteins() + 9 * this.GetFats() + 4 * this.GetCarbohydrates();
         }
 
-        
+
         public double GetCaloriesNorm()
         {
-            return this.GetCalories()/GetMassa()*100;
+            return this.GetCalories() / GetMassa() * 100;
         }
-               
+
 
         public string GetName()
         {
             return Name;
         }
 
+                
         public void Sort()
         {
-            salat.Sort();
+           salat.Sort();
         }
 
         public List<FoodStuff> RangeOfValuesToList(double a, double b)
         {
-            List<FoodStuff> salatt = new List<FoodStuff>();
+            List<FoodStuff> d = new List<FoodStuff>();
             foreach (FoodStuff ingr in salat)
             {
-                if (ingr.GetCaloriesNorm()>=a && ingr.GetCaloriesNorm()<=b)
+                if (ingr.GetCaloriesNorm() >= a && ingr.GetCaloriesNorm() <= b)
                 {
-                    salatt.Add(ingr);
+                    d.Add(ingr);
                 }
             }
-            
-            return salatt;
+
+            return d;
         }
 
         public void RangeOfValuesToType(double a, double b)
         {
-            Console.WriteLine("Ingredients of salad \"{0}\"  with calorie \nfrom {1} to {2} kilocalories in 100 gramms", 
+            Console.WriteLine("Ingredients of salad \"{0}\"  with calorie \nfrom {1} to {2} kilocalories in 100 gramms",
                 this.GetName(), a, b);
-            
-            foreach (FoodStuff ingr in salat)
+
+            foreach (X ingr in salat)
             {
                 if (ingr.GetCaloriesNorm() >= a && ingr.GetCaloriesNorm() <= b)
                 {
@@ -193,6 +125,6 @@ namespace zadacha
                 }
             }
         }
-
     }
+        
 }
