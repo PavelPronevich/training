@@ -76,18 +76,7 @@ namespace zadacha
             //Console.WriteLine("\n"); 
             
             salad.RangeOfValuesToType(15, 35);
-
-            Console.WriteLine(salad.Massa);
-            Console.WriteLine(salad.Proteins);
-            Console.WriteLine(salad.Fats);
-            Console.WriteLine(salad.Carbohydrates);
-
             Console.ReadKey();
-            Radish t=new Radish(50);
-            Console.WriteLine(t.Proteins);
-            Console.ReadKey();
-
-
         }
         
     }
