@@ -8,10 +8,27 @@ using System.Threading.Tasks;
 
 namespace zadacha
 {
+    public enum VegetableType : byte
+    {
+        Roots = 1,
+        Tubers = 2,
+        Cruciferous = 3,
+        Tomatos = 4,
+        Pumpkins = 5,
+        Leguminous = 6,
+        Cereals = 7,
+        Onions = 8,
+        Salads = 9,
+        Sweets = 10
+
+    }
     class Program
     {
+       
         static void Main(string[] args)
         {
+
+
             
             Salad<FoodStuff> salad = new Salad<FoodStuff>();
             salad.Name = "All Inclusive";
@@ -24,26 +41,26 @@ namespace zadacha
             salad.Add(new Beets(130));
 
 
-            Console.WriteLine("Salad \"{0}\"", salad.GetName());
+            Console.WriteLine("Salad \"{0}\"", salad.Name);
             
             foreach(FoodStuff ingr in salad )
             {
-                Console.WriteLine("{0}, {1}", ingr.GetName(), ingr.GetCaloriesNorm());
+                Console.WriteLine("Name: {0}, Calorie: {1}", ingr.Name, ingr.Calories);
             }
             Console.WriteLine();
 
-            Console.WriteLine("Salad \"{0}\"  contains {1:f2} kilocalories in 100 gramms.", salad.GetName(), salad.GetCaloriesNorm());
+            Console.WriteLine("Salad \"{0}\"  contains {1:f2} kilocalories in 100 gramms.", salad.Name, salad.Calories);
             Console.WriteLine("\n");
 
 
 
             salad.Sort();
             
-            Console.WriteLine("Sort salad \"{0}\" ingredients by the number of calories in 100 gramms:", salad.GetName());
+            Console.WriteLine("Sort salad \"{0}\" ingredients by the number of calories in 100 gramms:", salad.Name);
            
             foreach (FoodStuff ingr in salad)
             {
-                Console.WriteLine("{0}, {1}", ingr.GetName(), ingr.GetCaloriesNorm());
+                Console.WriteLine("{0}, {1}", ingr.Name, ingr.Calories);
             }
             Console.WriteLine("\n");
 
@@ -59,8 +76,19 @@ namespace zadacha
             //Console.WriteLine("\n"); 
             
             salad.RangeOfValuesToType(15, 35);
+
+            Console.WriteLine(salad.Massa);
+            Console.WriteLine(salad.Proteins);
+            Console.WriteLine(salad.Fats);
+            Console.WriteLine(salad.Carbohydrates);
+
             Console.ReadKey();
-            
+            Radish t=new Radish(50);
+            Console.WriteLine(t.Proteins);
+            Console.ReadKey();
+
+
         }
+        
     }
 }

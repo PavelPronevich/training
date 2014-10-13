@@ -6,82 +6,53 @@ using System.Threading.Tasks;
 
 namespace zadacha
 {
+    
     class FoodStuff : IFoodStuff, IComparable
      {
-        private double proteins, fats, carbohydrates, massa;
-        private string vegetableType, vegetableName, vegetableIso;
+             
+        
+        internal double caloriesAll, proteinsAll, fatsAll, carbohydratesAll;
 
-       
-        public FoodStuff(string vegetableType, string vegetableName, string vegetableIso, 
+
+        public double Proteins { get; private set; }
+        public double Fats { get; private set; }
+        public double Carbohydrates { get; private set; }
+        public double Massa { get; private set; }
+        public double Calories { get; private set; }
+        public string Name { get; private set; }
+        public string ISO { get; private set; }
+        public VegetableType Type {get; private set;}
+
+
+
+        public FoodStuff(VegetableType vegetableType, string vegetableName, string vegetableIso, 
             double proteins, double fats, double carbohydrates, double massa)
         {
-            this.vegetableType = vegetableType;
-            this.vegetableName = vegetableName;
-            this.vegetableIso = vegetableIso;
-            this.proteins = proteins;
-            this.fats = fats;
-            this.carbohydrates = carbohydrates;
-            this.massa = massa;
+            this.Type = vegetableType;
+            this.Name = vegetableName;
+            this.ISO = vegetableIso;
+            this.Proteins = proteins;
+            this.Fats = fats;
+            this.Carbohydrates = carbohydrates;
+            this.Massa = massa;
+            this.proteinsAll=proteins*massa/100; 
+            this.fatsAll=fats*massa/100;
+            this.carbohydratesAll = carbohydrates * massa/100;
+            this.Calories = 4 * proteins + 9 * fats + 4 * carbohydrates;
+            this.caloriesAll = Calories * Massa / 100;
         }
+ 
+       
 
-        public double GetCalories() 
-        {
-            return GetCaloriesNorm() * massa / 100;
-        }
-        public double GetCaloriesNorm()
-        {
-            return 4 * proteins + 9 * fats + 4 * carbohydrates;
-        }
-
-        public double GetProteinsNorm()
-        {
-            return proteins;
-        }
-
-        public double GetProteins()
-        {
-            return proteins * massa / 100;
-        }
-        public double GetFatsNorm()
-        {
-            return fats;
-        }
-        public double GetFats()
-        {
-            return fats * massa / 100;
-        }
-        public double GetCarbohydratesNorm()
-        {
-            return carbohydrates;
-        }
-        public double GetCarbohydrates()
-        {
-            return carbohydrates * massa / 100;
-        }
-        public double GetMassa()
-        {
-            return massa;
-        }
-        
-        public string GetVegetableType()
-        {
-            return vegetableType;
-        }
-        public string GetName()
-        {
-            return vegetableName;
-        }
-        public string GetIso()
-        {
-            return vegetableIso;
-        }
-
+                
+             
+       
         public int CompareTo(object obj)
         {
             if (obj is FoodStuff)
             {
                 FoodStuff other = obj as FoodStuff;
-                return (this.GetCaloriesNorm()).CompareTo(other.GetCaloriesNorm());
+                return (this.Calories).CompareTo(other.Calories);
             }
             else
             {

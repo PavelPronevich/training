@@ -8,8 +8,6 @@ namespace zadacha
 {
     class Salad<X> : IFoodStuff, IList<X> where X : FoodStuff
     {
-        public string Name;
-
         private List<X> salat= new List<X>();
         public List<X> Salat
         {
@@ -18,7 +16,8 @@ namespace zadacha
                 return salat;
             }
         }
-        
+
+              
         public int IndexOf(X item)
         {
             return salat.IndexOf(item);
@@ -92,75 +91,86 @@ namespace zadacha
             throw new NotImplementedException();
         }
 
-
-
-        public double GetMassa()
+        public double Massa
         {
-            double massa = 0;
-            foreach (FoodStuff ingr in salat)
+            get
             {
-                massa += ingr.GetMassa();
+                double massaSalad = 0;
+                foreach (FoodStuff ingr in salat)
+                {
+                    massaSalad += ingr.Massa;
+                }
+
+                return massaSalad;
             }
-            return massa;
-        }
-        public double GetProteins()
-        {
-            double proteins = 0;
-            foreach (FoodStuff ingr in salat)
-            {
-                proteins += ingr.GetProteins();
-            }
-            return proteins;
-        }
-        public double GetProteinsNorm()
-        {
-            return GetProteins()/GetMassa()*100;
+
+             
         }
 
-        public double GetFats()
+        public double Proteins
         {
-            double fats = 0;
-            foreach (FoodStuff ingr in salat)
+            get
             {
-                fats += ingr.GetFats();
+                double proteinsSalad=0;
+                foreach (FoodStuff ingr in salat)
+                {
+                    proteinsSalad += ingr.proteinsAll;
+                }
+                return (proteinsSalad / Massa* 100);
             }
-            return fats;
+            
         }
-        public double GetFatsNorm()
+        
+        public double Fats
         {
-            return GetFats() / GetMassa() * 100;
+            get
+            {
+                double fatsSalad=0;
+            foreach (FoodStuff ingr in salat)
+                {
+                    fatsSalad += ingr.fatsAll;
+                } 
+               return fatsSalad / Massa * 100;
+            }
+            
         }
 
-        public double GetCarbohydrates()
+        public double Carbohydrates
         {
-            double carbohydrates = 0;
-            foreach (FoodStuff ingr in salat)
+            get
             {
-                carbohydrates += ingr.GetCarbohydrates();
+                double carbohydratesSalad = 0;
+                foreach (FoodStuff ingr in salat)
+                {
+                    carbohydratesSalad += ingr.carbohydratesAll;
+                    
+                }
+                return carbohydratesSalad / Massa * 100;
             }
-            return carbohydrates;
-        }
-        public double GetCarbohydratesNorm()
-        {
-            return GetCarbohydrates() / GetMassa() * 100;
+            
         }
 
-        public double GetCalories()
+
+        double caloriesAll = 0;
+        public double Calories
         {
-            return 4*this.GetProteins()+9*this.GetFats()+4*this.GetCarbohydrates();
-        }
+            get{
+                
+                foreach (FoodStuff ingr in salat)
+                {
+                    caloriesAll += ingr.caloriesAll;
+                    
+                }
+                return caloriesAll / Massa * 100;
+            
+            }
 
         
-        public double GetCaloriesNorm()
-        {
-            return this.GetCalories()/GetMassa()*100;
         }
-               
+        
 
-        public string GetName()
-        {
-            return Name;
-        }
+        
+        public string Name { get; set; }
 
         public void Sort()
         {
@@ -172,7 +182,7 @@ namespace zadacha
             List<FoodStuff> salatt = new List<FoodStuff>();
             foreach (FoodStuff ingr in salat)
             {
-                if (ingr.GetCaloriesNorm()>=a && ingr.GetCaloriesNorm()<=b)
+                if (ingr.Calories>=a && ingr.Calories<=b)
                 {
                     salatt.Add(ingr);
                 }
@@ -184,13 +194,13 @@ namespace zadacha
         public void RangeOfValuesToType(double a, double b)
         {
             Console.WriteLine("Ingredients of salad \"{0}\"  with calorie \nfrom {1} to {2} kilocalories in 100 gramms", 
-                this.GetName(), a, b);
+                this.Name, a, b);
             
             foreach (FoodStuff ingr in salat)
             {
-                if (ingr.GetCaloriesNorm() >= a && ingr.GetCaloriesNorm() <= b)
+                if (ingr.Calories >= a && ingr.Calories <= b)
                 {
-                    Console.WriteLine("{0}, {1}", ingr.GetName(), ingr.GetCaloriesNorm());
+                    Console.WriteLine("{0}, {1}", ingr.Name, ingr.Calories);
                 }
             }
         }

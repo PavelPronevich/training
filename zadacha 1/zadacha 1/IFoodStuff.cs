@@ -8,15 +8,32 @@ namespace zadacha
 {
     interface IFoodStuff
     {
-          double GetCalories();
-          double GetCaloriesNorm();
-          double GetProteins();
-          double GetProteinsNorm();
-          double GetFats();
-          double GetFatsNorm();
-          double GetCarbohydrates();
-          double GetCarbohydratesNorm();
-          string GetName();
+          double Calories
+          {
+              get; 
+              
+          }
+          double Proteins 
+          { 
+              get; 
+              
+          }
+          double Fats
+          {
+              get;
+              
+          }
+          double Carbohydrates 
+          { 
+              get; 
+               
+          }
+          double Massa
+          {
+              get;
+              
+          }
+          
 
     }
 }
