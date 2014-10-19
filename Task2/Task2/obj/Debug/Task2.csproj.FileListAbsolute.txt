@@ -1,0 +1,6 @@
+E:\epam\training\training\Task2\Task2\bin\Debug\Task2.exe.config
+E:\epam\training\training\Task2\Task2\bin\Debug\Task2.exe
+E:\epam\training\training\Task2\Task2\bin\Debug\Task2.pdb
+E:\epam\training\training\Task2\Task2\obj\Debug\Task2.csprojResolveAssemblyReference.cache
+E:\epam\training\training\Task2\Task2\obj\Debug\Task2.exe
+E:\epam\training\training\Task2\Task2\obj\Debug\Task2.pdb
