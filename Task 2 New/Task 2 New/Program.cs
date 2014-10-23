@@ -10,9 +10,33 @@ namespace Task_2_New
     {
         static void Main(string[] args)
         {
-            String A = System.IO.File.ReadAllText(@"E:\epam\WriteText.txt"+" ");
 
-            //удаление форматирования
+            Letter a=new Letter('Ь');
+            Console.WriteLine(a.Value);
+            Console.WriteLine(a.IsConsonant);
+            Console.WriteLine(a.ToString());
+
+            Word<Letter> slovo = new Word<Letter>();
+            slovo.Add(new Letter('C'));
+            slovo.Add(new Letter('л'));
+            slovo.Add(new Letter('о'));
+            slovo.Add(new Letter('в'));
+            slovo.Add(new Letter('о'));
+
+            Console.WriteLine(slovo);
+
+            Console.ReadKey();
+            String A = System.IO.File.ReadAllText(@"E:\epam\WriteText.txt"+" ");
+                        
+            //I ToString, количество элементов
+            //символ (знак конца предложения, знак конца слова, буква)
+            //слово string+начало слова+конец слова
+            // предложение list<слово> + символ конца предложения
+            // глава 
+            // book list<предложение>
+            
+
+           //удаление форматирования
 
             A = A.Replace("\n", " ");
             A = A.Replace("\t", " ");
@@ -30,9 +54,8 @@ namespace Task_2_New
 
             
             int i,j,k,number;
-            int index=0;
             number = 0;
-            string e;
+            List<string> e=new List<string>(); 
 
             while (A.IndexOf(". ")!=A.LastIndexOf(". "))
             {
@@ -48,17 +71,17 @@ namespace Task_2_New
                             k = A.IndexOf("? ");
                             if ((i < j) && (i < k))
                             {
-                                Console.WriteLine(A.Substring(0,i));
+                                e.Add(A.Substring(0,i));
                                 number = i + 2;
                             }
                             if ((j < i) && (j < k))
                             {
-                                Console.WriteLine(A.Substring(0,j));
+                                e.Add(A.Substring(0,j));
                                 number += j + 2;
                             }
                             if ((k < i) && (k < j))
                             {
-                                Console.WriteLine(A.Substring(0,k));
+                                e.Add(A.Substring(0,k));
                                 number = k + 2;
                             }
                         }
@@ -66,12 +89,12 @@ namespace Task_2_New
                         {
                             if (i < j)
                             {
-                                Console.WriteLine(A.Substring(0,i));
+                                e.Add(A.Substring(0,i));
                                 number = i + 2;
                             }
                             else
                             {
-                                Console.WriteLine(A.Substring(0,j));
+                                e.Add(A.Substring(0,j));
                                 number = j + 2;
                             }
                         }
@@ -79,15 +102,22 @@ namespace Task_2_New
                     }
                     else
                     {
-                        Console.WriteLine(A.Substring(0,i));
+                        e.Add(A.Substring(0,i));
                         number = i + 2;
                     }
                 }
                 A = A.Remove(0, number);
-                
+               
             }
+            
+            foreach(string item in e)
+            {
+                Console.WriteLine(item);
+            }
+            
+            
             Console.ReadKey();
-           
+            
             
 
 

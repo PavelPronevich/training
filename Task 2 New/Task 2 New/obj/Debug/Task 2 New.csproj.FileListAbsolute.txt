@@ -4,3 +4,9 @@ E:\epam\Task 2 New\Task 2 New\bin\Debug\Task 2 New.pdb
 E:\epam\Task 2 New\Task 2 New\obj\Debug\Task 2 New.exe
 E:\epam\Task 2 New\Task 2 New\obj\Debug\Task 2 New.pdb
 E:\epam\Task 2 New\Task 2 New\obj\Debug\Task 2 New.csprojResolveAssemblyReference.cache
+E:\epam\training\training\Task 2 New\Task 2 New\bin\Debug\Task 2 New.exe.config
+E:\epam\training\training\Task 2 New\Task 2 New\obj\Debug\Task 2 New.exe
+E:\epam\training\training\Task 2 New\Task 2 New\obj\Debug\Task 2 New.pdb
+E:\epam\training\training\Task 2 New\Task 2 New\obj\Debug\Task 2 New.csprojResolveAssemblyReference.cache
+E:\epam\training\training\Task 2 New\Task 2 New\bin\Debug\Task 2 New.exe
+E:\epam\training\training\Task 2 New\Task 2 New\bin\Debug\Task 2 New.pdb
