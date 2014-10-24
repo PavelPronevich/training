@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Task_2_New
 {
-    class Text<X> : IList<X> where X : Sentance
+    class Intervals<X>: IList<X> where X : Symbol
     {
-        private List<X> sentance = new List<X>();
+        private List<X> word = new List<X>();
 
         //public List<X> Word
         //{
@@ -21,17 +21,17 @@ namespace Task_2_New
 
         public int IndexOf(X item)
         {
-            return sentance.IndexOf(item);
+            return word.IndexOf(item);
         }
 
         public void Insert(int index, X item)
         {
-            sentance.Insert(index, item);
+            word.Insert(index, item);
         }
 
         public void RemoveAt(int index)
         {
-            sentance.RemoveAt(index);
+            word.RemoveAt(index);
         }
 
         public X this[int index]
@@ -48,22 +48,22 @@ namespace Task_2_New
 
         public void Add(X item)
         {
-            sentance.Add(item);
+            word.Add(item);
         }
 
         public void Clear()
         {
-            sentance.Clear();
+            word.Clear();
         }
 
         public bool Contains(X item)
         {
-            return sentance.Contains(item);
+            return word.Contains(item);
         }
 
         public void CopyTo(X[] array, int arrayIndex)
         {
-            sentance.CopyTo(array, arrayIndex);
+            word.CopyTo(array, arrayIndex);
         }
 
         public int Count
@@ -78,13 +78,13 @@ namespace Task_2_New
 
         public bool Remove(X item)
         {
-            return sentance.Remove(item);
+            return word.Remove(item);
         }
 
 
         public IEnumerator<X> GetEnumerator()
         {
-            return sentance.GetEnumerator();
+            return word.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
@@ -94,12 +94,13 @@ namespace Task_2_New
 
         override public string ToString()
         {
-            StringBuilder sentancedString = new StringBuilder();
-            foreach (X item in sentance)
+            StringBuilder wordString = new StringBuilder();
+            foreach (X item in word)
             {
-                sentancedString.Append(item.ToString());
+                wordString.Append(item.ToString());
             }
-            return sentancedString.ToString();
+            // Console.WriteLine(wordString.ToString());
+            return wordString.ToString();
         }
     }
 }

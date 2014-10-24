@@ -99,6 +99,7 @@ namespace Task_2_New
             {
                 wordString.Append(item.ToString());
             }
+           // Console.WriteLine(wordString.ToString());
             return wordString.ToString();
         }
     }
