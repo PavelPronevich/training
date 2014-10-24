@@ -41,7 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Intervals.cs" />
+    <Compile Include="IntervalsCollection.cs" />
+    <Compile Include="IntervalsNew.cs" />
     <Compile Include="ISentancePart.cs" />
     <Compile Include="Letter.cs" />
     <Compile Include="Program.cs" />
@@ -50,6 +51,7 @@
     <Compile Include="Symbol.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="Word.cs" />
+    <Compile Include="WordNew.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

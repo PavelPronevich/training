@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task_2_New
 {
-    class Word<X> : IList<X> where X : Letter
+    class WordsCollection<X> : IList<X> where X : WordNew
     {
         private List<X> word = new List<X>();
 
@@ -48,6 +48,7 @@ namespace Task_2_New
 
         public void Add(X item)
         {
+
             word.Add(item);
         }
 
@@ -89,7 +90,7 @@ namespace Task_2_New
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return word.GetEnumerator();
         }
 
         override public string ToString()
@@ -102,5 +103,7 @@ namespace Task_2_New
            // Console.WriteLine(wordString.ToString());
             return wordString.ToString();
         }
+
+       
     }
 }

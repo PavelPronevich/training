@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task_2_New
 {
-    class Intervals<X>: IList<X> where X : Symbol
+    class IntervalsCollection<X> : IList<X> where X : IntervalsNew
     {
         private List<X> word = new List<X>();
 
@@ -94,13 +94,13 @@ namespace Task_2_New
 
         override public string ToString()
         {
-            StringBuilder wordString = new StringBuilder();
+            StringBuilder intervalString = new StringBuilder();
             foreach (X item in word)
             {
-                wordString.Append(item.ToString());
+                intervalString.Append(item.ToString());
             }
             // Console.WriteLine(wordString.ToString());
-            return wordString.ToString();
+            return intervalString.ToString();
         }
     }
 }

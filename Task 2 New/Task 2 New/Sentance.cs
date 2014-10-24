@@ -9,12 +9,12 @@ namespace Task_2_New
     class Sentance
     {
 
-        public List<Word<Letter>> WordsOfSentance;
-        public Intervals<Symbol> BeginSymbolsOfSentance;
-        public List<Intervals<Symbol>> IntervalsBetweenWords;
+        private WordsCollection<WordNew> WordsOfSentance = new WordsCollection<WordNew>();
+        private IntervalsNew BeginSymbolsOfSentance;
+        private IntervalsCollection<IntervalsNew> IntervalsBetweenWords = new IntervalsCollection<IntervalsNew>();
 
-        public Sentance(Intervals<Symbol> _BeginSymbolsOfSentance, List<Word<Letter>> _WordsOfSentance,
-            List<Intervals<Symbol>> _IntervalsBetweenWords)
+        public Sentance(IntervalsNew _BeginSymbolsOfSentance, WordsCollection<WordNew> _WordsOfSentance,
+           IntervalsCollection<IntervalsNew> _IntervalsBetweenWords)
         {
             this.WordsOfSentance = _WordsOfSentance;
             this.BeginSymbolsOfSentance = _BeginSymbolsOfSentance;
@@ -26,7 +26,7 @@ namespace Task_2_New
         {
             StringBuilder sentanceString = new StringBuilder();
 
-            sentanceString.Append(BeginSymbolsOfSentance.ToString());
+            sentanceString.Append(BeginSymbolsOfSentance);
 
             //foreach (Symbol s in BeginSymbolsOfSentance)
             //{
@@ -36,10 +36,13 @@ namespace Task_2_New
             
             //Console.WriteLine(sentanceString);
 
-                for (int i=0;i<WordsOfSentance.Count; i++)
-                {
-                    //Console.WriteLine(WordsOfSentance[i].ToString());
-                    sentanceString.Append(WordsOfSentance[i].ToString());
+                //for (int i=0;i<WordsOfSentance.Count; i++)
+            int i = 0;        
+            while (i<WordsOfSentance.Count)
+               {
+               //   //Console.WriteLine(WordsOfSentance[i].ToString());
+                    sentanceString.Append(WordsOfSentance[2].ToString());
+                    i++;
                     //Console.WriteLine(sentanceString);
                     sentanceString.Append(IntervalsBetweenWords[i].ToString());
                 }
@@ -47,12 +50,12 @@ namespace Task_2_New
             return sentanceString.ToString();
         }
          
-        public Symbol getLastSymbol()
-        {
-
-            return ((IntervalsBetweenWords[IntervalsBetweenWords.Count - 1])
-                [(IntervalsBetweenWords[IntervalsBetweenWords.Count - 1]).Count-1]);
-        }
+        //public Symbol getLastSymbol()
+        //{
+        //
+        //    return ((IntervalsBetweenWords[IntervalsBetweenWords.Count - 1])
+        //        [(IntervalsBetweenWords[IntervalsBetweenWords.Count - 1]).Count-1]);
+        //}
         
 
     }
