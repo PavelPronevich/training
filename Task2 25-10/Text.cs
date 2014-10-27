@@ -4,72 +4,81 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Task_2_New
+namespace Task2_25_10
 {
-    class WordsCollection<X> : IList<X> where X : WordNew
+    class Text<X> : IList<X> where X : Sentence
     {
-        private List<X> word = new List<X>();
+        
+        private List<X> text = new List<X>();
+        //private object _contents = new object();
+        //WordNew _contents;
 
-        //public List<X> Word
+        //private int _count;
+        //public WordsCollecti()
         //{
-        //    get
-        //    {
-        //        return word;
-        //    }
+        //    _count = 0;
         //}
+
+       // public List<X> Text
+       // {
+       //     get
+       //     {
+       //         return text;
+       //     }
+       // }
 
 
         public int IndexOf(X item)
         {
-            return word.IndexOf(item);
+            return text.IndexOf(item);
         }
 
         public void Insert(int index, X item)
         {
-            word.Insert(index, item);
+            text.Insert(index, item);
         }
 
         public void RemoveAt(int index)
         {
-            word.RemoveAt(index);
+            text.RemoveAt(index);
         }
 
         public X this[int index]
         {
             get
             {
-                throw new NotImplementedException();
+                return text[index];
             }
             set
             {
-                throw new NotImplementedException();
+                text[index] = value;
             }
         }
 
         public void Add(X item)
         {
 
-            word.Add(item);
+            text.Add(item);
         }
 
         public void Clear()
         {
-            word.Clear();
+            text.Clear();
         }
 
         public bool Contains(X item)
         {
-            return word.Contains(item);
+            return text.Contains(item);
         }
 
         public void CopyTo(X[] array, int arrayIndex)
         {
-            word.CopyTo(array, arrayIndex);
+            text.CopyTo(array, arrayIndex);
         }
 
         public int Count
         {
-            get { throw new NotImplementedException(); }
+            get { return text.Count; }
         }
 
         public bool IsReadOnly
@@ -79,31 +88,29 @@ namespace Task_2_New
 
         public bool Remove(X item)
         {
-            return word.Remove(item);
+            return text.Remove(item);
         }
 
 
         public IEnumerator<X> GetEnumerator()
         {
-            return word.GetEnumerator();
+            return text.GetEnumerator();
         }
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return word.GetEnumerator();
+            return text.GetEnumerator();
         }
 
         override public string ToString()
         {
-            StringBuilder wordString=new StringBuilder();
-            foreach (X item in word)
+            StringBuilder wordString = new StringBuilder();
+            foreach (X item in text)
             {
                 wordString.Append(item.ToString());
             }
-           // Console.WriteLine(wordString.ToString());
+            
             return wordString.ToString();
         }
-
-       
     }
 }

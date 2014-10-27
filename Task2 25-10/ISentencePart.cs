@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Task_2_New
+namespace Task2_25_10
 {
-    interface ISentancePart
+    interface ISentencePart
     {
-
+     string ToString();
     }
 }

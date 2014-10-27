@@ -4,17 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Task_2_New
+namespace Task2_25_10
 {
-    class Letter
+    class Character
     {
-        public char Value;
+        public char Char;
         public bool IsConsonant { get; private set; }
-        public Letter(char letter)
+        public Character(char character)
         {
-            this.Value = letter;
-            
-            if (ConsonantLettersString.Contains(this.Value))
+            this.Char = character;
+
+            if (ConsonantCharactersString.Contains(this.Char))
             {
                 IsConsonant = true;
             }
@@ -26,10 +26,11 @@ namespace Task_2_New
 
         override public string ToString()
         {
-            return this.Value.ToString();
+            return this.Char.ToString();
         }
         
-        public string ConsonantLettersString = "QqWwRrTtPpSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm" + 
+        
+        public string ConsonantCharactersString = "QqWwRrTtPpSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm" + 
             "ЙйЦцКкНнГгШшЩщЗзХхЪъФфВвПпРрЛлДдЖжЧчСсМмТтЬьБб";
     }
 }

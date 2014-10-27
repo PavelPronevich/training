@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Task_2_New
+namespace Task2_25_10
 {
     class Symbol
     {
@@ -15,11 +15,11 @@ namespace Task_2_New
             this.Value = value;
             if (value.Equals('?'))
             {
-                isQuestion=true;
+                isQuestion = true;
             }
             else
             {
-                isQuestion=false;
+                isQuestion = false;
             }
         }
         override public string ToString()

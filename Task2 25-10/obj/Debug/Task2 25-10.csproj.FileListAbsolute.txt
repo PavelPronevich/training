@@ -1,0 +1,6 @@
+E:\epam\Task2 25-10\Task2 25-10\bin\Debug\Task2 25-10.exe.config
+E:\epam\Task2 25-10\Task2 25-10\bin\Debug\Task2 25-10.exe
+E:\epam\Task2 25-10\Task2 25-10\bin\Debug\Task2 25-10.pdb
+E:\epam\Task2 25-10\Task2 25-10\obj\Debug\Task2 25-10.csprojResolveAssemblyReference.cache
+E:\epam\Task2 25-10\Task2 25-10\obj\Debug\Task2 25-10.exe
+E:\epam\Task2 25-10\Task2 25-10\obj\Debug\Task2 25-10.pdb
