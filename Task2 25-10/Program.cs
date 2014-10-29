@@ -20,93 +20,21 @@ namespace Task2_25_10
         {
             //удалить перед сдачей проекта все комментарии и 
             //переименовать переменную A 
-           
-            String A = System.IO.File.ReadAllText(@"E:\epam\WriteText.txt");
-            
-            //удаление форматирования
-            A = A.Replace("\n", " ");
-            A = A.Replace("\t", " ");
-            A = A.Replace("\r", " ");
-            A = A.Replace("¬", "");
-            //удаление парных пробелов
-            string prob = "  ";
-            while (A.Contains(prob))
-            {
-                A = A.Remove(A.IndexOf(prob), 1);
-            }
 
-            //Console.WriteLine(A);
-            //Console.WriteLine(A.Length);
-            
-            string StringSymbolsOfEndSentance = ".!?";
-            //string StringIntervalsBetweenWords = " .!?,;:-(){}[]|\"";
-            string Letters = "1234567890ЁёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю" +
-                "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm@#$%^&*/+";
-
-            Text<Sentence> Book = new Text<Sentence>();
-            List<Character> varWord=new List<Character>();
-            List<Symbol> varCombSymbols=new List<Symbol>();
-            List<ISentencePart> varSentance = new List<ISentencePart>();
             
 
-            for (int i = 0; i < A.Length;i++)
-            {
-                if (Letters.Contains(A[i]))
-                {
-                    varWord.Add(new Character(A[i]));
-                    if (varCombSymbols.Count!=0)
-                    {
-                        varSentance.Add(new CombinationSymbol(new List<Symbol>(varCombSymbols)));
-                        varCombSymbols.Clear();
-                       
-                    }
-                }
-                else
-                {
-                    
-                    if (varWord.Count != 0)
-                    {
-                        
-                        varSentance.Add(new Word(new List<Character>(varWord)));
-                        varWord.Clear();
 
-                       
-                    }
-                    if (StringSymbolsOfEndSentance.Contains(A[i]))
-                    {
-                        varSentance.Add(new CombinationSymbol(new List<Symbol>(varCombSymbols)));
-                        varCombSymbols.Clear();
-                        varCombSymbols.Add(new Symbol(A[i]));
-                        varSentance.Add(new CombinationSymbol(new List<Symbol>(varCombSymbols)));
-                        varCombSymbols.Clear();
-                        
-                        /*byte type1;
-                        switch (A[i])
-                        {
-                            case '.':
-                                type1 = SentenceType.Declarative;
-                                break;
-                            case '!':
-                                Console.WriteLine("Case 2");
-                                break;
-                            case '?':
-                                break;
-                        }
-                         */
- 
-                        Book.Add(new Sentence(new List<ISentencePart>(varSentance)));
-                        varSentance.Clear();
-                    }
-                    else
-                    {
-                        varCombSymbols.Add(new Symbol(A[i]));
-                    }
-                }
-                //Console.WriteLine(new Sentance(varSentance));
+            @String A = System.IO.File.ReadAllText(@"E:\epam\WriteText.txt");
+            String A = System.IO.File.ReadAllText(@"\\\\\\WriteText.txt");
 
-            }
 
-            var querySentensToAscendingWords = from item in Book
+
+
+
+            Text<Sentence> BookOfSentence =StringToText(A);
+
+
+            var querySentensToAscendingWords = from item in BookOfSentence
                         orderby item.NumberOfWords
                         select item;
   
@@ -116,7 +44,7 @@ namespace Task2_25_10
                 Console.WriteLine("{0} ({1} words)", item.ToString().Trim(), item.NumberOfWords);
             }
 
-            var query= from item in Book
+            var query = from item in BookOfSentence
                        where item.Value[item.Value.Count - 1].ToString().Equals("?")
                        select item;
             
@@ -158,7 +86,7 @@ namespace Task2_25_10
             Console.ReadKey();
 
             Text<Sentence> NewBook = new Text<Sentence>();
-            foreach (var item in Book)
+            foreach (var item in BookOfSentence)
                 NewBook.Add(item);
 
            Console.WriteLine("\n\n");
@@ -241,5 +169,187 @@ namespace Task2_25_10
              */
 
         }
+        
+
+        /*
+         static public Text<Sentence> StringToText(string textString)
+        {
+            string TextString = textString;
+            //удаление форматирования
+            TextString = TextString.Replace("\n", " ");
+            TextString = TextString.Replace("\t", " ");
+            TextString = TextString.Replace("\r", " ");
+            TextString = TextString.Replace("¬", "");
+            //удаление парных пробелов
+            string prob = "  ";
+            while (TextString.Contains(prob))
+            {
+                TextString = TextString.Remove(TextString.IndexOf(prob), 1);
+            }
+
+
+            string StringSymbolsOfEndSentance = ".!?";
+            //string StringIntervalsBetweenWords = " .!?,;:-(){}[]|\"";
+            string Letters = "1234567890ЁёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю" +
+                "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm@#$%^*&/+";
+
+            Text<Sentence> Book = new Text<Sentence>();
+            List<Character> varWord = new List<Character>();
+            List<Symbol> varCombSymbols = new List<Symbol>();
+            List<ISentencePart> varSentance = new List<ISentencePart>();
+
+
+            for (int i = 0; i < TextString.Length; i++)
+            {
+                if (Letters.Contains(TextString[i]))
+                {
+                    varWord.Add(new Character(TextString[i]));
+                    if (varCombSymbols.Count != 0)
+                    {
+                        varSentance.Add(new CombinationSymbol(new List<Symbol>(varCombSymbols)));
+                        varCombSymbols.Clear();
+
+                    }
+                }
+                else
+                {
+
+                    if (varWord.Count != 0)
+                    {
+
+                        varSentance.Add(new Word(new List<Character>(varWord)));
+                        varWord.Clear();
+
+
+                    }
+                    if (StringSymbolsOfEndSentance.Contains(TextString[i]))
+                    {
+                        varSentance.Add(new CombinationSymbol(new List<Symbol>(varCombSymbols)));
+                        varCombSymbols.Clear();
+                        varCombSymbols.Add(new Symbol(TextString[i]));
+                        varSentance.Add(new CombinationSymbol(new List<Symbol>(varCombSymbols)));
+                        varCombSymbols.Clear();
+
+                        Book.Add(new Sentence(new List<ISentencePart>(varSentance)));
+                        varSentance.Clear();
+                    }
+                    else
+                    {
+                        varCombSymbols.Add(new Symbol(TextString[i]));
+                    }
+                }
+                //Console.WriteLine(new Sentance(varSentance));
+
+            }
+            return Book;
+        }
+        */
+
+        static public Text<Sentence> StringToText(string textString)
+        {
+            string SymbolsOfEndSentance = ".!?";
+            //string StringIntervalsBetweenWords = " .!?,;:-(){}[]|\"";
+            string Letters = "1234567890ЁёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю" +
+                "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm@#$%^&*/+";
+            List<Character> CharactersObject = new List<Character>();
+            foreach(char item in Letters)
+            {
+                CharactersObject.Add(new Character(item));
+            }
+            
+
+            string TextString = textString;
+            //удаление форматирования
+            TextString = TextString.Replace("\n", " ");
+            TextString = TextString.Replace("\t", " ");
+            TextString = TextString.Replace("\r", " ");
+            TextString = TextString.Replace("¬", "");
+            //удаление парных пробелов
+            string whiteSpace = "  ";
+            while (TextString.Contains(whiteSpace))
+            {
+                TextString = TextString.Remove(TextString.IndexOf(whiteSpace), 1);
+            }
+
+
+
+
+            Text<Sentence> Book = new Text<Sentence>();
+            List<Character> varWord = new List<Character>();
+            List<Symbol> varCombSymbols = new List<Symbol>();
+            List<ISentencePart> varSentance = new List<ISentencePart>();
+
+            /* Хороший код восстановить если не получится
+            for (int i = 0; i < TextString.Length; i++)
+            {
+                if (Letters.Contains(TextString[i]))
+                {
+                    varWord.Add(new Character(TextString[i]));
+                    if (varCombSymbols.Count != 0)
+                    {
+                        varSentance.Add(new CombinationSymbol(new List<Symbol>(varCombSymbols)));
+                        varCombSymbols.Clear();
+
+                    }
+                }
+                else
+                {
+
+                    if (varWord.Count != 0)
+                    {
+
+                        varSentance.Add(new Word(new List<Character>(varWord)));
+                        varWord.Clear();
+
+
+                    }
+                    if (StringSymbolsOfEndSentance.Contains(TextString[i]))
+                    {
+                        varSentance.Add(new CombinationSymbol(new List<Symbol>(varCombSymbols)));
+                        varCombSymbols.Clear();
+                        varCombSymbols.Add(new Symbol(TextString[i]));
+                        varSentance.Add(new CombinationSymbol(new List<Symbol>(varCombSymbols)));
+                        varCombSymbols.Clear();
+
+                        Book.Add(new Sentence(new List<ISentencePart>(varSentance)));
+                        varSentance.Clear();
+                    }
+                    else
+                    {
+                        varCombSymbols.Add(new Symbol(TextString[i]));
+                    }
+                }
+                //Console.WriteLine(new Sentance(varSentance));
+             */
+
+            for (int i = 0; i < TextString.Length; i++)
+            {
+                if (Letters.Contains(TextString[i]))
+                {
+                    varWord.Add(CharactersObject[Letters.IndexOf(TextString[i])]);
+                }
+                else
+                {
+                    if (varWord.Count != 0)
+                    {
+
+                        varSentance.Add(new Word(new List<Character>(varWord)));
+                        varWord.Clear();
+                    }
+                    varSentance.Add(new Symbol(TextString[i]));
+
+                    if (SymbolsOfEndSentance.Contains(TextString[i]))
+                    {
+                        Book.Add(new Sentence(new List<ISentencePart>(varSentance)));
+                        varSentance.Clear();
+                    }
+                }
+                //Console.WriteLine(new Sentance(varSentance));
+
+            }
+            return Book;
+        }
+
     }
+    
 }

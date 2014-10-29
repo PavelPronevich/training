@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task2_25_10
 {
-    class Symbol
+    class Symbol: ISentencePart
     {
         public char Value;
         public bool isQuestion { get; private set; }
