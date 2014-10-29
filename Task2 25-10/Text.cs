@@ -112,5 +112,7 @@ namespace Task2_25_10
             
             return wordString.ToString();
         }
+
+        
     }
 }

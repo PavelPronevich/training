@@ -15,13 +15,30 @@ namespace Task2_25_10
             int number=0;
             foreach(ISentencePart item in list)
             {
-                if (item.GetType()== typeof(Word))
+                if (item.GetType() == typeof(Word))
+                {
                     number++;
+                }
             }
             NumberOfWords=number;
             
         }
        public int NumberOfWords{get; private set;}
+
+
+
+       public List<Word> GetWords()
+        {
+            List<Word> WordsList = new List<Word>();
+           foreach (ISentencePart item in Value)
+           {
+               if (item.GetType() == typeof(Word))
+               {
+                   WordsList.Add((Word)item);
+               }
+           }
+           return WordsList;
+        }
 
        override public string ToString()
         {
@@ -38,6 +55,16 @@ namespace Task2_25_10
             return wordString.ToString();
         }
 
+        public void DeleteWord(string wordToDelete)
+        {
+            for (int i=0; i< this.Value.Count;i++)
+            {
+                if (this.Value[i].ToString().Equals(wordToDelete))
+                {
+                    this.Value.RemoveRange(i, 1);
+                }
+            }
+        }
        
 
       /* public SentenceType TypeOfSentence 

@@ -23,14 +23,17 @@ namespace Task2_25_10
             }
             return wordString.ToString();
         }
-        public int getLength()
+        public int Length
         {
-            return Value.Count;
+            get
+            { return this.Value.Count; }
         }
 
         public Character getFirstCharacter()
         {
             return Value[0];
         }
+        
+        
     }
 }

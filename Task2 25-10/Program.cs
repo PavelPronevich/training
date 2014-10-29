@@ -18,6 +18,8 @@ namespace Task2_25_10
         
         static void Main(string[] args)
         {
+            //удалить перед сдачей проекта все комментарии и 
+            //переименовать переменную A 
            
             String A = System.IO.File.ReadAllText(@"E:\epam\WriteText.txt");
             
@@ -25,7 +27,7 @@ namespace Task2_25_10
             A = A.Replace("\n", " ");
             A = A.Replace("\t", " ");
             A = A.Replace("\r", " ");
-
+            A = A.Replace("¬", "");
             //удаление парных пробелов
             string prob = "  ";
             while (A.Contains(prob))
@@ -39,7 +41,7 @@ namespace Task2_25_10
             string StringSymbolsOfEndSentance = ".!?";
             //string StringIntervalsBetweenWords = " .!?,;:-(){}[]|\"";
             string Letters = "1234567890ЁёЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮйцукенгшщзхъфывапролджэячсмитьбю" +
-                "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm@#$%^&*/";
+                "QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm@#$%^&*/+";
 
             Text<Sentence> Book = new Text<Sentence>();
             List<Character> varWord=new List<Character>();
@@ -104,32 +106,84 @@ namespace Task2_25_10
 
             }
 
-            //var numQuery =
-            //from item in Book
-            //where item.NumberOfWords
-            //select num;
-
-            var query = from item in Book
+            var querySentensToAscendingWords = from item in Book
                         orderby item.NumberOfWords
                         select item;
+  
 
-            foreach (var item in query)
+            foreach (var item in querySentensToAscendingWords)
             {
                 Console.WriteLine("{0} ({1} words)", item.ToString().Trim(), item.NumberOfWords);
             }
 
+            var query= from item in Book
+                       where item.Value[item.Value.Count - 1].ToString().Equals("?")
+                       select item;
             
-            Console.WriteLine(Book);
-            //Console.WriteLine(Book[2].NumberOfWords);
-            foreach (var item in Book)
+            foreach (var item in query)
             {
-                Console.WriteLine(item);
+                Console.WriteLine("{0}", item.ToString().Trim());
             }
+            List<Word> ListOfWords = new List<Word>();
+            int LengthOfWord = 3;
+            List<string> ValueOfWords = new List<string>();
+
+            foreach (var item in query)
+            {
+                ListOfWords.AddRange(item.GetWords());
+             
+            }
+                        
+            foreach (Word item in ListOfWords)
+            {
+                if ( (ValueOfWords.Contains(item.ToString().ToLower()) == false)
+                    && (item.Length==LengthOfWord))
+                {
+                    ValueOfWords.Add(item.ToString().ToLower());
+                    
+                }
+            }
+            
+            foreach (string item in ValueOfWords)
+            {
+                Console.Write(item+" ");
+            }
+
+            //Console.WriteLine(Book);
+            //Console.WriteLine(Book[2].NumberOfWords);
+            //foreach (var item in Book)
+            //{
+            //    Console.WriteLine(item);
+            //}
+            Console.ReadKey();
+
+            Text<Sentence> NewBook = new Text<Sentence>();
+            foreach (var item in Book)
+                NewBook.Add(item);
+
+           Console.WriteLine("\n\n");
+           int LengthOfWordToDelete = 3;
+           foreach (var item in NewBook)
+           {
+               for (int i = 0; i < item.Value.Count; i++)
+               {
+                   if (item.Value[i].GetType()==typeof(Word))
+                   {
+                       if (((Word)item.Value[i]).Length == LengthOfWordToDelete 
+                           && ((Word)item.Value[i]).getFirstCharacter().IsConsonant)
+                       {
+                           item.Value.RemoveRange(i,1);
+                       }
+                   }
+               }
+           }
+
+
+            Console.WriteLine(NewBook);
             Console.ReadKey();
 
 
-
-
+            
             
             /*Проверка работы класса Sentance
             List<Character> list=new List<Character>();
