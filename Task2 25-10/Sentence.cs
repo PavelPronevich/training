@@ -6,74 +6,128 @@ using System.Threading.Tasks;
 
 namespace Task2_25_10
 {
-    class Sentence
+    public class Sentence : ICollection<ISentencePart>
     {
-        public List<ISentencePart> Value;
+        public List<ISentencePart> _items=new List<ISentencePart>();
         public Sentence(List<ISentencePart> list)
         {
-            this.Value = list;
-            int number=0;
-            foreach(ISentencePart item in list)
-            {
-                if (item.GetType() == typeof(Word))
-                {
-                    number++;
-                }
-            }
-            NumberOfWords=number;
-            
+            this._items = list;
         }
-       public int NumberOfWords{get; private set;}
 
-
-
-       public List<Word> GetWords()
+        public int NumberOfWords
         {
-            List<Word> WordsList = new List<Word>();
-           foreach (ISentencePart item in Value)
-           {
-               if (item.GetType() == typeof(Word))
-               {
-                   WordsList.Add((Word)item);
-               }
-           }
-           return WordsList;
+            get
+            {
+                return _items.Count(x=>x is Word);
+            }
         }
+
+
+        /*public IEnumerable<Word> GetWords()
+        {
+           return _items.Where(x=>x is Word).Select( x=> x as Word);
+        }
+         */
+        
 
        override public string ToString()
         {
             StringBuilder wordString = new StringBuilder();
-            foreach (ISentencePart item in Value)
+            foreach (ISentencePart item in _items)
             {
                 wordString.Append(item.ToString());
             }
-            //for (int i = 0; i < this.Value.Count; i++)
-            //{
-            //    wordString.Append(Value[i].ToString());
-            //}
-
             return wordString.ToString();
         }
 
         public void DeleteWord(string wordToDelete)
         {
-            for (int i=0; i< this.Value.Count;i++)
+            for (int i=0; i< this._items.Count;i++)
             {
-                if (this.Value[i].ToString().Equals(wordToDelete))
+                if (this._items[i].ToString().Equals(wordToDelete))
                 {
-                    this.Value.RemoveRange(i, 1);
+                    this._items.RemoveRange(i, 1);
                 }
             }
         }
        
+        public void DelWhiteSpaces()
+        {
+            string separators = " .!?,;:)]}";
+            for (int i=0;i<_items.Count-1;i++)
+                if (_items[i].GetType()== typeof(Symbol) && (_items[i].ToString().Equals(" ") 
+                    && separators.Contains(_items[i + 1].ToString())))
+                {
+                    _items.RemoveRange(i--, 1);
+                }
+        }
 
-      /* public SentenceType TypeOfSentence 
-       { 
-           get
-           {
-           if ((this.Value.Count-1).)
-           }
-           ; private set; }
-       */ 
+
+     
+       
+
+        public void Add(ISentencePart item)
+        {
+            _items.Add(item);
+        }
+
+        public void Clear()
+        {
+            _items.Clear();
+        }
+
+        public bool Contains(ISentencePart item)
+        {
+            return _items.Contains(item);
+        }
+
+        public void CopyTo(ISentencePart[] array, int arrayIndex)
+        {
+            _items.CopyTo(array, arrayIndex);
+        }
+
+        public int Count
+        {
+            get { return _items.Count; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public bool Remove(ISentencePart item)
+        {
+            return _items.Remove(item);
+        }
+
+        public IEnumerator<ISentencePart> GetEnumerator()
+        {
+           return _items.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+
+
+
+
+        /*public void ReplaceAll(Func<ISentencePart,bool> condition, IEnumerable<ISentencePart> newItems)
+        {
+            _items.Skip()
+            ISentencePart current = _items.FirstOrDefault(condition);
+            do
+            {
+                if (current!=null)
+                {
+
+                }
+            }
+            while()
+        }
+         */
     }
 }

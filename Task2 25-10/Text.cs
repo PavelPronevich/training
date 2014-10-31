@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task2_25_10
 {
-    class Text<X> : IList<X> where X : Sentence
+    public class Text<X> : IList<X> where X : Sentence
     {
         
         private List<X> text = new List<X>();
@@ -113,6 +113,46 @@ namespace Task2_25_10
             return wordString.ToString();
         }
 
-        
+        public IEnumerable<Sentence> SortSentenceByWords()
+        {
+            var query = from item in text
+                                               orderby item.NumberOfWords
+                                               select item;
+            return query;
+        }
+
+        public IEnumerable<Sentence> GetInterrogativeSentences()
+        {
+            var query = from item in text
+                        where item.LastOrDefault().ToString().Equals("?")
+                        select item;
+            
+            return query;
+        }
+
+        public void DeleteAllWordsOfLength(int LengthOfWordToDelete)
+        {
+            int  LengthOfWord = LengthOfWordToDelete;
+
+            foreach (var item in text)
+            {
+                for (int i = 0; i < item._items.Count; i++)
+                {
+                    if (item._items[i].GetType() == typeof(Word))
+                    {
+                        if (((Word)item._items[i]).Length == LengthOfWord
+                            && ((Word)item._items[i]).getFirstCharacter().IsConsonant)
+                        {
+                            item._items.RemoveRange(i, 1);
+                        }
+                    }
+
+                }
+                item.DelWhiteSpaces();
+            }
+            
+        }
+
+
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task2_25_10
 {
-    interface ISentencePart
+    public interface ISentencePart
     {
      string ToString();
     }

@@ -8,7 +8,7 @@ namespace Task2_25_10
 {
     class Character
     {
-        public char Char;
+        public char Char { get; private set; }
         public bool IsConsonant { get; private set; }
         public Character(char character)
         {
@@ -30,7 +30,9 @@ namespace Task2_25_10
         }
         
         
-        public string ConsonantCharactersString = "QqWwRrTtPpSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm" + 
+        private string ConsonantCharactersString = "QqWwRrTtPpSsDdFfGgHhJjKkLlZzXxCcVvBbNnMm" + 
             "ЙйЦцКкНнГгШшЩщЗзХхЪъФфВвПпРрЛлДдЖжЧчСсМмТтЬьБб";
+
+     
     }
 }

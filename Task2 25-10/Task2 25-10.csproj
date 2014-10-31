@@ -49,6 +49,7 @@
     <Compile Include="Symbol.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="Word.cs" />
+    <Compile Include="WordComparer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

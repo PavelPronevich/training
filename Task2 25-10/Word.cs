@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Task2_25_10
 {
-    class Word : ISentencePart
+    class Word : ISentencePart, IEnumerable<Character> //, IEqualityComparer<Word> //IEnumerable<Symbol>
     {
         public List<Character> Value;
         public Word(List<Character> word)
@@ -33,7 +33,26 @@ namespace Task2_25_10
         {
             return Value[0];
         }
-        
-        
+
+
+
+        /*public IEnumerator<Symbol> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+         */
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return Value.GetEnumerator();
+        }
+
+        IEnumerator<Character> IEnumerable<Character>.GetEnumerator()
+        {
+            return Value.GetEnumerator();
+           
+        }
+
+       
     }
 }
