@@ -7,7 +7,7 @@
     <ProjectGuid>{F0CB0C0F-B76D-479A-9489-71E61547B98E}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Task2_25_10</RootNamespace>
+    <RootNamespace>TextToSEntence</RootNamespace>
     <AssemblyName>Task2 25-10</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

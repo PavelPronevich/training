@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Task2_25_10
+namespace TextToSEntence
 {
     public class Sentence : ICollection<ISentencePart>
     {
@@ -12,6 +12,9 @@ namespace Task2_25_10
         public Sentence(List<ISentencePart> list)
         {
             this._items = list;
+        }
+        public Sentence()
+        {
         }
 
         public int NumberOfWords
@@ -23,12 +26,7 @@ namespace Task2_25_10
         }
 
 
-        /*public IEnumerable<Word> GetWords()
-        {
-           return _items.Where(x=>x is Word).Select( x=> x as Word);
-        }
-         */
-        
+       
 
        override public string ToString()
         {
@@ -112,21 +110,39 @@ namespace Task2_25_10
         }
 
 
-
-
-
-        /*public void ReplaceAll(Func<ISentencePart,bool> condition, IEnumerable<ISentencePart> newItems)
+        public void ReplaceAll(int lenthOfword, List<ISentencePart> listToPast)
+         {
+            
+        for (int i=0; i< this._items.Count; i++)
         {
-            _items.Skip()
-            ISentencePart current = _items.FirstOrDefault(condition);
+            if (_items[i].GetType()==typeof(Word) && ((Word)_items[i]).Length==lenthOfword)
+            {
+                _items.RemoveAt(i);
+                _items.InsertRange(i,listToPast);
+                i += listToPast.Count;
+
+            }
+        }
+        }
+
+       /* public void ReplaceAll(Func<ISentencePart,bool> condition, IEnumerable<ISentencePart> newItems)
+        {
+            //ISentencePart current = _items.FirstOrDefault(condition);
+            int i=0;
             do
             {
-                if (current!=null)
+                if (_items[i].GetType()==typeof(Word) && (_items[i]as Word).Length==length))
+                {
+                    _items.RemoveAt(i);
+                    _items.InsertRange(i,newItems);
+                    newItems.
+                }
+                if (current != null)
                 {
 
                 }
             }
-            while()
+            while (i < _items.Count);
         }
          */
     }

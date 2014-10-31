@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Task2_25_10
+namespace TextToSEntence
 {
     class Word : ISentencePart, IEnumerable<Character> //, IEqualityComparer<Word> //IEnumerable<Symbol>
     {
