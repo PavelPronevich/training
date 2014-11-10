@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextToSEntence
+namespace TelephoneStation
 {
-    public interface ISentencePart
+    enum PortState
     {
-     string ToString();
+        Connect,
+        Disconnect,
+        Busy
     }
 }

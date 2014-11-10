@@ -1,6 +1,0 @@
-E:\epam\training\training\Task2 25-10\bin\Release\Task2 25-10.exe.config
-E:\epam\training\training\Task2 25-10\bin\Release\Task2 25-10.exe
-E:\epam\training\training\Task2 25-10\bin\Release\Task2 25-10.pdb
-E:\epam\training\training\Task2 25-10\obj\Release\Task2 25-10.csprojResolveAssemblyReference.cache
-E:\epam\training\training\Task2 25-10\obj\Release\Task2 25-10.exe
-E:\epam\training\training\Task2 25-10\obj\Release\Task2 25-10.pdb
