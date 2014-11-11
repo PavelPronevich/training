@@ -11,7 +11,7 @@ namespace TelephoneStation
         private bool _isSwitched=true; // вкл.откл станция за неуплату
         private bool _isBusy=false;    // занет не занет опред станция если идет входящий или пользователь если исходящий звонки
         public int Number{get;private set;}// номер порта (телефона)
-        private int _namber = 754318;
+        private static int _namber = 754318;
         
         //private int pinCode; // секр номер для телефона, чтобы он прослушивал Port
         public Port() 
