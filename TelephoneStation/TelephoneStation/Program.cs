@@ -22,8 +22,8 @@ namespace TelephoneStation
             ATS.Check();
             Console.WriteLine(port1.Number);
             Console.WriteLine(port2.Number);
-            Console.WriteLine(port1.Isswitched);
-            Console.WriteLine(port2.Isswitched);
+            Console.WriteLine(port1.IsSwitched);
+            Console.WriteLine(port2.IsSwitched);
             Console.ReadKey();
         }
         

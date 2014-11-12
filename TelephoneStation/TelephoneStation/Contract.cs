@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TelephoneStation
 {
-    class Contract
+    public class Contract
     {
         public TariffPlan ClientPlan { get; private set;}
         public Port ClientPort { get; private set; }

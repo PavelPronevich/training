@@ -45,6 +45,7 @@
     <Compile Include="Contract.cs" />
     <Compile Include="Human.cs" />
     <Compile Include="Port.cs" />
+    <Compile Include="PortCallToStationEventArgs.cs" />
     <Compile Include="PortState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -52,6 +53,7 @@
     <Compile Include="Subscriber.cs" />
     <Compile Include="TariffPlan.cs" />
     <Compile Include="Terminal.cs" />
+    <Compile Include="TerminalCallToEventArgs.cs" />
     <Compile Include="Time.cs" />
   </ItemGroup>
   <ItemGroup>

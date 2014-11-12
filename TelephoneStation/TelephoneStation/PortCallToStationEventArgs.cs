@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace TelephoneStation
 {
-   public class BlockPortEventArgs
+    public class PortCallToStationEventArgs
     {
-        public Port port { get; set; }
-        public bool IsSwitched { get; set; }
+        public int PhoneNumber;
     }
 }

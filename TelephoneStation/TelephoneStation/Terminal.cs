@@ -6,24 +6,35 @@ using System.Threading.Tasks;
 
 namespace TelephoneStation
 {
-    class Terminal
+    
+    public class Terminal
     {
-        public bool Call(Terminal target)
+        public bool IsSwitched { get; set; }
+        public bool IsBusy { get; set; }
+        public void CallTo(int phoneNumber)
         {
-            EventArgs args = null;
-            OnStartingCall(this, args);
-            if (args != null)
-            {
-                OnStartedCall(this, args);
-            }
+            TerminalCallToEventArgs args = new TerminalCallToEventArgs();
+            args.PhoneNumber = phoneNumber;
+            OnTerminalCallTo(args);
+
+            //отпр сообщ порту и перевод его в состояние занят
+            //прием сообщение от порта об успехе/неуспехе передачи сообщения станции
+
+            //сформировать и передать событие терминалу по переводу терминала в состоянии занято и передаче номера абонента
+            //возможно создать уникальный  номер для отслеживания состояния операции
         }
-        protected void OnStartingCall(object sender, EventArgs e)
+        protected virtual void OnTerminalCallTo(TerminalCallToEventArgs e)
         {
-            var temp = StartingCall;
-            if (temp != null)
-            {
-                StartingCall(sender, e);
-            }
+            EventHandler<TerminalCallToEventArgs> handler = TerminalCallTo;
+            if (handler != null) handler(this, e);
         }
+        public Terminal()
+        {
+            this.IsSwitched = true;
+            this.IsBusy = false;
+        }
+
+
+        public event EventHandler<TerminalCallToEventArgs> TerminalCallTo;
     }
 }
