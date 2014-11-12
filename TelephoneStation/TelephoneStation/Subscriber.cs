@@ -8,26 +8,16 @@ namespace TelephoneStation
 {
     public class Subscriber
     {
-        public Human Person { get; private set; }
-        public int? TerminalNumber { get; private set; }
-        public bool IsBusy { get; set; }
-        public Subscriber(Human person)
+        public Human Person{get; private set;}
+        public Terminal Phone{get; private set;}
+        public Port SimCard{get; private set;}
+        public TariffPlan Plan{get; private set;}
+        public Subscriber(Human person, Terminal phone, Port port, TariffPlan plan)
         {
             this.Person = person;
-            this.IsBusy = false;
-            //this.TerminalNumber=
+            this.Phone = phone;
+            this.SimCard = port;
+            this.Plan = plan;
         }
-        
-
-        
-        public void GetTerminal()//???ConcludeContract
-        {
-            if (this.TerminalNumber!=null)
-            {
-                // ЗАпрос на АТС ФиоAge возврат номер термин 
-            }
-        }
-        
-
     }
 }

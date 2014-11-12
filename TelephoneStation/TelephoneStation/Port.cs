@@ -9,7 +9,7 @@ namespace TelephoneStation
     class Port
     {
         private bool _isSwitched=true; // вкл.откл станция за неуплату
-        private bool _isBusy=false;    // занет не занет опред станция если идет входящий или пользователь если исходящий звонки
+        private bool _isBusy=false;    // занет не занет опред станция если идет входящий или телефон исзодящим звонком
         public int Number{get;private set;}// номер порта (телефона)
         private static int _namber = 754318;
         
