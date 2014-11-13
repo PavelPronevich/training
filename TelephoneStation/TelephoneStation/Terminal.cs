@@ -16,6 +16,7 @@ namespace TelephoneStation
             TerminalCallToEventArgs args = new TerminalCallToEventArgs();
             args.PhoneNumber = phoneNumber;
             OnTerminalCallTo(args);
+            //Console.WriteLine("Терминал отправляет звонок на номер {0} порту", phoneNumber);
 
             //отпр сообщ порту и перевод его в состояние занят
             //прием сообщение от порта об успехе/неуспехе передачи сообщения станции

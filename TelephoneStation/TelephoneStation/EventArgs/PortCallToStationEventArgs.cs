@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TelephoneStation
 {
-    public class TerminalCallToEventArgs
+    public class PortCallToStationEventArgs
     {
         public int PhoneNumber;
+        public Port PortColling;
     }
 }

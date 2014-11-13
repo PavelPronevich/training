@@ -10,10 +10,15 @@ namespace TelephoneStation
     {
         private bool _isSwitched=true; // вкл.откл станция за неуплату
         private bool _isBusy=false;    // занет не занет опред станция если идет входящий или телефон исзодящим звонком
-        public int Number{get;private set;}// номер порта (телефона)
+        public int? Number{get;private set;}// номер порта (телефона)
+        public int TransactionNumber { get; set; }
         private static int _namber = 754318;
         
         //private int pinCode; // секр номер для телефона, чтобы он прослушивал Port
+        public Port(bool a)
+        {
+        }
+
         public Port() 
         {
             this.Number = _namber++;
@@ -41,6 +46,12 @@ namespace TelephoneStation
             }
         }
 
+        public void TakeCall(int? phoneNumber)
+        {
+            Console.WriteLine("Входящий вызов от {0}", phoneNumber);
+
+        }
+
 
         public void PortCallToStation(object sender, TerminalCallToEventArgs e)
         {
@@ -49,7 +60,9 @@ namespace TelephoneStation
                 this.IsBusy = true;
                 PortCallToStationEventArgs args = new PortCallToStationEventArgs();
                 args.PhoneNumber = e.PhoneNumber;
+                args.PortColling = this;
                 OnPortCallToStation(args);
+                //Console.WriteLine("Порт принял звонок от терминала и отправляет запрос на звонок {0} к станции", e.PhoneNumber);
             }
             else { /*невозможно сделать звонок, сообщить терминалу*/}
             

@@ -8,7 +8,8 @@ namespace TelephoneStation
 {
     public class Station
     {
-    private List<Port> _ports = new List<Port>();
+        private static int transactionNumber = 1;
+        private List<Port> _ports = new List<Port>();
     private List<Contract>subscribers = new List<Contract>();// придумать новое название
     public Station() 
     {
@@ -55,6 +56,8 @@ namespace TelephoneStation
             }
         }
     }
+   
+
     protected virtual void OnBlockPort(BlockPortEventArgs e)
         {
             EventHandler<BlockPortEventArgs> handler = BlockPort;
@@ -67,9 +70,53 @@ namespace TelephoneStation
         
     public void ConnectToColl(object sender, PortCallToStationEventArgs e)
      {
-      
+        Console.WriteLine("Станция приняла звонок от {0} порта и отправляет запрос на {1} порт",e.PortColling.Number, e.PhoneNumber);
+        //Если номер не существует оборвать линию, вернуть звонившему сообщение 
+        //номер не зарегистрирован, перевести все в режим доступности
+        
+        if (GetPort(e.PhoneNumber) == null)
+        {
+            Console.WriteLine("Номер не привязан ни к одному из абонентов", GetPort(e.PhoneNumber).Number);
+        }
+        else if (GetPort(e.PhoneNumber).IsBusy)
+        {
+            Console.WriteLine("Линия занята");
+        }
+        else
+        {
+            Port port = new Port(false);
+            port = GetPort(e.PhoneNumber);
+            port.TransactionNumber=transactionNumber;//Может номер операции определять телефоном исход вызова
+            e.PortColling.TransactionNumber=transactionNumber;
+            Console.WriteLine("Найден порт номера {0}, устанавливается соединение", port.Number);
+            port.TakeCall(e.PortColling.Number);
+
+        }
      }
-    
+
+    public Port GetPort(int phoneNumber)
+    {
+        Port port=new Port(true);
+        foreach (Contract contract in subscribers)
+        {
+            if (contract.ClientPort.Number == phoneNumber)
+            {
+                port = contract.ClientPort;
+            }
+        }
+        return port;
+    }
+
+        public void GetAllAbonents()
+    {
+        foreach (var item in subscribers)
+        {
+            Console.WriteLine("Фамилия {0}, имя: {1}, номер телефона: {2}",
+              item.ClientSurname, item.ClientName, item.ClientPort.Number);
+        }
+    }
+
     }
     
 }
+
