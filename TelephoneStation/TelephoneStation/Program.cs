@@ -20,23 +20,20 @@ namespace TelephoneStation
             Subscriber subscriber2 = ATS.ConcludeContract(human2, plan);
             Subscriber subscriber3 = ATS.ConcludeContract(human3, plan);
             Subscriber subscriber4 = ATS.ConcludeContract(human4, plan);
-            subscriber1.CallTo(754320);
-            subscriber2.CallTo(754319);
-            subscriber4.CallTo(754318);
+
+            
+            subscriber1.CallTo(1232);
+            subscriber1.CallTo(754319);
+            subscriber3.CallTo(754319);
+            //subscriber1.CallTo(754321);
+            //subscriber3.CallTo(754321);
+            //subscriber4.CallTo(654323);
 
             ATS.GetAllAbonents();
 
-            Port port1=new Port();
-            Port port2 = new Port();
-           
-            ATS.Add(port1);
-            ATS.Add(port2);
-            ATS.Check();
-            Console.WriteLine(port1.Number);
-            Console.WriteLine(port2.Number);
-            Console.WriteLine(port1.IsSwitched);
-            Console.WriteLine(port2.IsSwitched);
+            Console.WriteLine(DateTime.Now);
             Console.ReadKey();
+            
         }
         
     }

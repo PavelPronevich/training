@@ -12,6 +12,7 @@ namespace TelephoneStation
         public Terminal Phone { get; private set;}
         public Port SimCard { get; private set;}
         public TariffPlan Plan { get; private set;}
+        public bool IsSpeaking { get; private set; }
         public Subscriber(Human person, Terminal phone, Port port, TariffPlan plan)
         {
             this.Person = person;
@@ -25,8 +26,25 @@ namespace TelephoneStation
             if (!Phone.IsBusy)
             {
                 Phone.IsBusy = true;
+                this.IsSpeaking = true;
                 this.Phone.CallTo(phoneNumber);
             }
+        }
+        public void IncomingCall(object sender, TerminalIncomingCallToSubscriberEventArgs e)
+        {
+            if (!this.Person.IsBusy)
+            {
+                //Console.WriteLine("Абонент {0}({1}) ответил на звонок от {2}", this.Person.Surname + " " + this.Person.Name, this.SimCard.Number, e.PhoneNumber);
+                this.IsSpeaking = true;
+                this.Phone.ConfirmCall(true,false,true,false);
+            }
+            else this.Phone.ConfirmCall(false,true,true,false);
+
+        }
+        public void DisconnectSubscriber(object sender, DisconnectionEventArgs e)
+        {
+            this.IsSpeaking = false;
+            if (e.Messege != "") Console.WriteLine(e.Messege);
         }
     }
 }

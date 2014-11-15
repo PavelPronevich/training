@@ -13,7 +13,7 @@ namespace TelephoneStation
         public int? Number{get;private set;}// номер порта (телефона)
         public int TransactionNumber { get; set; }
         private static int _namber = 754318;
-        
+       
         //private int pinCode; // секр номер для телефона, чтобы он прослушивал Port
         public Port(bool a)
         {
@@ -46,11 +46,20 @@ namespace TelephoneStation
             }
         }
 
-        public void TakeCall(int? phoneNumber)
+        public void TakeCall(int phoneNumber)//о вход вызове
         {
-            Console.WriteLine("Входящий вызов от {0}", phoneNumber);
-
+            _isBusy = true;
+            PortCallToTerminalEventArgs args = new PortCallToTerminalEventArgs();
+            args.PhoneNumber = phoneNumber;
+            OnPortCallToTerminal(args);
+            //Console.WriteLine("Входящий вызов от {0}", phoneNumber);
         }
+        protected virtual void OnPortCallToTerminal(PortCallToTerminalEventArgs e)
+        {
+            EventHandler<PortCallToTerminalEventArgs> handler = PortToTerminal;
+            if (handler != null) handler(this, e);
+        }
+        public event EventHandler<PortCallToTerminalEventArgs> PortToTerminal;
 
 
         public void PortCallToStation(object sender, TerminalCallToEventArgs e)
@@ -79,8 +88,29 @@ namespace TelephoneStation
         {
          e.port.IsSwitched = e.IsSwitched;
         }
-        
-        
+       
+        public void ConfirmCall(object sender, ConfirmCallEventArgs e)
+        {
+            e.ConfirfCallPort = this;
+            EventHandler<ConfirmCallEventArgs> handler = PortConfirmCall;
+            if (handler != null) handler(this, e);
+        }
+        public event EventHandler<ConfirmCallEventArgs> PortConfirmCall;
+
+        public void Disconnection(string messege)
+        {
+            this.IsBusy = false;
+            DisconnectionEventArgs args = new DisconnectionEventArgs();
+            args.Messege=messege;
+            OnDisconnectionTerminal(args);
+            //Console.WriteLine("Входящий вызов от {0}", phoneNumber);
+        }
+        protected virtual void OnDisconnectionTerminal(DisconnectionEventArgs e)
+        {
+            EventHandler<DisconnectionEventArgs> handler = DisconnectionTerminal;
+            if (handler != null) handler(this, e);
+        }
+        public event EventHandler<DisconnectionEventArgs> DisconnectionTerminal;
 
     }
     

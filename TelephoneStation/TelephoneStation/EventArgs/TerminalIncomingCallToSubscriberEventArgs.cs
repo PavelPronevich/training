@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace TelephoneStation
 {
-    public class Time
+    public class TerminalIncomingCallToSubscriberEventArgs
     {
-        
+        public int PhoneNumber;
     }
-     
 }

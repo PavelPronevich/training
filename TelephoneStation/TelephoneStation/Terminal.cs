@@ -37,5 +37,68 @@ namespace TelephoneStation
 
 
         public event EventHandler<TerminalCallToEventArgs> TerminalCallTo;
+
+        
+        public void IncomingCall(object sender, PortCallToTerminalEventArgs e)
+        {
+            if (this.IsSwitched && !this.IsBusy)
+            {
+                this.IsBusy = true;
+                TerminalIncomingCallToSubscriberEventArgs args = new TerminalIncomingCallToSubscriberEventArgs();
+                args.PhoneNumber = e.PhoneNumber;
+                OnTerminalIncomingCallToSubscriber(args);
+                //Console.WriteLine("Входящий звонок от {0}", e.PhoneNumber);
+
+            }
+            else if (!this.IsSwitched)
+            {
+                ConfirmCall(null, null, false, null);
+            }
+            else if (this.IsBusy)
+            {
+                ConfirmCall(null, null, true, true);
+                //{ Console.WriteLine("Невозможно дозвониться телефон абонента выключен или занят {0}", e.PhoneNumber); }
+            }
+        }
+        protected virtual void OnTerminalIncomingCallToSubscriber(TerminalIncomingCallToSubscriberEventArgs e)
+        {
+            EventHandler<TerminalIncomingCallToSubscriberEventArgs> handler = TerminalIncomingCall;
+            if (handler != null) handler(this, e);
+        }
+
+        public event EventHandler<TerminalIncomingCallToSubscriberEventArgs> TerminalIncomingCall;
+
+        public void ConfirmCall(bool? isConfirmCall, bool? isSubscriberBusy, bool? isTerminalSwitched, bool? isTerminalBusy)
+        {
+            
+            ConfirmCallEventArgs args = new ConfirmCallEventArgs();
+            args.IsConfirmCall=isConfirmCall;
+            args.IsSubscriberBusy = isSubscriberBusy;
+            args.IsTerminalSwitched = isTerminalSwitched;
+            args.IsTerminalBusy = isTerminalBusy;
+
+            OnTerminalConfirmCall(args);
+        }
+
+        protected virtual void OnTerminalConfirmCall(ConfirmCallEventArgs e)
+        {
+            EventHandler<ConfirmCallEventArgs> handler = TerminalConfirmCall;
+            if (handler != null) handler(this, e);
+        }
+        public event EventHandler<ConfirmCallEventArgs> TerminalConfirmCall;
+
+        public void DisconnectionSubscriber(object sender, DisconnectionEventArgs e)
+        {
+            this.IsBusy=false;
+            OnDisconnectionSubscriber(e);
+
+        }
+
+        protected virtual void OnDisconnectionSubscriber(DisconnectionEventArgs e)
+        {
+            EventHandler<DisconnectionEventArgs> handler = SubscriberDisconnection;
+            if (handler != null) handler(this, e);
+        }
+        public event EventHandler<DisconnectionEventArgs> SubscriberDisconnection;
     }
 }
