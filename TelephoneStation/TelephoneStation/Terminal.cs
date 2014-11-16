@@ -56,6 +56,7 @@ namespace TelephoneStation
             }
             else if (this.IsBusy)
             {
+                
                 ConfirmCall(null, null, true, true);
                 //{ Console.WriteLine("Невозможно дозвониться телефон абонента выключен или занят {0}", e.PhoneNumber); }
             }
@@ -76,7 +77,7 @@ namespace TelephoneStation
             args.IsSubscriberBusy = isSubscriberBusy;
             args.IsTerminalSwitched = isTerminalSwitched;
             args.IsTerminalBusy = isTerminalBusy;
-
+            if (!isConfirmCall == true) this.IsBusy = false;
             OnTerminalConfirmCall(args);
         }
 
@@ -100,5 +101,20 @@ namespace TelephoneStation
             if (handler != null) handler(this, e);
         }
         public event EventHandler<DisconnectionEventArgs> SubscriberDisconnection;
+
+        public void FinishCall()
+        {
+            FinishCallEventArgs args = new FinishCallEventArgs();
+            args.IsCallFinished = true;
+            this.IsBusy = false;
+            OnTerminalFinishCall(args);
+        }
+        protected virtual void OnTerminalFinishCall(FinishCallEventArgs e)
+        {
+            EventHandler<FinishCallEventArgs> handler = TerminalFinishCall;
+            if (handler != null) handler(this, e);
+        }
+        public event EventHandler<FinishCallEventArgs> TerminalFinishCall;
+
     }
 }

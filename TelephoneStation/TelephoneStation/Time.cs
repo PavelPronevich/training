@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace TelephoneStation
 {
-    public class Time
+    static public class Time
     {
-        
+        public static DateTime ProgramTime = DateTime.Now;
+        public static DateTime Now
+        {
+            get
+            {
+               return ProgramTime.AddMilliseconds((DateTime.Now.Ticks - ProgramTime.Ticks)*553);
+            }
+        }    
     }
      
 }

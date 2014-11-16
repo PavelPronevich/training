@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TelephoneStation
 {
-    class Calls
+    public class Calls
     {
         public int TransactionNumber { get; set; }
         public Port OutgoingPort { get; set; }
@@ -21,6 +21,8 @@ namespace TelephoneStation
             this.IncomingPort = incomingPort;
             this.OutgoingPort = outgoingPort;
             this.TransactionNumber = transactionNumber;
+            this.BeginCallTime = new DateTime();
+            this.EndCallTime = new DateTime();
         }
     }
 }

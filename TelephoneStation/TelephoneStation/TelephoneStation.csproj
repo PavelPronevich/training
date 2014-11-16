@@ -47,6 +47,7 @@
     <Compile Include="Contract.cs" />
     <Compile Include="EventArgs\ConfirmCallEventArgs.cs" />
     <Compile Include="EventArgs\PortCallToTerminalEventArgs.cs" />
+    <Compile Include="FinishCallEventArgs.cs" />
     <Compile Include="Human.cs" />
     <Compile Include="Port.cs" />
     <Compile Include="EventArgs\PortCallToStationEventArgs.cs" />

@@ -12,7 +12,7 @@ namespace TelephoneStation
         private bool _isBusy=false;    // занет не занет опред станция если идет входящий или телефон исзодящим звонком
         public int? Number{get;private set;}// номер порта (телефона)
         public int TransactionNumber { get; set; }
-        private static int _namber = 754318;
+        private static int _namber = 754301;
        
         //private int pinCode; // секр номер для телефона, чтобы он прослушивал Port
         public Port(bool a)
@@ -91,6 +91,8 @@ namespace TelephoneStation
        
         public void ConfirmCall(object sender, ConfirmCallEventArgs e)
         {
+            if (!e.IsConfirmCall == true) this._isBusy = false;
+
             e.ConfirfCallPort = this;
             EventHandler<ConfirmCallEventArgs> handler = PortConfirmCall;
             if (handler != null) handler(this, e);
@@ -111,6 +113,20 @@ namespace TelephoneStation
             if (handler != null) handler(this, e);
         }
         public event EventHandler<DisconnectionEventArgs> DisconnectionTerminal;
+
+
+        public void FinishCall(object sender, FinishCallEventArgs e)
+        {
+            this._isBusy = false;
+            e.PoartFinishedCall = this;
+            OnFinishCall(e);
+        }
+        protected virtual void OnFinishCall(FinishCallEventArgs e)
+        {
+            EventHandler<FinishCallEventArgs> handler = PortFinishCall;
+            if (handler != null) handler(this, e);
+        }
+        public event EventHandler<FinishCallEventArgs> PortFinishCall;
 
     }
     

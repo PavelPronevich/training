@@ -46,5 +46,11 @@ namespace TelephoneStation
             this.IsSpeaking = false;
             if (e.Messege != "") Console.WriteLine(e.Messege);
         }
+
+        public void FinishCall()
+        {
+            this.IsSpeaking = false;
+            this.Phone.FinishCall();
+        }
     }
 }

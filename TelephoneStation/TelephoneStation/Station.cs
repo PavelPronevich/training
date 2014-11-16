@@ -39,6 +39,7 @@ namespace TelephoneStation
     _port.PortToTerminal += terminal.IncomingCall;
     _port.DisconnectionTerminal += terminal.DisconnectionSubscriber;
 
+    _port.PortFinishCall += finishCall;
 
 
     terminal.TerminalConfirmCall += _port.ConfirmCall;
@@ -48,6 +49,8 @@ namespace TelephoneStation
     Subscriber _subscriber = new Subscriber(human, terminal, _port, clientPlan);
     terminal.TerminalIncomingCall += _subscriber.IncomingCall;
     terminal.SubscriberDisconnection += _subscriber.DisconnectSubscriber;
+    terminal.TerminalFinishCall += _port.FinishCall;
+
 
     return _subscriber;
        // подумать нужен ли пользователю порт или просто номер порта
@@ -118,7 +121,7 @@ namespace TelephoneStation
         else if (GetPort(e.PhoneNumber).IsBusy)
         {
             string messege = String.Format("Station->{1}: Connection can not be established. "
-               + "Number's {0} port is busy.", e.PhoneNumber, e.PortColling.Number);
+               + "Subscriber's {0} port is busy.", e.PhoneNumber, e.PortColling.Number);
             this.disconnection(e.PortColling, messege);
         }
         
@@ -149,10 +152,11 @@ namespace TelephoneStation
     }
         void ConfirmCall(object sender, ConfirmCallEventArgs e)
         {
+            Calls _col = this.waitingCalls.Find(x => x.IncomingPort == e.ConfirfCallPort);
+
             if (e.IsConfirmCall == true)
             {
-                Calls _col = this.waitingCalls.Find(x => x.IncomingPort == e.ConfirfCallPort);
-                _col.BeginCallTime = DateTime.Now;
+                _col.BeginCallTime = Time.Now;
                 this.activeCalls.Add(_col);
                 this.waitingCalls.Remove(_col);
                 Contract contractFirst=subscribers.Find(x=>x.ClientPort==_col.OutgoingPort);
@@ -161,20 +165,59 @@ namespace TelephoneStation
                     contractFirst.ClientSurname, contractFirst.ClientName,contractFirst.ClientPort.Number,
                     contractSecond.ClientSurname, contractSecond.ClientName,contractSecond.ClientPort.Number);
             }
-            else if (true)
+            else if (e.IsSubscriberBusy==true)
             {
-
+                string messege = String.Format("Station->{1}: Connection is not established. "
+               + "Subscriber {0} is busy.",  e.ConfirfCallPort.Number , _col.OutgoingPort.Number);
+                this.disconnection(_col.OutgoingPort, messege);
             }
-
+            else if (e.IsTerminalBusy == true)
+            {
+                string messege = String.Format("Station->{1}: Connection is not established. "
+               + "Subscriber's {0} terminal is busy.", e.ConfirfCallPort.Number, _col.OutgoingPort.Number);
+                this.disconnection(_col.OutgoingPort, messege);
+            }
+            else if (e.IsTerminalSwitched == false)
+            {
+                string messege = String.Format("Station->{1}: Connection is not established. "
+               + "Subscriber's {0} terminal is unswitched.", e.ConfirfCallPort.Number, _col.OutgoingPort.Number);
+                this.disconnection(_col.OutgoingPort, messege);
+            }
         }
 
         void disconnection(Port port, string messege)
         {
-
             port.Disconnection(messege);
+        }
+
+        void finishCall(object sender, FinishCallEventArgs e)
+        {
+            Calls _call = this.activeCalls.Find(x => ((x.IncomingPort == e.PoartFinishedCall) 
+                || (x.OutgoingPort == e.PoartFinishedCall)));
+            if (!(_call==null))
+            {
+                _call.EndCallTime = Time.Now;
+                //this.disconnection(_call.OutgoingPort, messege);
+                this.activeCalls.Remove(_call);
+                this.finishedCalls.Add(_call);
+                if (_call.IncomingPort==e.PoartFinishedCall)
+                {
+                    this.disconnection(_call.OutgoingPort, "");
+                }
+                else this.disconnection(_call.IncomingPort, "");
+            }
+            //Console.WriteLine(e.PoartFinishedCall.Number + "завершил разговор");
 
         }
 
+        public void GetAllFinishedCalls()
+        {
+            foreach (var item in this.finishedCalls)
+            {
+                Console.WriteLine(item.OutgoingPort.Number + "->" + item.IncomingPort.Number +": " 
+                    +item.BeginCallTime+" - "+ item.EndCallTime);
+            }
+        }
     }
     
 }
