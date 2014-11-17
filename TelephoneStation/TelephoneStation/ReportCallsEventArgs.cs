@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace TelephoneStation
 {
-    public class TerminalCallToEventArgs
+    public class ReportCallsEventArgs
     {
-        public int PhoneNumber;
+        public List<SubscriberCall> RepottCalls;
+        public double SummToPay;
     }
 }

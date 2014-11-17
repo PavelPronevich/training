@@ -13,6 +13,5 @@ namespace TelephoneStation
         public bool? IsTerminalSwitched;
         public bool? IsTerminalBusy;
         public Port ConfirfCallPort;
-        //string messege;
     }
 }

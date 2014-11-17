@@ -8,60 +8,45 @@ namespace TelephoneStation
 {
     public class Port
     {
-        private bool _isSwitched=true; // вкл.откл станция за неуплату
-        private bool _isBusy=false;    // занет не занет опред станция если идет входящий или телефон исзодящим звонком
-        public int? Number{get;private set;}// номер порта (телефона)
+        private bool _isSwitched=true;
+        private bool _isBusy=false;
+        public int Number { get; private set;}
         public int TransactionNumber { get; set; }
         private static int _namber = 754301;
-       
-        //private int pinCode; // секр номер для телефона, чтобы он прослушивал Port
         public Port(bool a)
-        {
-        }
-
+        { this.Number = 0; }
+        
         public Port() 
         {
             this.Number = _namber++;
         }
+        
         public bool IsSwitched 
         {
-            get 
-            { 
-                return _isSwitched; 
-            }
-            set
-            { 
-                _isSwitched=value;
-            }
-         }
+            get { return _isSwitched; }
+            set { _isSwitched=value;  }
+        }
+        
         public bool IsBusy
         {
-            get
-            {
-                return _isBusy;
-            }
-            private set
-            {
-                _isBusy = value;
-            }
+            get { return _isBusy;}
+            private set { _isBusy = value;}
         }
 
-        public void TakeCall(int phoneNumber)//о вход вызове
+        public void TakeCall(int phoneNumber)
         {
             _isBusy = true;
             PortCallToTerminalEventArgs args = new PortCallToTerminalEventArgs();
             args.PhoneNumber = phoneNumber;
             OnPortCallToTerminal(args);
-            //Console.WriteLine("Входящий вызов от {0}", phoneNumber);
         }
+        
         protected virtual void OnPortCallToTerminal(PortCallToTerminalEventArgs e)
         {
             EventHandler<PortCallToTerminalEventArgs> handler = PortToTerminal;
             if (handler != null) handler(this, e);
         }
-        public event EventHandler<PortCallToTerminalEventArgs> PortToTerminal;
-
-
+                
         public void PortCallToStation(object sender, TerminalCallToEventArgs e)
         {
             if (this.IsSwitched && !this.IsBusy)
@@ -71,10 +56,17 @@ namespace TelephoneStation
                 args.PhoneNumber = e.PhoneNumber;
                 args.PortColling = this;
                 OnPortCallToStation(args);
-                //Console.WriteLine("Порт принял звонок от терминала и отправляет запрос на звонок {0} к станции", e.PhoneNumber);
-            }
+             }
             else { /*невозможно сделать звонок, сообщить терминалу*/}
             
+
+
+
+
+
+
+
+
 
         }
         protected virtual void OnPortCallToStation(PortCallToStationEventArgs e)
@@ -82,13 +74,7 @@ namespace TelephoneStation
             EventHandler<PortCallToStationEventArgs> handler = PortToStation;
             if (handler != null) handler(this, e);
         }
-        public event EventHandler<PortCallToStationEventArgs> PortToStation;
-       
-        public static void Block(object sender, BlockPortEventArgs e)
-        {
-         e.port.IsSwitched = e.IsSwitched;
-        }
-       
+        
         public void ConfirmCall(object sender, ConfirmCallEventArgs e)
         {
             if (!e.IsConfirmCall == true) this._isBusy = false;
@@ -97,7 +83,6 @@ namespace TelephoneStation
             EventHandler<ConfirmCallEventArgs> handler = PortConfirmCall;
             if (handler != null) handler(this, e);
         }
-        public event EventHandler<ConfirmCallEventArgs> PortConfirmCall;
 
         public void Disconnection(string messege)
         {
@@ -105,15 +90,13 @@ namespace TelephoneStation
             DisconnectionEventArgs args = new DisconnectionEventArgs();
             args.Messege=messege;
             OnDisconnectionTerminal(args);
-            //Console.WriteLine("Входящий вызов от {0}", phoneNumber);
         }
+
         protected virtual void OnDisconnectionTerminal(DisconnectionEventArgs e)
         {
             EventHandler<DisconnectionEventArgs> handler = DisconnectionTerminal;
             if (handler != null) handler(this, e);
         }
-        public event EventHandler<DisconnectionEventArgs> DisconnectionTerminal;
-
 
         public void FinishCall(object sender, FinishCallEventArgs e)
         {
@@ -121,13 +104,17 @@ namespace TelephoneStation
             e.PoartFinishedCall = this;
             OnFinishCall(e);
         }
+
         protected virtual void OnFinishCall(FinishCallEventArgs e)
         {
             EventHandler<FinishCallEventArgs> handler = PortFinishCall;
             if (handler != null) handler(this, e);
         }
+     
         public event EventHandler<FinishCallEventArgs> PortFinishCall;
-
+        public event EventHandler<PortCallToTerminalEventArgs> PortToTerminal;
+        public event EventHandler<DisconnectionEventArgs> DisconnectionTerminal;
+        public event EventHandler<ConfirmCallEventArgs> PortConfirmCall;
+        public event EventHandler<PortCallToStationEventArgs> PortToStation;
     }
-    
 }

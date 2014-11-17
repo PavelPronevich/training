@@ -13,7 +13,7 @@ namespace TelephoneStation
         {
             get
             {
-               return ProgramTime.AddMilliseconds((DateTime.Now.Ticks - ProgramTime.Ticks)*553);
+               return ProgramTime.AddMilliseconds((DateTime.Now.Ticks - ProgramTime.Ticks)*202);
             }
         }    
     }

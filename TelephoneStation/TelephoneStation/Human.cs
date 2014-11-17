@@ -28,10 +28,7 @@ namespace TelephoneStation
             this.ID = Guid.NewGuid();
         }
         
-        public void AddCash(int monney)
-        {
-            this.Cash += monney;
-        }
+        
 
     }
 }

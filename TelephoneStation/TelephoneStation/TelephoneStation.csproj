@@ -42,20 +42,23 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calls.cs" />
-    <Compile Include="DisconnectionEventArgs.cs" />
-    <Compile Include="EventArgs\BlockPortEventArgs.cs" />
+    <Compile Include="EventArgs\DisconnectionEventArgs.cs" />
     <Compile Include="Contract.cs" />
     <Compile Include="EventArgs\ConfirmCallEventArgs.cs" />
     <Compile Include="EventArgs\PortCallToTerminalEventArgs.cs" />
-    <Compile Include="FinishCallEventArgs.cs" />
+    <Compile Include="EventArgs\FinishCallEventArgs.cs" />
     <Compile Include="Human.cs" />
+    <Compile Include="ITariffPlan.cs" />
     <Compile Include="Port.cs" />
     <Compile Include="EventArgs\PortCallToStationEventArgs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportCallsEventArgs.cs" />
     <Compile Include="Station.cs" />
     <Compile Include="Subscriber.cs" />
-    <Compile Include="TariffPlan.cs" />
+    <Compile Include="SubscriberCall.cs" />
+    <Compile Include="TariffBase.cs" />
+    <Compile Include="TariffLight.cs" />
     <Compile Include="Terminal.cs" />
     <Compile Include="EventArgs\TerminalCallToEventArgs.cs" />
     <Compile Include="EventArgs\TerminalIncomingCallToSubscriberEventArgs.cs" />

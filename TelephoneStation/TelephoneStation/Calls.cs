@@ -13,9 +13,6 @@ namespace TelephoneStation
         public Port IncomingPort { get; set; }
         public DateTime BeginCallTime { get; set; }
         public DateTime EndCallTime { get; set; }
-        public Calls()
-        {
-        }
         public Calls(int transactionNumber, Port outgoingPort, Port incomingPort)
         {
             this.IncomingPort = incomingPort;
