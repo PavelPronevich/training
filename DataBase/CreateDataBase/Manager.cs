@@ -11,5 +11,7 @@ namespace CreateDataBase
         public int ManagerID { get; set; }
         public string ManagerSurname { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
+
+        
     }
 }

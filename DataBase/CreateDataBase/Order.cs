@@ -11,6 +11,7 @@ namespace CreateDataBase
         public int OrderID { get; set; }
         public DateTime OrderDate { get; set;} 
         public double Price {get;set;}
+        public DateTime ReportDate { get; set; }
         public int ManagerID { get; set; }
         public int ProductID { get; set; }
         public int CustomerID { get; set; }

@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework">
       <HintPath>..\packages\EntityFramework.6.1.1\lib\net45\EntityFramework.dll</HintPath>
@@ -51,6 +54,10 @@
     <Compile Include="Migrations\201411202317540_sameChange.cs" />
     <Compile Include="Migrations\201411202317540_sameChange.Designer.cs">
       <DependentUpon>201411202317540_sameChange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411252250409_AddReportDate.cs" />
+    <Compile Include="Migrations\201411252250409_AddReportDate.Designer.cs">
+      <DependentUpon>201411252250409_AddReportDate.cs</DependentUpon>
     </Compile>
     <Compile Include="Product.cs" />
     <Compile Include="Customer.cs" />
@@ -73,7 +80,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201411201328244_InitialCreate.resx">
@@ -84,6 +93,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411202317540_sameChange.resx">
       <DependentUpon>201411202317540_sameChange.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411252250409_AddReportDate.resx">
+      <DependentUpon>201411252250409_AddReportDate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
