@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,13 +14,24 @@ namespace CreateDataBase
 
         static void Main(string[] args)
         {
-            //OrdersContext.DreadfulDayCame(true);
+            string path = @"E:\1\DB.log";
+            if (!File.Exists(path))
+            {
+                using (FileStream fs = File.Create(path)) { }
+            }
+
+            OrdersContext.DreadfulDayCame(true);
             OrdersContext.GetManagers();
-            foreach (var item in OrdersContext.ManagersInDB)
-            { Console.WriteLine("{0}, {1}",item.ManagerSurname,item.ManagerID); }
+            //OrdersContext.AddManagerToDB("Lopital");
+            //OrdersContext.AddManagerToDB("Lopitall");
             OrdersContext.GetProducts();
             OrdersContext.GetCustomers();
-            OrdersContext.AddOrdersToDBFromFile(@"E:\1\Lopital_02112014.csv");
+            string[] file = new string[] { @"E:\1\Lopital_02112014.csv", @"E:\1\Kopernik_23122014.csv", @"E:\1\Kopernik_23122014.csv" };
+            Parallel.ForEach(file, item => OrdersContext.AddOrdersToDBFromFile(item, path));
+           // foreach (var item in file)
+           // {
+           //     OrdersContext.AddOrdersToDBFromFile(item);
+           // }
            
             /*OrdersContext.GetManagers();
             OrdersContext.GetProducts();
@@ -39,8 +51,8 @@ namespace CreateDataBase
 
             
 
-            foreach (var item in OrdersContext.CustomersInDB)
-                Console.WriteLine("{0} {1}", item.CustomerName, item.CustomerID);
+            //foreach (var item in OrdersContext.CustomersInDB)
+            //    Console.WriteLine("{0} {1}", item.CustomerName, item.CustomerID);
 
             //foreach (var item in OrdersContext.ProductInDB)
             //    Console.WriteLine("{0} {1}",item.ProductName,item.ProductID);
@@ -50,7 +62,7 @@ namespace CreateDataBase
                 
 
 
-                Console.ReadKey();
+            //    Console.ReadKey();
            
         }
     }

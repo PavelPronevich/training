@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Runtime.CompilerServices;
 
 namespace CreateDataBase
 {
@@ -21,6 +22,9 @@ namespace CreateDataBase
         public static List<Product> ProductInDB = new List<Product>();
         public static List<Manager> ManagersInDB = new List<Manager>();
         
+        
+        private static Object thisLock = new Object();
+        
         public static void GetManagers()
         {
             ManagersInDB.Clear();
@@ -35,17 +39,20 @@ namespace CreateDataBase
             }
         }
 
-        public static void AddManagerToDB(string managerSurname)
+        [MethodImpl(MethodImplOptions.Synchronized)]public static void AddManagerToDB(string managerSurname)
         {
-            if (GetManagerID(managerSurname) == null)
+            //lock (thisLock)
             {
-                using (var db = new OrdersContext())
+                if (GetManagerID(managerSurname) == null)
                 {
-                    Manager newManager = new Manager();
-                    newManager.ManagerSurname = managerSurname;
-                    db.Managers.Add(newManager);
-                    db.SaveChanges();
-                    ManagersInDB.Add(newManager);
+                    using (var db = new OrdersContext())
+                    {
+                        Manager newManager = new Manager();
+                        newManager.ManagerSurname = managerSurname;
+                        db.Managers.Add(newManager);
+                        db.SaveChanges();
+                        ManagersInDB.Add(newManager);
+                    }
                 }
             }
         }
@@ -62,7 +69,7 @@ namespace CreateDataBase
 
         public static void GetCustomers()
         {
-            ManagersInDB.Clear();
+            CustomersInDB.Clear();
             using (var db = new OrdersContext())
             {
                 var q = from b in db.Customers
@@ -74,17 +81,20 @@ namespace CreateDataBase
             }
         }
 
-        public static void AddCustomerToDB(string customerrName)
+        [MethodImpl(MethodImplOptions.Synchronized)]public static void AddCustomerToDB(string customerrName)
         {
-            if (GetCustomerID(customerrName) == null)
+            //lock (thisLock)
             {
-                using (var db = new OrdersContext())
+                if (GetCustomerID(customerrName) == null)
                 {
-                    Customer newCustomer = new Customer();
-                    newCustomer.CustomerName = customerrName;
-                    db.Customers.Add(newCustomer);
-                    db.SaveChanges();
-                    CustomersInDB.Add(newCustomer);
+                    using (var db = new OrdersContext())
+                    {
+                        Customer newCustomer = new Customer();
+                        newCustomer.CustomerName = customerrName;
+                        db.Customers.Add(newCustomer);
+                        db.SaveChanges();
+                        CustomersInDB.Add(newCustomer);
+                    }
                 }
             }
         }
@@ -112,17 +122,20 @@ namespace CreateDataBase
             }
         }
 
-        public static void AddProductToDB(string productName)
+        [MethodImpl(MethodImplOptions.Synchronized)]public static void AddProductToDB(string productName)
         {
-            if (GetProductID(productName) == null)
+        //lock (thisLock)
             {
-                using (var db = new OrdersContext())
+                if (GetProductID(productName) == null)
                 {
-                    Product newProduct = new Product();
-                    newProduct.ProductName = productName;
-                    db.Goods.Add(newProduct);
-                    db.SaveChanges();
-                    ProductInDB.Add(newProduct);
+                    using (var db = new OrdersContext())
+                    {
+                        Product newProduct = new Product();
+                        newProduct.ProductName = productName;
+                        db.Goods.Add(newProduct);
+                        db.SaveChanges();
+                        ProductInDB.Add(newProduct);
+                    }
                 }
             }
         }
@@ -137,8 +150,20 @@ namespace CreateDataBase
             return null;
         }
 
-        public static void AddOrdersToDBFromFile(string fileName)
+        [MethodImpl(MethodImplOptions.Synchronized)]private static void AddOrdersToDB(List<Order> orders)
         {
+            //lock (thisLock)
+            {
+                using (var db = new OrdersContext())
+                {
+                    db.Orders.AddRange(orders);
+                    db.SaveChanges();
+                }
+            }
+        }
+        public static void AddOrdersToDBFromFile(string fileName,string logFileName)
+        {
+
             int beginNameIndex = fileName.LastIndexOf("\\") + 1;
             int endnNameIndex = fileName.LastIndexOf("_");
             string managerName=fileName.Substring(beginNameIndex, endnNameIndex - beginNameIndex);
@@ -184,12 +209,20 @@ namespace CreateDataBase
                 order.Price = price;
                 orders.Add(order);
             }
+             AddOrdersToDB(orders);
+             
+            System.IO.StreamWriter writer = new System.IO.StreamWriter(logFileName, true);
+             writer.WriteLine("Данные из файла {0} добавлены в базу данных {1}", fileName, DateTime.Now);
+             writer.Close();
 
-            using (var db = new OrdersContext())
-            {
-                db.Orders.AddRange(orders);
-                db.SaveChanges();
-            }
+             using (System.IO.StreamReader sr = System.IO.File.OpenText(logFileName))
+             {
+                 string s = "";
+                 while ((s = sr.ReadLine()) != null)
+                 {
+                     Console.WriteLine(s);
+                 }
+             }
         }
 
         public static void DreadfulDayCame(bool isItTrue)

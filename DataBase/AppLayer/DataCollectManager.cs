@@ -1,6 +1,8 @@
-﻿using System;
+﻿using CreateDataBase;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,13 +29,22 @@ namespace AppLayer
         }
         public void Start()
         {
+            
             CatalogWatcher = new System.IO.FileSystemWatcher(Catalog, "*.csv");
             CatalogWatcher.Deleted += null;
             CatalogWatcher.Renamed += null;
-            CatalogWatcher.Created += null;
+            CatalogWatcher.Created += new FileSystemEventHandler(OnCreated);
 
-            IEnumerable<string> files = System.IO.Directory.GetFiles(Catalog, "*.csv");
+            IEnumerable<string> files = Directory.GetFiles(Catalog, "*.csv");
+            Parallel.ForEach(files, item => OrdersContext.AddOrdersToDBFromFile(item));
+        
         }
+        private static void OnCreated(object source, FileSystemEventArgs e)
+        {
+            OrdersContext.AddOrdersToDBFromFile(e.FullPath);
+
+        }
+
 
 
         public void Dispose()
