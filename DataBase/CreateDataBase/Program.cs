@@ -22,12 +22,16 @@ namespace CreateDataBase
 
             OrdersContext.DreadfulDayCame(true);
             OrdersContext.GetManagers();
-            //OrdersContext.AddManagerToDB("Lopital");
-            //OrdersContext.AddManagerToDB("Lopitall");
             OrdersContext.GetProducts();
             OrdersContext.GetCustomers();
-            string[] file = new string[] { @"E:\1\Lopital_02112014.csv", @"E:\1\Kopernik_23122014.csv", @"E:\1\Kopernik_23122014.csv" };
-            Parallel.ForEach(file, item => OrdersContext.AddOrdersToDBFromFile(item, path));
+            // @"E:\1\Lopital_02112014.csv", 
+            string[] file = new string[] { @"E:\1\Kopernik_20122014.csv", @"E:\1\Lopital_02112014.csv", @"E:\1\Kopernik_23122014.csv" };
+            Parallel.ForEach(file, item => OrdersContext.AddOrdersToDBFromFile(item));
+
+            Console.ReadKey();
+            OrdersContext.RemoveDataRfomDB(@"E:\1\Lopital_02112014.csv", path);
+
+            
            // foreach (var item in file)
            // {
            //     OrdersContext.AddOrdersToDBFromFile(item);

@@ -36,15 +36,17 @@ namespace AppLayer
             CatalogWatcher.Created += new FileSystemEventHandler(OnCreated);
 
             IEnumerable<string> files = Directory.GetFiles(Catalog, "*.csv");
-            Parallel.ForEach(files, item => OrdersContext.AddOrdersToDBFromFile(item));
-        
+            //Parallel.ForEach(files, item => OrdersContext.AddOrdersToDBFromFile(item, @"E:\1\DB.log"));
+            //Parallel.ForEach(files, item => OrdersContext.AddOrdersToDBFromFile(item));
         }
         private static void OnCreated(object source, FileSystemEventArgs e)
         {
             OrdersContext.AddOrdersToDBFromFile(e.FullPath);
-
         }
-
+        private static void OnDeleted(object source, FileSystemEventArgs e)
+        {
+            OrdersContext.RemoveDataRfomDB(e.FullPath, @"E:\1\DB.log");
+        }
 
 
         public void Dispose()

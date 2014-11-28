@@ -161,21 +161,34 @@ namespace CreateDataBase
                 }
             }
         }
-        public static void AddOrdersToDBFromFile(string fileName,string logFileName)
+        
+        public static string GetManagerName(string fileName)
         {
-
             int beginNameIndex = fileName.LastIndexOf("\\") + 1;
             int endnNameIndex = fileName.LastIndexOf("_");
-            string managerName=fileName.Substring(beginNameIndex, endnNameIndex - beginNameIndex);
+            return fileName.Substring(beginNameIndex, endnNameIndex - beginNameIndex);
+        }
+        public static DateTime GetDateTime(string fileName)
+        {
+            string reportDateString = (fileName.Remove(fileName.LastIndexOf(".")).Remove(0, fileName.LastIndexOf("_") + 1));
+            DateTime reportDate = new DateTime(Convert.ToInt32(reportDateString.Remove(0, 4)),
+            Convert.ToInt32(reportDateString.Remove(0, 2).Remove(2)), Convert.ToInt32(reportDateString.Remove(2)));
+            return reportDate;
+        }
+
+        
+        //public static void AddOrdersToDBFromFile(string fileName, string logFileName)
+        public static void AddOrdersToDBFromFile(string fileName)
+        {
+            string managerName = GetManagerName(fileName); 
             int managerID;
             if (GetManagerID(managerName) == null)
             {
                 AddManagerToDB(managerName);
             }
             managerID = (int)GetManagerID(managerName);
-            string reportDateString = (fileName.Remove(fileName.LastIndexOf(".")).Remove(0, fileName.LastIndexOf("_") + 1));
-            DateTime reportDate = new DateTime(Convert.ToInt32(reportDateString.Remove(0, 4)),
-            Convert.ToInt32(reportDateString.Remove(0, 2).Remove(2)), Convert.ToInt32(reportDateString.Remove(2)));
+            DateTime reportDate = GetDateTime(fileName); 
+
             IEnumerable<string> strings = System.IO.File.ReadLines(fileName);
             List<Order> orders = new List<Order>();
             foreach (var item in strings)
@@ -210,12 +223,13 @@ namespace CreateDataBase
                 orders.Add(order);
             }
              AddOrdersToDB(orders);
+            
              
-            System.IO.StreamWriter writer = new System.IO.StreamWriter(logFileName, true);
-             writer.WriteLine("Данные из файла {0} добавлены в базу данных {1}", fileName, DateTime.Now);
-             writer.Close();
+             //System.IO.StreamWriter writer = new System.IO.StreamWriter(logFileName, true);
+             //writer.WriteLine("{0};{1}", fileName, DateTime.Now);
+             //writer.Close();
 
-             using (System.IO.StreamReader sr = System.IO.File.OpenText(logFileName))
+             /*using (System.IO.StreamReader sr = System.IO.File.OpenText(logFileName))
              {
                  string s = "";
                  while ((s = sr.ReadLine()) != null)
@@ -223,6 +237,7 @@ namespace CreateDataBase
                      Console.WriteLine(s);
                  }
              }
+              */
         }
 
         public static void DreadfulDayCame(bool isItTrue)
@@ -250,6 +265,57 @@ namespace CreateDataBase
                 }
             }
         }
-        
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
+        public static void RemoveDataRfomDB(string fileName, string logFileName)
+        {
+            
+            string managerName=GetManagerName(fileName);
+            DateTime reportDate=GetDateTime(fileName);
+            int managerID=(int)GetManagerID(managerName);
+            List<int> productsID = new List<int>();
+            List<int> customersID = new List<int>();
+            using (var db = new OrdersContext())
+            {
+                var q = from b in db.Orders
+                        where (b.ManagerID == managerID && b.ReportDate == reportDate)
+                        select b;
+                foreach (var item in q)
+                {
+                    if (!productsID.Contains(item.ProductID))
+                        productsID.Add(item.ProductID);
+                    if (!customersID.Contains(item.CustomerID))
+                        customersID.Add(item.CustomerID);
+                }
+                db.Orders.RemoveRange(q);
+                db.SaveChanges();
+
+                foreach(var item in productsID)
+                {
+                    
+                    
+                    if (db.Orders.Count(x => x.ProductID == item) == 0)
+                    {
+                        db.Goods.Remove(db.Goods.FirstOrDefault(x=>x.ProductID==item));
+                        ProductInDB.Remove(ProductInDB.FirstOrDefault(x => x.ProductID == item));
+                    }
+                }
+                foreach (var item in customersID)
+                {
+                    if (db.Orders.Count(x => x.CustomerID == item) == 0)
+                    {
+                        db.Customers.Remove(db.Customers.FirstOrDefault(x => x.CustomerID == item));
+                        CustomersInDB.Remove(CustomersInDB.FirstOrDefault(x => x.CustomerID == item));
+                    }
+                }
+                if (db.Orders.Count(x => x.ManagerID == managerID) == 0)
+                {
+                    db.Managers.Remove(db.Managers.FirstOrDefault(x => x.ManagerID == managerID));
+                    ManagersInDB.Remove(ManagersInDB.FirstOrDefault(x => x.ManagerID == managerID));
+                }
+               
+                db.SaveChanges();
+            }
+        }
     }
 }
