@@ -5,13 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace CreateDataBase
 {
-        
-
     public class OrdersContext :DbContext
-    {
+       {
         public DbSet<Manager> Managers { get; set; }
         public DbSet<Product> Goods { get; set; }
         public DbSet<Customer> Customers { get; set; }
@@ -23,7 +22,11 @@ namespace CreateDataBase
         public static List<Manager> ManagersInDB = new List<Manager>();
         
         
-        private static Object thisLock = new Object();
+        //private static Object thisLock = new Object();
+        private static Mutex mutexManager = new Mutex();
+        private static Mutex mutexCustomer = new Mutex();
+        private static Mutex mutexProduct = new Mutex();
+        private static Mutex mutexOrder = new Mutex();
         
         public static void GetManagers()
         {
@@ -39,8 +42,10 @@ namespace CreateDataBase
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]public static void AddManagerToDB(string managerSurname)
+        //[MethodImpl(MethodImplOptions.Synchronized)]
+        public static void AddManagerToDB(string managerSurname)
         {
+            mutexManager.WaitOne();
             //lock (thisLock)
             {
                 if (GetManagerID(managerSurname) == null)
@@ -55,6 +60,7 @@ namespace CreateDataBase
                     }
                 }
             }
+            mutexManager.ReleaseMutex();
         }
 
         public static int? GetManagerID(string managerSurname)
@@ -81,8 +87,10 @@ namespace CreateDataBase
             }
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]public static void AddCustomerToDB(string customerrName)
+        //[MethodImpl(MethodImplOptions.Synchronized)]
+        public static void AddCustomerToDB(string customerrName)
         {
+            mutexCustomer.WaitOne();
             //lock (thisLock)
             {
                 if (GetCustomerID(customerrName) == null)
@@ -97,6 +105,7 @@ namespace CreateDataBase
                     }
                 }
             }
+            mutexCustomer.ReleaseMutex();
         }
 
         public static int? GetCustomerID(string customerrName)
@@ -110,6 +119,7 @@ namespace CreateDataBase
         }
         public static void GetProducts()
         {
+            
             ProductInDB.Clear();
             using (var db = new OrdersContext())
             {
@@ -120,10 +130,13 @@ namespace CreateDataBase
                     ProductInDB.Add(item);
                 }
             }
+            
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]public static void AddProductToDB(string productName)
+        //[MethodImpl(MethodImplOptions.Synchronized)]
+        public static void AddProductToDB(string productName)
         {
+            mutexProduct.WaitOne();
         //lock (thisLock)
             {
                 if (GetProductID(productName) == null)
@@ -138,6 +151,7 @@ namespace CreateDataBase
                     }
                 }
             }
+            mutexProduct.ReleaseMutex();
         }
 
         public static int? GetProductID(string productName)
@@ -150,8 +164,10 @@ namespace CreateDataBase
             return null;
         }
 
-        [MethodImpl(MethodImplOptions.Synchronized)]private static void AddOrdersToDB(List<Order> orders)
+        //[MethodImpl(MethodImplOptions.Synchronized)]
+        private static void AddOrdersToDB(List<Order> orders)
         {
+            mutexOrder.WaitOne();
             //lock (thisLock)
             {
                 using (var db = new OrdersContext())
@@ -160,6 +176,7 @@ namespace CreateDataBase
                     db.SaveChanges();
                 }
             }
+            mutexOrder.ReleaseMutex();
         }
         
         public static string GetManagerName(string fileName)
@@ -267,16 +284,21 @@ namespace CreateDataBase
         }
 
         [MethodImpl(MethodImplOptions.Synchronized)]
-        public static void RemoveDataRfomDB(string fileName, string logFileName)
+        public static void RemoveDataRfomDB(string fileName)
         {
-            
+            mutexOrder.WaitOne();
+            mutexCustomer.WaitOne();
+            mutexManager.WaitOne();
+            mutexProduct.WaitOne();
             string managerName=GetManagerName(fileName);
             DateTime reportDate=GetDateTime(fileName);
             int managerID=(int)GetManagerID(managerName);
             List<int> productsID = new List<int>();
             List<int> customersID = new List<int>();
+            
             using (var db = new OrdersContext())
             {
+                
                 var q = from b in db.Orders
                         where (b.ManagerID == managerID && b.ReportDate == reportDate)
                         select b;
@@ -289,13 +311,14 @@ namespace CreateDataBase
                 }
                 db.Orders.RemoveRange(q);
                 db.SaveChanges();
+                
 
                 foreach(var item in productsID)
                 {
                     
-                    
                     if (db.Orders.Count(x => x.ProductID == item) == 0)
                     {
+                        
                         db.Goods.Remove(db.Goods.FirstOrDefault(x=>x.ProductID==item));
                         ProductInDB.Remove(ProductInDB.FirstOrDefault(x => x.ProductID == item));
                     }
@@ -316,6 +339,11 @@ namespace CreateDataBase
                
                 db.SaveChanges();
             }
+            mutexCustomer.ReleaseMutex();
+            mutexManager.ReleaseMutex();
+            mutexOrder.ReleaseMutex();
+            mutexProduct.ReleaseMutex();
+            
         }
     }
 }

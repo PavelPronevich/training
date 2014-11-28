@@ -11,14 +11,13 @@ namespace CreateDataBase
     class Program
     {
 
-
         static void Main(string[] args)
         {
-            string path = @"E:\1\DB.log";
-            if (!File.Exists(path))
-            {
-                using (FileStream fs = File.Create(path)) { }
-            }
+            //string path = @"E:\1\DB.log";
+            //if (!File.Exists(path))
+            //{
+            //    using (FileStream fs = File.Create(path)) { }
+            //}
 
             OrdersContext.DreadfulDayCame(true);
             OrdersContext.GetManagers();
@@ -29,7 +28,7 @@ namespace CreateDataBase
             Parallel.ForEach(file, item => OrdersContext.AddOrdersToDBFromFile(item));
 
             Console.ReadKey();
-            OrdersContext.RemoveDataRfomDB(@"E:\1\Lopital_02112014.csv", path);
+            OrdersContext.RemoveDataRfomDB(@"E:\1\Lopital_02112014.csv");
 
             
            // foreach (var item in file)
