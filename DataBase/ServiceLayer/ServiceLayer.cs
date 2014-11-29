@@ -23,9 +23,22 @@ namespace ServiceLayer
             eventLog1.Log = "MyNewLog";
         }
 
+        AppLayer.DataCollectManager _dataManager;
+
         protected override void OnStart(string[] args)
         {
-            eventLog1.WriteEntry(string.Format("In OnStart {0}.", DateTime.Now));
+            try
+            {
+                CreateDataBase.OrdersContext.DreadfulDayCame(true);
+                eventLog1.WriteEntry(string.Format("In OnStart {0}.", DateTime.Now));
+                _dataManager = new AppLayer.DataCollectManager();
+                _dataManager.Init(@"e:\1\");
+                _dataManager.Start();
+            }
+            catch (Exception e)
+            {
+                eventLog1.WriteEntry(string.Format("Exception {0}",e.Message));
+            }
         }
 
         protected override void OnStop()

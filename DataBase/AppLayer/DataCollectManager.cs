@@ -29,25 +29,49 @@ namespace AppLayer
         }
         public void Start()
         {
+            Console.WriteLine("Start");
             
-            CatalogWatcher = new System.IO.FileSystemWatcher(Catalog, "*.csv");
-            CatalogWatcher.Deleted += null;
-            CatalogWatcher.Renamed += null;
-            CatalogWatcher.Created += new FileSystemEventHandler(OnCreated);
+            Console.WriteLine("On_process");
+            
+            //OrdersContext.GetManagers();
+            //OrdersContext.GetProducts();
+            //OrdersContext.GetCustomers();
 
+            CatalogWatcher = new System.IO.FileSystemWatcher(Catalog, "*.csv");
+            //CatalogWatcher = new System.IO.FileSystemWatcher(Catalog, "*.csv");
+            CatalogWatcher.Deleted += new FileSystemEventHandler(OnDeleted);
+            CatalogWatcher.Renamed += new RenamedEventHandler(OnRenamed);
+            CatalogWatcher.Created += new FileSystemEventHandler(OnCreated);
+            CatalogWatcher.EnableRaisingEvents = true;
+            
             IEnumerable<string> files = Directory.GetFiles(Catalog, "*.csv");
             Parallel.ForEach(files, item => OrdersContext.AddOrdersToDBFromFile(item));
             //Parallel.ForEach(files, item => OrdersContext.AddOrdersToDBFromFile(item));
+
         }
         private static void OnCreated(object source, FileSystemEventArgs e)
         {
+            Console.WriteLine(e.FullPath);
             OrdersContext.AddOrdersToDBFromFile(e.FullPath);
         }
         private static void OnDeleted(object source, FileSystemEventArgs e)
         {
             OrdersContext.RemoveDataRfomDB(e.FullPath);
         }
+        private static void OnRenamed(object source, RenamedEventArgs e)
+        {
+            OrdersContext.RemoveDataRfomDB(e.OldFullPath);
+            
+            OrdersContext.AddOrdersToDBFromFile(e.FullPath);
+        }
 
+        public void Stop()
+        {
+            CatalogWatcher.Deleted -= new FileSystemEventHandler(OnDeleted);
+            CatalogWatcher.Renamed -= new RenamedEventHandler(OnRenamed);
+            CatalogWatcher.Created -= new FileSystemEventHandler(OnCreated);
+            CatalogWatcher.EnableRaisingEvents = false;
+        }
 
         public void Dispose()
         {

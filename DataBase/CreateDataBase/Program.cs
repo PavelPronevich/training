@@ -13,6 +13,7 @@ namespace CreateDataBase
 
         static void Main(string[] args)
         {
+            
             //string path = @"E:\1\DB.log";
             //if (!File.Exists(path))
             //{
@@ -20,9 +21,11 @@ namespace CreateDataBase
             //}
 
             OrdersContext.DreadfulDayCame(true);
-            OrdersContext.GetManagers();
-            OrdersContext.GetProducts();
-            OrdersContext.GetCustomers();
+            Console.WriteLine(OrdersContext.GetManagerID("dasdsds"));
+            //OrdersContext.GetManagers();
+            //OrdersContext.GetProducts();
+            //OrdersContext.GetCustomers();
+            /*
             // @"E:\1\Lopital_02112014.csv", 
             string[] file = new string[] { @"E:\1\Kopernik_20122014.csv", @"E:\1\Lopital_02112014.csv", @"E:\1\Kopernik_23122014.csv" };
             Parallel.ForEach(file, item => OrdersContext.AddOrdersToDBFromFile(item));
