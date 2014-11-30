@@ -43,7 +43,7 @@ namespace ServiceLayer
 
         protected override void OnStop()
         {
-            _dataManager.Stop();
+            //_dataManager.Stop();
 
             eventLog1.WriteEntry(string.Format("In onStop {0}", DateTime.Now));
         }

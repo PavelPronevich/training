@@ -22,6 +22,7 @@ namespace CreateDataBase
         private static Mutex mutexCustomer = new Mutex();
         private static Mutex mutexProduct = new Mutex();
         private static Mutex mutexOrder = new Mutex();
+        private static Mutex mutexReport = new Mutex();
         public static void AddManagerToDB(string managerSurname)
         {
             mutexManager.WaitOne();
@@ -124,7 +125,7 @@ namespace CreateDataBase
             return fileName.Substring(beginNameIndex, endnNameIndex - beginNameIndex);
         }
 
-        static string GetFileName(string fileName)
+        static string GetReportName(string fileName)
         {
             int beginNameIndex = fileName.LastIndexOf("\\") + 1;
             return fileName.Substring(beginNameIndex);
@@ -137,58 +138,81 @@ namespace CreateDataBase
             return reportDate;
         }
 
-        public static void AddOrdersToDBFromFile(string fileName)
+        public static bool IsReportInDB(string fileReport)
         {
-            string managerName = GetManagerName(fileName); 
-            int managerID;
-            if (GetManagerID(managerName) == null)
-            {
-                AddManagerToDB(managerName);
-            }
-            managerID = (int)GetManagerID(managerName);
-            
             using (var db = new OrdersContext())
             {
-                db.Reports.Add(new Report() { FileReport = GetFileName(fileName), ManagerID = managerID });
-                db.SaveChanges();
+                if (db.Reports.Count(x => x.FileReport == fileReport) == 0)
+                    return false;
+                else return true;
             }
+        }
+        public static bool AddReportToDB(string fileReport, int managerID)
+        {
+            bool result;
+            mutexReport.WaitOne();
+            if (!IsReportInDB(fileReport))
+                using (var db = new OrdersContext())
+                {
+                    db.Reports.Add(new Report(){FileReport=fileReport,ManagerID=managerID});
+                    db.SaveChanges();
+                    result = true;
+                }
+            else result = false;
+            mutexReport.ReleaseMutex();
+            return result;
+        }
 
-            DateTime reportDate = GetDateTime(fileName); 
-            IEnumerable<string> strings = System.IO.File.ReadLines(fileName);
-            List<Order> orders = new List<Order>();
-            foreach (var item in strings)
+        public static void AddOrdersToDBFromFile(string fileName)
+        {
+            string fileReport = GetReportName(fileName);
+            if (!IsReportInDB(fileName))
             {
-                Order order = new Order();
-                order.ManagerID = managerID;
-                order.ReportDate = reportDate;
-                List<int> breaks = new List<int>();
-                breaks.Add(item.IndexOf(','));
-                breaks.Add(item.IndexOf(',', breaks[0] + 1));
-                breaks.Add(item.IndexOf(',', breaks[1] + 1));
-                DateTime orderDate = System.Convert.ToDateTime(item.Substring(0, breaks[0]));
-                order.OrderDate = orderDate;
-                string customerName = item.Substring(breaks[0] + 1, breaks[1] - breaks[0] - 1);
-                int customerID;
-                if (GetCustomerID(customerName) == null)
+
+                string managerName = GetManagerName(fileName);
+                if (GetManagerID(managerName) == null)
+                    AddManagerToDB(managerName);
+                int managerID = (int)GetManagerID(managerName);
+                if (AddReportToDB(fileReport, managerID))
                 {
-                    AddCustomerToDB(customerName);
+                    DateTime reportDate = GetDateTime(fileName);
+                    IEnumerable<string> strings = System.IO.File.ReadLines(fileName);
+                    List<Order> orders = new List<Order>();
+                    foreach (var item in strings)
+                    {
+                        Order order = new Order();
+                        order.ManagerID = managerID;
+                        order.ReportDate = reportDate;
+                        List<int> breaks = new List<int>();
+                        breaks.Add(item.IndexOf(','));
+                        breaks.Add(item.IndexOf(',', breaks[0] + 1));
+                        breaks.Add(item.IndexOf(',', breaks[1] + 1));
+                        DateTime orderDate = System.Convert.ToDateTime(item.Substring(0, breaks[0]));
+                        order.OrderDate = orderDate;
+                        string customerName = item.Substring(breaks[0] + 1, breaks[1] - breaks[0] - 1);
+                        int customerID;
+                        if (GetCustomerID(customerName) == null)
+                        {
+                            AddCustomerToDB(customerName);
+                        }
+                        customerID = (int)GetCustomerID(customerName);
+                        order.CustomerID = customerID;
+                        string productName = item.Substring(breaks[1] + 1, breaks[2] - breaks[1] - 1);
+                        int productID;
+                        if (GetProductID(productName) == null)
+                        {
+                            AddProductToDB(productName);
+                        }
+                        productID = (int)GetProductID(productName);
+                        order.ProductID = productID;
+                        double price = System.Convert.ToDouble(item.Substring(breaks[2] + 1));
+                        order.Price = price;
+                        orders.Add(order);
+                    }
+                    AddOrdersToDB(orders);
+                    Console.WriteLine("Data from {0} added to the database.", fileName);
                 }
-                customerID = (int)GetCustomerID(customerName);
-                order.CustomerID = customerID;
-                string productName = item.Substring(breaks[1] + 1, breaks[2] - breaks[1] - 1);
-                int productID;
-                if (GetProductID(productName) == null)
-                {
-                    AddProductToDB(productName);
-                }
-                productID = (int)GetProductID(productName);
-                order.ProductID = productID;
-                double price= System.Convert.ToDouble(item.Substring(breaks[2] + 1));
-                order.Price = price;
-                orders.Add(order);
             }
-             AddOrdersToDB(orders);
-             Console.WriteLine("Data from {0} added to the database.", fileName);
         }
 
         public static void DreadfulDayCame(bool isItTrue)
@@ -205,10 +229,13 @@ namespace CreateDataBase
                              select b;
                     var q3 = from b in db.Orders
                              select b;
+                    var q4 = from b in db.Reports
+                             select b;
                     db.Products.RemoveRange(q);
                     db.Managers.RemoveRange(q1);
                     db.Customers.RemoveRange(q2);
                     db.Orders.RemoveRange(q3);
+                    db.Reports.RemoveRange(q4);
                     db.SaveChanges();
                     Console.WriteLine("All data deleted from the database.");
                 }
@@ -217,57 +244,70 @@ namespace CreateDataBase
 
         public static void RemoveDataRfomDB(string fileName)
         {
-            mutexOrder.WaitOne();
-            mutexCustomer.WaitOne();
-            mutexManager.WaitOne();
-            mutexProduct.WaitOne();
-            string managerName=GetManagerName(fileName);
-            DateTime reportDate=GetDateTime(fileName);
-            if (GetManagerID(managerName)!=null)
-            { 
-                int managerID=(int)GetManagerID(managerName);
-                List<int> productsID = new List<int>();
-                List<int> customersID = new List<int>();
+            mutexReport.WaitOne();
+            if (IsReportInDB(GetReportName(fileName)))
+            {
+                string reportName = GetReportName(fileName);
                 using (var db = new OrdersContext())
                 {
-                    var q = from b in db.Orders
-                            where (b.ManagerID == managerID && b.ReportDate == reportDate)
-                            select b;
-                    foreach (var item in q)
-                    {
-                        if (!productsID.Contains(item.ProductID))
-                            productsID.Add(item.ProductID);
-                        if (!customersID.Contains(item.CustomerID))
-                            customersID.Add(item.CustomerID);
-                    }
-                    db.Orders.RemoveRange(q);
-                    db.SaveChanges();
-                    foreach (var item in productsID)
-                    {
-                        if (db.Orders.Count(x => x.ProductID == item) == 0)
-                        {
-                            db.Products.Remove(db.Products.FirstOrDefault(x => x.ProductID == item));
-                        }
-                    }
-                    foreach (var item in customersID)
-                    {
-                        if (db.Orders.Count(x => x.CustomerID == item) == 0)
-                        {
-                            db.Customers.Remove(db.Customers.FirstOrDefault(x => x.CustomerID == item));
-                        }
-                    }
-                    if (db.Orders.Count(x => x.ManagerID == managerID) == 0)
-                    {
-                        db.Managers.Remove(db.Managers.FirstOrDefault(x => x.ManagerID == managerID));                  
-                    }
+                    db.Reports.Remove(db.Reports.FirstOrDefault(x => x.FileReport == reportName));
                     db.SaveChanges();
                 }
+                mutexReport.ReleaseMutex();
+                mutexOrder.WaitOne();
+                mutexCustomer.WaitOne();
+                mutexManager.WaitOne();
+                mutexProduct.WaitOne();
+                string managerName = GetManagerName(fileName);
+                DateTime reportDate = GetDateTime(fileName);
+                if (GetManagerID(managerName) != null)
+                {
+                    int managerID = (int)GetManagerID(managerName);
+                    List<int> productsID = new List<int>();
+                    List<int> customersID = new List<int>();
+                    using (var db = new OrdersContext())
+                    {
+                        var q = from b in db.Orders
+                                where (b.ManagerID == managerID && b.ReportDate == reportDate)
+                                select b;
+                        foreach (var item in q)
+                        {
+                            if (!productsID.Contains(item.ProductID))
+                                productsID.Add(item.ProductID);
+                            if (!customersID.Contains(item.CustomerID))
+                                customersID.Add(item.CustomerID);
+                        }
+                        db.Orders.RemoveRange(q);
+                        db.SaveChanges();
+                        foreach (var item in productsID)
+                        {
+                            if (db.Orders.Count(x => x.ProductID == item) == 0)
+                            {
+                                db.Products.Remove(db.Products.FirstOrDefault(x => x.ProductID == item));
+                            }
+                        }
+                        foreach (var item in customersID)
+                        {
+                            if (db.Orders.Count(x => x.CustomerID == item) == 0)
+                            {
+                                db.Customers.Remove(db.Customers.FirstOrDefault(x => x.CustomerID == item));
+                            }
+                        }
+                        if (db.Orders.Count(x => x.ManagerID == managerID) == 0)
+                        {
+                            db.Managers.Remove(db.Managers.FirstOrDefault(x => x.ManagerID == managerID));
+                        }
+                        
+                        
+                        db.SaveChanges();
+                    }
+                }
+                mutexCustomer.ReleaseMutex();
+                mutexManager.ReleaseMutex();
+                mutexOrder.ReleaseMutex();
+                mutexProduct.ReleaseMutex();
+                Console.WriteLine("Data from {0} removed from the database.", fileName);
             }
-            mutexCustomer.ReleaseMutex();
-            mutexManager.ReleaseMutex();
-            mutexOrder.ReleaseMutex();
-            mutexProduct.ReleaseMutex();
-            Console.WriteLine("Data from {0} removed from the database.", fileName);
         }
     }
 }

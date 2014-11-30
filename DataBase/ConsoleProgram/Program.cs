@@ -14,7 +14,7 @@ namespace ConsoleProgram
     {
         static void Main(string[] args)
         {
-            OrdersContext.DreadfulDayCame(true);
+            //OrdersContext.DreadfulDayCame(true);
             AppLayer.DataCollectManager _dataManager;
             //eventLog1.WriteEntry(string.Format("In OnStart {0}.", DateTime.Now));
             _dataManager = new AppLayer.DataCollectManager();
