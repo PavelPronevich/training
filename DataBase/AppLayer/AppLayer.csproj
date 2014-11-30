@@ -52,17 +52,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CreateDataBase\CreateDataBase.csproj">
-      <Project>{7751b0f6-e38c-4753-887c-f61831026c58}</Project>
-      <Name>CreateDataBase</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CreateDataBase\CreateDataBase.csproj">
+      <Project>{7751b0f6-e38c-4753-887c-f61831026c58}</Project>
+      <Name>CreateDataBase</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

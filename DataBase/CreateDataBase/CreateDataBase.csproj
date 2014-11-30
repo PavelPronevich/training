@@ -59,6 +59,14 @@
     <Compile Include="Migrations\201411252250409_AddReportDate.Designer.cs">
       <DependentUpon>201411252250409_AddReportDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201411300112060_AddReport.cs" />
+    <Compile Include="Migrations\201411300112060_AddReport.Designer.cs">
+      <DependentUpon>201411300112060_AddReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201411300216215_chandeInNames.cs" />
+    <Compile Include="Migrations\201411300216215_chandeInNames.Designer.cs">
+      <DependentUpon>201411300216215_chandeInNames.cs</DependentUpon>
+    </Compile>
     <Compile Include="Product.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="Manager.cs" />
@@ -75,6 +83,7 @@
     <Compile Include="OrdersContext.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -96,6 +105,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201411252250409_AddReportDate.resx">
       <DependentUpon>201411252250409_AddReportDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411300112060_AddReport.resx">
+      <DependentUpon>201411300112060_AddReport.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201411300216215_chandeInNames.resx">
+      <DependentUpon>201411300216215_chandeInNames.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

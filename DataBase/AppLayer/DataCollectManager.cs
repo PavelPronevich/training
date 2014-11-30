@@ -29,29 +29,17 @@ namespace AppLayer
         }
         public void Start()
         {
-            Console.WriteLine("Start");
-            
-            Console.WriteLine("On_process");
-            
-            //OrdersContext.GetManagers();
-            //OrdersContext.GetProducts();
-            //OrdersContext.GetCustomers();
-
+            Console.WriteLine("On Start");
             CatalogWatcher = new System.IO.FileSystemWatcher(Catalog, "*.csv");
-            //CatalogWatcher = new System.IO.FileSystemWatcher(Catalog, "*.csv");
             CatalogWatcher.Deleted += new FileSystemEventHandler(OnDeleted);
             CatalogWatcher.Renamed += new RenamedEventHandler(OnRenamed);
             CatalogWatcher.Created += new FileSystemEventHandler(OnCreated);
             CatalogWatcher.EnableRaisingEvents = true;
-            
             IEnumerable<string> files = Directory.GetFiles(Catalog, "*.csv");
             Parallel.ForEach(files, item => OrdersContext.AddOrdersToDBFromFile(item));
-            //Parallel.ForEach(files, item => OrdersContext.AddOrdersToDBFromFile(item));
-
         }
         private static void OnCreated(object source, FileSystemEventArgs e)
         {
-            Console.WriteLine(e.FullPath);
             OrdersContext.AddOrdersToDBFromFile(e.FullPath);
         }
         private static void OnDeleted(object source, FileSystemEventArgs e)
@@ -60,8 +48,7 @@ namespace AppLayer
         }
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
-            OrdersContext.RemoveDataRfomDB(e.OldFullPath);
-            
+            OrdersContext.RemoveDataRfomDB(e.OldFullPath);            
             OrdersContext.AddOrdersToDBFromFile(e.FullPath);
         }
 
@@ -75,7 +62,8 @@ namespace AppLayer
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Stop();
+            GC.SuppressFinalize(this);    
         }
     }
 }

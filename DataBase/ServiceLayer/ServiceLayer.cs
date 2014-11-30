@@ -29,7 +29,7 @@ namespace ServiceLayer
         {
             try
             {
-                CreateDataBase.OrdersContext.DreadfulDayCame(true);
+                //CreateDataBase.OrdersContext.DreadfulDayCame(true);
                 eventLog1.WriteEntry(string.Format("In OnStart {0}.", DateTime.Now));
                 _dataManager = new AppLayer.DataCollectManager();
                 _dataManager.Init(@"e:\1\");
@@ -43,6 +43,8 @@ namespace ServiceLayer
 
         protected override void OnStop()
         {
+            _dataManager.Stop();
+
             eventLog1.WriteEntry(string.Format("In onStop {0}", DateTime.Now));
         }
     }

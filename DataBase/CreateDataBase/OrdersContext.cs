@@ -12,53 +12,27 @@ namespace CreateDataBase
     public class OrdersContext :DbContext
        {
         public DbSet<Manager> Managers { get; set; }
-        public DbSet<Product> Goods { get; set; }
+        public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Report> Reports { get; set; }
         public DbSet<Order> Orders { get; set; }
         public OrdersContext() : base("MyDB") { }
-
-        //public static List<Customer> CustomersInDB = new List<Customer>();
-        //public static List<Product> ProductInDB = new List<Product>();
-        //public static List<Manager> ManagersInDB = new List<Manager>();
         
-        
-        //private static Object thisLock = new Object();
         private static Mutex mutexManager = new Mutex();
         private static Mutex mutexCustomer = new Mutex();
         private static Mutex mutexProduct = new Mutex();
         private static Mutex mutexOrder = new Mutex();
-        
-        /*public static void GetManagers()
-        {
-            ManagersInDB.Clear();
-            using (var db = new OrdersContext())
-            {
-                var q= from b in db.Managers
-                                select b;
-                foreach(var item in q)
-                {
-                    ManagersInDB.Add(item);
-                }
-            }
-        }
-         */
-
-        //[MethodImpl(MethodImplOptions.Synchronized)]
         public static void AddManagerToDB(string managerSurname)
         {
             mutexManager.WaitOne();
-            //lock (thisLock)
+            if (GetManagerID(managerSurname) == null)
             {
-                if (GetManagerID(managerSurname) == null)
+                using (var db = new OrdersContext())
                 {
-                    using (var db = new OrdersContext())
-                    {
-                        Manager newManager = new Manager();
-                        newManager.ManagerSurname = managerSurname;
-                        db.Managers.Add(newManager);
-                        db.SaveChanges();
-                        //ManagersInDB.Add(newManager);
-                    }
+                    Manager newManager = new Manager();
+                    newManager.ManagerSurname = managerSurname;
+                    db.Managers.Add(newManager);
+                    db.SaveChanges();
                 }
             }
             mutexManager.ReleaseMutex();
@@ -76,38 +50,17 @@ namespace CreateDataBase
             return null;
         }
 
-
-        /*public static void GetCustomers()
-        {
-            CustomersInDB.Clear();
-            using (var db = new OrdersContext())
-            {
-                var q = from b in db.Customers
-                        select b;
-                foreach (var item in q)
-                {
-                    CustomersInDB.Add(item);
-                }
-            }
-        }
-         */
-
-        //[MethodImpl(MethodImplOptions.Synchronized)]
         public static void AddCustomerToDB(string customerrName)
         {
             mutexCustomer.WaitOne();
-            //lock (thisLock)
+            if (GetCustomerID(customerrName) == null)
             {
-                if (GetCustomerID(customerrName) == null)
+                using (var db = new OrdersContext())
                 {
-                    using (var db = new OrdersContext())
-                    {
-                        Customer newCustomer = new Customer();
-                        newCustomer.CustomerName = customerrName;
-                        db.Customers.Add(newCustomer);
-                        db.SaveChanges();
-                        //CustomersInDB.Add(newCustomer);
-                    }
+                    Customer newCustomer = new Customer();
+                    newCustomer.CustomerName = customerrName;
+                    db.Customers.Add(newCustomer);
+                    db.SaveChanges();
                 }
             }
             mutexCustomer.ReleaseMutex();
@@ -124,39 +77,18 @@ namespace CreateDataBase
             }
             return null;
         }
-        /*public static void GetProducts()
-        {
-            
-            ProductInDB.Clear();
-            using (var db = new OrdersContext())
-            {
-                var q = from b in db.Goods
-                        select b;
-                foreach (var item in q)
-                {
-                    ProductInDB.Add(item);
-                }
-            }
-            
-        }
-         */
-
-        //[MethodImpl(MethodImplOptions.Synchronized)]
+        
         public static void AddProductToDB(string productName)
         {
             mutexProduct.WaitOne();
-        //lock (thisLock)
+            if (GetProductID(productName) == null)
             {
-                if (GetProductID(productName) == null)
+                using (var db = new OrdersContext())
                 {
-                    using (var db = new OrdersContext())
-                    {
-                        Product newProduct = new Product();
-                        newProduct.ProductName = productName;
-                        db.Goods.Add(newProduct);
-                        db.SaveChanges();
-                        //ProductInDB.Add(newProduct);
-                    }
+                    Product newProduct = new Product();
+                    newProduct.ProductName = productName;
+                    db.Products.Add(newProduct);
+                    db.SaveChanges();
                 }
             }
             mutexProduct.ReleaseMutex();
@@ -166,37 +98,38 @@ namespace CreateDataBase
         {
             using (var db = new OrdersContext())
             {
-                if (db.Goods.FirstOrDefault(x => x.ProductName == productName) != null)
+                if (db.Products.FirstOrDefault(x => x.ProductName == productName) != null)
                 {
-                    return db.Goods.FirstOrDefault(x => x.ProductName == productName).ProductID;
+                    return db.Products.FirstOrDefault(x => x.ProductName == productName).ProductID;
                 }
             }
             return null;
-
         }
 
-        //[MethodImpl(MethodImplOptions.Synchronized)]
         private static void AddOrdersToDB(List<Order> orders)
         {
             mutexOrder.WaitOne();
-            //lock (thisLock)
+            using (var db = new OrdersContext())
             {
-                using (var db = new OrdersContext())
-                {
-                    db.Orders.AddRange(orders);
-                    db.SaveChanges();
-                }
+                db.Orders.AddRange(orders);
+                db.SaveChanges();
             }
             mutexOrder.ReleaseMutex();
         }
         
-        public static string GetManagerName(string fileName)
+        static string GetManagerName(string fileName)
         {
             int beginNameIndex = fileName.LastIndexOf("\\") + 1;
             int endnNameIndex = fileName.LastIndexOf("_");
             return fileName.Substring(beginNameIndex, endnNameIndex - beginNameIndex);
         }
-        public static DateTime GetDateTime(string fileName)
+
+        static string GetFileName(string fileName)
+        {
+            int beginNameIndex = fileName.LastIndexOf("\\") + 1;
+            return fileName.Substring(beginNameIndex);
+        }
+        static DateTime GetDateTime(string fileName)
         {
             string reportDateString = (fileName.Remove(fileName.LastIndexOf(".")).Remove(0, fileName.LastIndexOf("_") + 1));
             DateTime reportDate = new DateTime(Convert.ToInt32(reportDateString.Remove(0, 4)),
@@ -204,8 +137,6 @@ namespace CreateDataBase
             return reportDate;
         }
 
-        
-        //public static void AddOrdersToDBFromFile(string fileName, string logFileName)
         public static void AddOrdersToDBFromFile(string fileName)
         {
             string managerName = GetManagerName(fileName); 
@@ -215,8 +146,14 @@ namespace CreateDataBase
                 AddManagerToDB(managerName);
             }
             managerID = (int)GetManagerID(managerName);
-            DateTime reportDate = GetDateTime(fileName); 
+            
+            using (var db = new OrdersContext())
+            {
+                db.Reports.Add(new Report() { FileReport = GetFileName(fileName), ManagerID = managerID });
+                db.SaveChanges();
+            }
 
+            DateTime reportDate = GetDateTime(fileName); 
             IEnumerable<string> strings = System.IO.File.ReadLines(fileName);
             List<Order> orders = new List<Order>();
             foreach (var item in strings)
@@ -251,21 +188,7 @@ namespace CreateDataBase
                 orders.Add(order);
             }
              AddOrdersToDB(orders);
-            
-             
-             //System.IO.StreamWriter writer = new System.IO.StreamWriter(logFileName, true);
-             //writer.WriteLine("{0};{1}", fileName, DateTime.Now);
-             //writer.Close();
-
-             /*using (System.IO.StreamReader sr = System.IO.File.OpenText(logFileName))
-             {
-                 string s = "";
-                 while ((s = sr.ReadLine()) != null)
-                 {
-                     Console.WriteLine(s);
-                 }
-             }
-              */
+             Console.WriteLine("Data from {0} added to the database.", fileName);
         }
 
         public static void DreadfulDayCame(bool isItTrue)
@@ -274,8 +197,7 @@ namespace CreateDataBase
             {
                 using (var db = new OrdersContext())
                 {
-                    Console.WriteLine("Очистка базы данных");
-                    var q = from b in db.Goods
+                    var q = from b in db.Products
                             select b;
                     var q1 = from b in db.Managers
                              select b;
@@ -283,83 +205,69 @@ namespace CreateDataBase
                              select b;
                     var q3 = from b in db.Orders
                              select b;
-                    db.Goods.RemoveRange(q);
+                    db.Products.RemoveRange(q);
                     db.Managers.RemoveRange(q1);
                     db.Customers.RemoveRange(q2);
                     db.Orders.RemoveRange(q3);
                     db.SaveChanges();
-                    //ProductInDB.Clear();
-                    //CustomersInDB.Clear();
-                    //ManagersInDB.Clear();
+                    Console.WriteLine("All data deleted from the database.");
                 }
             }
         }
 
-        //[MethodImpl(MethodImplOptions.Synchronized)]
         public static void RemoveDataRfomDB(string fileName)
         {
             mutexOrder.WaitOne();
             mutexCustomer.WaitOne();
             mutexManager.WaitOne();
             mutexProduct.WaitOne();
-
             string managerName=GetManagerName(fileName);
             DateTime reportDate=GetDateTime(fileName);
             if (GetManagerID(managerName)!=null)
             { 
-            int managerID=(int)GetManagerID(managerName);
-            List<int> productsID = new List<int>();
-            List<int> customersID = new List<int>();
-
-            using (var db = new OrdersContext())
-            {
-
-                var q = from b in db.Orders
-                        where (b.ManagerID == managerID && b.ReportDate == reportDate)
-                        select b;
-                foreach (var item in q)
+                int managerID=(int)GetManagerID(managerName);
+                List<int> productsID = new List<int>();
+                List<int> customersID = new List<int>();
+                using (var db = new OrdersContext())
                 {
-                    if (!productsID.Contains(item.ProductID))
-                        productsID.Add(item.ProductID);
-                    if (!customersID.Contains(item.CustomerID))
-                        customersID.Add(item.CustomerID);
-                }
-                db.Orders.RemoveRange(q);
-                db.SaveChanges();
-
-
-                foreach (var item in productsID)
-                {
-
-                    if (db.Orders.Count(x => x.ProductID == item) == 0)
+                    var q = from b in db.Orders
+                            where (b.ManagerID == managerID && b.ReportDate == reportDate)
+                            select b;
+                    foreach (var item in q)
                     {
-
-                        db.Goods.Remove(db.Goods.FirstOrDefault(x => x.ProductID == item));
-                        //ProductInDB.Remove(ProductInDB.FirstOrDefault(x => x.ProductID == item));
+                        if (!productsID.Contains(item.ProductID))
+                            productsID.Add(item.ProductID);
+                        if (!customersID.Contains(item.CustomerID))
+                            customersID.Add(item.CustomerID);
                     }
-                }
-                foreach (var item in customersID)
-                {
-                    if (db.Orders.Count(x => x.CustomerID == item) == 0)
+                    db.Orders.RemoveRange(q);
+                    db.SaveChanges();
+                    foreach (var item in productsID)
                     {
-                        db.Customers.Remove(db.Customers.FirstOrDefault(x => x.CustomerID == item));
-                        //CustomersInDB.Remove(CustomersInDB.FirstOrDefault(x => x.CustomerID == item));
+                        if (db.Orders.Count(x => x.ProductID == item) == 0)
+                        {
+                            db.Products.Remove(db.Products.FirstOrDefault(x => x.ProductID == item));
+                        }
                     }
+                    foreach (var item in customersID)
+                    {
+                        if (db.Orders.Count(x => x.CustomerID == item) == 0)
+                        {
+                            db.Customers.Remove(db.Customers.FirstOrDefault(x => x.CustomerID == item));
+                        }
+                    }
+                    if (db.Orders.Count(x => x.ManagerID == managerID) == 0)
+                    {
+                        db.Managers.Remove(db.Managers.FirstOrDefault(x => x.ManagerID == managerID));                  
+                    }
+                    db.SaveChanges();
                 }
-                if (db.Orders.Count(x => x.ManagerID == managerID) == 0)
-                {
-                    db.Managers.Remove(db.Managers.FirstOrDefault(x => x.ManagerID == managerID));
-                    //ManagersInDB.Remove(ManagersInDB.FirstOrDefault(x => x.ManagerID == managerID));
-                }
-
-                db.SaveChanges();
-            }
             }
             mutexCustomer.ReleaseMutex();
             mutexManager.ReleaseMutex();
             mutexOrder.ReleaseMutex();
             mutexProduct.ReleaseMutex();
-            
+            Console.WriteLine("Data from {0} removed from the database.", fileName);
         }
     }
 }
