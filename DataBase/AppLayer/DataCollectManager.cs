@@ -29,8 +29,6 @@ namespace AppLayer
         }
         public void Start()
         {
-
-            //OrdersContext.DreadfulDayCame(true);
             Console.WriteLine("On Start");
             CatalogWatcher = new System.IO.FileSystemWatcher(Catalog, "*.csv");
             CatalogWatcher.Deleted += new FileSystemEventHandler(OnDeleted);
@@ -56,23 +54,17 @@ namespace AppLayer
 
         public void Stop()
         {
-            //CatalogWatcher.Deleted -= new FileSystemEventHandler(OnDeleted);
-            //CatalogWatcher.Renamed -= new RenamedEventHandler(OnRenamed);
-            //CatalogWatcher.Created -= new FileSystemEventHandler(OnCreated);
-            //CatalogWatcher.EnableRaisingEvents = false;
+            CatalogWatcher.Deleted -= new FileSystemEventHandler(OnDeleted);
+            CatalogWatcher.Renamed -= new RenamedEventHandler(OnRenamed);
+            CatalogWatcher.Created -= new FileSystemEventHandler(OnCreated);
+            CatalogWatcher.EnableRaisingEvents = false;
         }
 
-        /*public void Dispose()
+        public void Dispose()
         {
             Stop();
             GC.SuppressFinalize(this);    
         }
-         */
-
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
