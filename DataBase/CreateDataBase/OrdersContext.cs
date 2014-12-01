@@ -250,10 +250,12 @@ namespace CreateDataBase
                 string reportName = GetReportName(fileName);
                 using (var db = new OrdersContext())
                 {
-                    db.Reports.Remove(db.Reports.FirstOrDefault(x => x.FileReport == reportName));
+                    Report report = db.Reports.FirstOrDefault(x => x.FileReport == reportName);
+                    if (report!=null)
+                    db.Reports.Remove(report);
                     db.SaveChanges();
                 }
-                mutexReport.ReleaseMutex();
+                
                 mutexOrder.WaitOne();
                 mutexCustomer.WaitOne();
                 mutexManager.WaitOne();
@@ -308,6 +310,7 @@ namespace CreateDataBase
                 mutexProduct.ReleaseMutex();
                 Console.WriteLine("Data from {0} removed from the database.", fileName);
             }
+            mutexReport.ReleaseMutex();
         }
     }
 }
