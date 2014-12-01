@@ -289,6 +289,7 @@ namespace CreateDataBase
                                 db.Products.Remove(db.Products.FirstOrDefault(x => x.ProductID == item));
                             }
                         }
+                        db.SaveChanges();
                         foreach (var item in customersID)
                         {
                             if (db.Orders.Count(x => x.CustomerID == item) == 0)
@@ -296,6 +297,7 @@ namespace CreateDataBase
                                 db.Customers.Remove(db.Customers.FirstOrDefault(x => x.CustomerID == item));
                             }
                         }
+                        db.SaveChanges();
                         if (db.Orders.Count(x => x.ManagerID == managerID) == 0)
                         {
                             db.Managers.Remove(db.Managers.FirstOrDefault(x => x.ManagerID == managerID));
