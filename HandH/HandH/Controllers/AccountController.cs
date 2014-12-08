@@ -61,11 +61,24 @@ namespace HandH.Controllers
             return View(model);
         }
 
+        private ApplicationDbContext db = new ApplicationDbContext();
         //
         // GET: /Account/Register
         [Authorize(Roles = "admin")]
         public ActionResult Register()
         {
+            var roleList = new List<string>();
+
+            var q = from d in db.Roles
+                           orderby d.Name
+                           select d.Name;
+            
+            roleList.AddRange(q.Distinct());
+            ViewBag.UserRole = new SelectList(roleList);
+            /* 
+            ViewBag.Roless = new SelectList(q);
+
+            ViewBag.UserRole = new SelectList(db.Roles, "ID", "Name");*/
             return View();
         }
 
@@ -80,10 +93,12 @@ namespace HandH.Controllers
             {
                 var user = new ApplicationUser() { UserName = model.UserName };
                 var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                if (result.Succeeded & model.UserRole!=null)
                 {
+                     UserManager.AddToRole(user.Id, model.UserRole);
                     //await SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
+
                 }
                 else
                 {

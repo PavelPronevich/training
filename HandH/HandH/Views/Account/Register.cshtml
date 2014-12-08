@@ -29,7 +29,15 @@
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
     </div>
+    
     <div class="form-group">
+            @Html.LabelFor(model => model.UserRole, "UserRole", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("UserRole", String.Empty)
+                @Html.ValidationMessageFor(model => model.UserRole)
+            </div>
+        </div>
+        <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" class="btn btn-default" value="Register" />
         </div>

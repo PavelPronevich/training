@@ -10,6 +10,14 @@
 <p>
     @if (User.IsInRole("admin")){@Html.ActionLink("Create New", "Create")}
 </p>
+<p>
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <input type="file" name="file" />
+        <input type="submit" value="OK" />
+    }
+
+</p>
 <table class="table">
     <tr>
         <th>
@@ -54,9 +62,9 @@
             @Html.DisplayFor(modelItem => item.ReportDate)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.OrderID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.OrderID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.OrderID })
+            @if (User.IsInRole("admin")){@Html.ActionLink("Edit", "Edit", new { id=item.OrderID })} 
+            @Html.ActionLink("Details", "Details", new { id=item.OrderID }) 
+            @if (User.IsInRole("admin")){@Html.ActionLink("Delete", "Delete", new { id=item.OrderID })}
         </td>
     </tr>
 }
