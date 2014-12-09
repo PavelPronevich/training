@@ -11,10 +11,13 @@
     @if (User.IsInRole("admin")){@Html.ActionLink("Create New", "Create")}
 </p>
 <p>
-    @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    @if (User.IsInRole("admin"))
     {
-        <input type="file" name="file" />
-        <input type="submit" value="OK" />
+        using (Html.BeginForm("AddFileToServer", "Orders", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <input type="file" name="file" />
+            <input type="submit" value="OK" />
+        }
     }
 
 </p>

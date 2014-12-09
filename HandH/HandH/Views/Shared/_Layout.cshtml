@@ -24,6 +24,10 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Products", "Index", "Product");}</li>
+                    <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Managers", "Index", "Managers");}</li>
+                    <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Customers","Index","Customer");}</li>
+                    <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Orders", "Index", "Orders");}</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

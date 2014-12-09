@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -14,6 +15,11 @@ namespace HandH
     {
         protected void Application_Start()
         {
+            DataCollectManager _dataManager;
+            _dataManager = new DataCollectManager();
+            _dataManager.Init(Server.MapPath("~/App_Data/uploads"));
+            _dataManager.Start();
+
             //Database.SetInitializer<ApplicationDbContext>(new AppDbInitializer());
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

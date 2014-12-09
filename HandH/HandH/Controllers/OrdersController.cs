@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HandH.Models;
+using System.IO;
 
 namespace HandH.Controllers
 {
@@ -132,6 +133,23 @@ namespace HandH.Controllers
             Order order = db.Orders.Find(id);
             db.Orders.Remove(order);
             db.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "admin")]
+        public ActionResult AddFileToServer(HttpPostedFileBase file)
+        {
+            // Verify that the user selected a file
+            if (file != null && file.ContentLength > 0)
+            {
+                // extract only the fielname
+                var fileName = Path.GetFileName(file.FileName);
+                // store the file inside ~/App_Data/uploads folder
+                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
+                file.SaveAs(path);
+            }
+            // redirect back to the index action to show the form once again
             return RedirectToAction("Index");
         }
 

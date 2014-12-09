@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using HandH.Models;
+using System.IO;
 
 namespace HandH.Controllers
 {
@@ -121,6 +122,7 @@ namespace HandH.Controllers
             return RedirectToAction("Index");
         }
 
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
