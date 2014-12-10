@@ -122,6 +122,11 @@ namespace HandH.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult CustomerSearch(string name)
+        {
+            var allCustomers = db.Customers.Where(a => a.CustomerName.Contains(name));
+            return PartialView(allCustomers);
+        }
         
         protected override void Dispose(bool disposing)
         {
