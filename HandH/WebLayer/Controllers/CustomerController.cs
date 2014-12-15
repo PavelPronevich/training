@@ -13,29 +13,29 @@ using RepositoryLayer;
 namespace WebLayer.Controllers
 {
     [Authorize]
-    public class ManagerController : Controller
+    public class CustomerController : Controller
     {
         private UnitOfWork unitOfWork = new UnitOfWork();
 
-        private ManagerView EntityToDTO(Manager manager)
+        private CustomerView EntityToDTO(Customer customer)
         {
-            return (new ManagerView { Id = manager.Id, Name = manager.ManagerSurname });
+            return (new CustomerView { Id = customer.Id, Name = customer.CustomerName });
         }
-        private List<ManagerView> EntityToDTO(IEnumerable<Manager> managers)
+        private List<CustomerView> EntityToDTO(IEnumerable<Customer> customers)
         {
-            List<ManagerView> managersv = new List<ManagerView>();
-            foreach (var item in managers)
+            List<CustomerView> customersv = new List<CustomerView>();
+            foreach (var item in customers)
             {
-                managersv.Add(EntityToDTO(item));
+                customersv.Add(EntityToDTO(item));
             }
-            return managersv;
+            return customersv;
         }
 
 
         public ViewResult Index()
         {
-            IEnumerable<Manager> managers = unitOfWork.ManagerRepository.Get();
-            return View(EntityToDTO(managers));
+            IEnumerable<Customer> customers = unitOfWork.CustomerRepository.Get();
+            return View(EntityToDTO(customers));
         }
 
         public ActionResult Details(int? id)
@@ -45,7 +45,7 @@ namespace WebLayer.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             
-            return View(EntityToDTO(unitOfWork.ManagerRepository.GetByID(id)));
+            return View(EntityToDTO(unitOfWork.CustomerRepository.GetByID(id)));
         }
 
         [Authorize(Roles = "admin")]
@@ -54,25 +54,25 @@ namespace WebLayer.Controllers
             return View();
         }
 
-        private Manager DTOToEntity(ManagerView managerView)
+        private Customer DTOToEntity(CustomerView customerView)
         {
-            return new Manager() { ManagerSurname = managerView.Name };
+            return new Customer() { CustomerName = customerView.Name };
         }
-        private Manager DTOToEntityFull(ManagerView managerView)
+        private Customer DTOToEntityFull(CustomerView customerView)
         {
-            return new Manager() {Id=managerView.Id, ManagerSurname = managerView.Name };
+            return new Customer() {Id=customerView.Id, CustomerName = customerView.Name };
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
-        public ActionResult Create([Bind(Include = "Name")] ManagerView managerView)
+        public ActionResult Create([Bind(Include = "Name")] CustomerView customerView)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.ManagerRepository.Insert(DTOToEntity(managerView));
+                    unitOfWork.CustomerRepository.Insert(DTOToEntity(customerView));
                     unitOfWork.Save();
                     return RedirectToAction("Index");
                 }
@@ -81,7 +81,7 @@ namespace WebLayer.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
-         return View(managerView);
+         return View(customerView);
         }
 
         [Authorize(Roles = "admin")]
@@ -91,19 +91,19 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(EntityToDTO(unitOfWork.ManagerRepository.GetByID(id)));
+            return View(EntityToDTO(unitOfWork.CustomerRepository.GetByID(id)));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
-        public ActionResult Edit([Bind(Include = "Id,Name")] ManagerView managerView)
+        public ActionResult Edit([Bind(Include = "Id,Name")] CustomerView customerView)
         {
             try
          {
             if (ModelState.IsValid)
             {
-               unitOfWork.ManagerRepository.Update(DTOToEntityFull(managerView));
+               unitOfWork.CustomerRepository.Update(DTOToEntityFull(customerView));
                unitOfWork.Save();
                return RedirectToAction("Index");
             }
@@ -112,7 +112,7 @@ namespace WebLayer.Controllers
          {
               ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
          }
-         return View(managerView);
+         return View(customerView);
         }
 
         [Authorize(Roles = "admin")]
@@ -122,14 +122,14 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Manager manager = unitOfWork.ManagerRepository.GetByID(id);
-            if (manager == null)
+            Customer customer = unitOfWork.CustomerRepository.GetByID(id);
+            if (customer == null)
             {
                 return HttpNotFound();
             }
             else
             {
-                return View(EntityToDTO(manager));
+                return View(EntityToDTO(customer));
             }
              
         }
@@ -139,8 +139,8 @@ namespace WebLayer.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult DeleteConfirmed(int id)
         {
-         //Manager manager = unitOfWork.ManagerRepository.GetByID(id);
-         unitOfWork.ManagerRepository.Delete(id);
+         //Customer customer = unitOfWork.CustomerRepository.GetByID(id);
+         unitOfWork.CustomerRepository.Delete(id);
          unitOfWork.Save();
          return RedirectToAction("Index");
         }
@@ -153,15 +153,15 @@ namespace WebLayer.Controllers
         }
 
 
-        public ActionResult ManagerSearch(string name)
+        public ActionResult CustomerSearch(string name)
         {
-            var allManagers = unitOfWork.ManagerRepository.Get(a => a.ManagerSurname.Contains(name));
-            List<ManagerView> managersv = new List<ManagerView>();
-            foreach (var item in allManagers)
+            var allCustomers = unitOfWork.CustomerRepository.Get(a => a.CustomerName.Contains(name));
+            List<CustomerView> customersv = new List<CustomerView>();
+            foreach (var item in allCustomers)
             {
-                managersv.Add(new ManagerView { Id = item.Id, Name = item.ManagerSurname });
+                customersv.Add(new CustomerView { Id = item.Id, Name = item.CustomerName });
             }
-            return PartialView(managersv);
+            return PartialView(customersv);
         }
          
     }

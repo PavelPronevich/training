@@ -27,8 +27,6 @@ namespace WebLayer.Controllers
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
 
-        //
-        // GET: /Account/Login
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
@@ -36,8 +34,6 @@ namespace WebLayer.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Login
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
@@ -56,14 +52,12 @@ namespace WebLayer.Controllers
                     ModelState.AddModelError("", "Invalid username or password.");
                 }
             }
-
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
         private ApplicationDbContext db = new ApplicationDbContext();
-        //
-        // GET: /Account/Register
+        
+
         [Authorize(Roles = "admin")]
         public ActionResult Register()
         {
@@ -75,15 +69,9 @@ namespace WebLayer.Controllers
             
             roleList.AddRange(q.Distinct());
             ViewBag.UserRole = new SelectList(roleList);
-            /* 
-            ViewBag.Roless = new SelectList(q);
-
-            ViewBag.UserRole = new SelectList(db.Roles, "ID", "Name");*/
             return View();
         }
 
-        //
-        // POST: /Account/Register
         [HttpPost]
         [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
@@ -105,13 +93,9 @@ namespace WebLayer.Controllers
                     AddErrors(result);
                 }
             }
-
-            // If we got this far, something failed, redisplay form
             return View();
         }
 
-        //
-        // POST: /Account/Disassociate
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Disassociate(string loginProvider, string providerKey)
@@ -129,8 +113,7 @@ namespace WebLayer.Controllers
             return RedirectToAction("Manage", new { Message = message });
         }
 
-        //
-        // GET: /Account/Manage
+        
         public ActionResult Manage(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
@@ -144,8 +127,6 @@ namespace WebLayer.Controllers
             return View();
         }
 
-        //
-        // POST: /Account/Manage
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Manage(ManageUserViewModel model)
@@ -170,7 +151,6 @@ namespace WebLayer.Controllers
             }
             else
             {
-                // User does not have a password so remove any validation errors caused by a missing OldPassword field
                 ModelState state = ModelState["OldPassword"];
                 if (state != null)
                 {
@@ -191,23 +171,18 @@ namespace WebLayer.Controllers
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return View(model);
         }
 
-        //
-        // POST: /Account/ExternalLogin
+        
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         public ActionResult ExternalLogin(string provider, string returnUrl)
         {
-            // Request a redirect to the external login provider
             return new ChallengeResult(provider, Url.Action("ExternalLoginCallback", "Account", new { ReturnUrl = returnUrl }));
         }
 
-        //
-        // GET: /Account/ExternalLoginCallback
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
@@ -217,7 +192,6 @@ namespace WebLayer.Controllers
                 return RedirectToAction("Login");
             }
 
-            // Sign in the user with this external login provider if the user already has a login
             var user = await UserManager.FindAsync(loginInfo.Login);
             if (user != null)
             {
@@ -226,25 +200,19 @@ namespace WebLayer.Controllers
             }
             else
             {
-                // If the user does not have an account, then prompt the user to create an account
                 ViewBag.ReturnUrl = returnUrl;
                 ViewBag.LoginProvider = loginInfo.Login.LoginProvider;
                 return View("ExternalLoginConfirmation", new ExternalLoginConfirmationViewModel { UserName = loginInfo.DefaultUserName });
             }
         }
 
-        //
-        // POST: /Account/LinkLogin
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LinkLogin(string provider)
         {
-            // Request a redirect to the external login provider to link a login for the current user
             return new ChallengeResult(provider, Url.Action("LinkLoginCallback", "Account"), User.Identity.GetUserId());
         }
 
-        //
-        // GET: /Account/LinkLoginCallback
         public async Task<ActionResult> LinkLoginCallback()
         {
             var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync(XsrfKey, User.Identity.GetUserId());
@@ -260,8 +228,6 @@ namespace WebLayer.Controllers
             return RedirectToAction("Manage", new { Message = ManageMessageId.Error });
         }
 
-        //
-        // POST: /Account/ExternalLoginConfirmation
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]

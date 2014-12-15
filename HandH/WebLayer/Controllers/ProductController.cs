@@ -13,29 +13,36 @@ using RepositoryLayer;
 namespace WebLayer.Controllers
 {
     [Authorize]
-    public class ManagerController : Controller
+    public class ProductController : Controller
     {
         private UnitOfWork unitOfWork = new UnitOfWork();
 
-        private ManagerView EntityToDTO(Manager manager)
+        private ProductView EntityToDTO(Product product)
         {
-            return (new ManagerView { Id = manager.Id, Name = manager.ManagerSurname });
+            return (new ProductView { Id = product.Id, Name = product.ProductName });
         }
-        private List<ManagerView> EntityToDTO(IEnumerable<Manager> managers)
+        private List<ProductView> EntityToDTO(IEnumerable<Product> products)
         {
-            List<ManagerView> managersv = new List<ManagerView>();
-            foreach (var item in managers)
+            List<ProductView> productsv = new List<ProductView>();
+            foreach (var item in products)
             {
-                managersv.Add(EntityToDTO(item));
+                productsv.Add(EntityToDTO(item));
             }
-            return managersv;
+            return productsv;
+        }
+        private Product DTOToEntity(ProductView productView)
+        {
+            return new Product() { ProductName = productView.Name };
+        }
+        private Product DTOToEntityFull(ProductView productView)
+        {
+            return new Product() { Id = productView.Id, ProductName = productView.Name };
         }
 
 
         public ViewResult Index()
         {
-            IEnumerable<Manager> managers = unitOfWork.ManagerRepository.Get();
-            return View(EntityToDTO(managers));
+            return View(EntityToDTO(unitOfWork.ProductRepository.Get()));
         }
 
         public ActionResult Details(int? id)
@@ -44,8 +51,8 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            
-            return View(EntityToDTO(unitOfWork.ManagerRepository.GetByID(id)));
+
+            return View(EntityToDTO(unitOfWork.ProductRepository.GetByID(id)));
         }
 
         [Authorize(Roles = "admin")]
@@ -54,25 +61,17 @@ namespace WebLayer.Controllers
             return View();
         }
 
-        private Manager DTOToEntity(ManagerView managerView)
-        {
-            return new Manager() { ManagerSurname = managerView.Name };
-        }
-        private Manager DTOToEntityFull(ManagerView managerView)
-        {
-            return new Manager() {Id=managerView.Id, ManagerSurname = managerView.Name };
-        }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
-        public ActionResult Create([Bind(Include = "Name")] ManagerView managerView)
+        public ActionResult Create([Bind(Include = "Name")] ProductView productView)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.ManagerRepository.Insert(DTOToEntity(managerView));
+                    unitOfWork.ProductRepository.Insert(DTOToEntity(productView));
                     unitOfWork.Save();
                     return RedirectToAction("Index");
                 }
@@ -81,7 +80,7 @@ namespace WebLayer.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
-         return View(managerView);
+            return View(productView);
         }
 
         [Authorize(Roles = "admin")]
@@ -91,19 +90,19 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(EntityToDTO(unitOfWork.ManagerRepository.GetByID(id)));
+            return View(EntityToDTO(unitOfWork.ProductRepository.GetByID(id)));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
-        public ActionResult Edit([Bind(Include = "Id,Name")] ManagerView managerView)
+        public ActionResult Edit([Bind(Include = "Id,Name")] ProductView productView)
         {
             try
          {
             if (ModelState.IsValid)
             {
-               unitOfWork.ManagerRepository.Update(DTOToEntityFull(managerView));
+               unitOfWork.ProductRepository.Update(DTOToEntityFull(productView));
                unitOfWork.Save();
                return RedirectToAction("Index");
             }
@@ -112,7 +111,7 @@ namespace WebLayer.Controllers
          {
               ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
          }
-         return View(managerView);
+            return View(productView);
         }
 
         [Authorize(Roles = "admin")]
@@ -122,14 +121,14 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Manager manager = unitOfWork.ManagerRepository.GetByID(id);
-            if (manager == null)
+            Product product = unitOfWork.ProductRepository.GetByID(id);
+            if (product == null)
             {
                 return HttpNotFound();
             }
             else
             {
-                return View(EntityToDTO(manager));
+                return View(EntityToDTO(product));
             }
              
         }
@@ -139,8 +138,7 @@ namespace WebLayer.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult DeleteConfirmed(int id)
         {
-         //Manager manager = unitOfWork.ManagerRepository.GetByID(id);
-         unitOfWork.ManagerRepository.Delete(id);
+         unitOfWork.ProductRepository.Delete(id);
          unitOfWork.Save();
          return RedirectToAction("Index");
         }
@@ -148,20 +146,14 @@ namespace WebLayer.Controllers
         protected override void Dispose(bool disposing)
         {
             unitOfWork.Dispose();
-         base.Dispose(disposing);
+            base.Dispose(disposing);
             
         }
 
 
-        public ActionResult ManagerSearch(string name)
+        public ActionResult ProductSearch(string name)
         {
-            var allManagers = unitOfWork.ManagerRepository.Get(a => a.ManagerSurname.Contains(name));
-            List<ManagerView> managersv = new List<ManagerView>();
-            foreach (var item in allManagers)
-            {
-                managersv.Add(new ManagerView { Id = item.Id, Name = item.ManagerSurname });
-            }
-            return PartialView(managersv);
+            return PartialView(EntityToDTO(unitOfWork.ProductRepository.Get(a => a.ProductName.Contains(name))));
         }
          
     }
