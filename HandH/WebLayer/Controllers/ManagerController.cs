@@ -6,36 +6,19 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using DBLayer;
-using WebLayer.Models.DTOModels;
-using RepositoryLayer;
+using ServiceLayer.DTOModels;
+using ServiceLayer;
 
 namespace WebLayer.Controllers
 {
     [Authorize]
     public class ManagerController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
-
-        private ManagerView EntityToDTO(Manager manager)
-        {
-            return (new ManagerView { Id = manager.Id, Name = manager.ManagerSurname });
-        }
-        private List<ManagerView> EntityToDTO(IEnumerable<Manager> managers)
-        {
-            List<ManagerView> managersv = new List<ManagerView>();
-            foreach (var item in managers)
-            {
-                managersv.Add(EntityToDTO(item));
-            }
-            return managersv;
-        }
-
+        private ManagerService service = new ManagerService();
 
         public ViewResult Index()
         {
-            IEnumerable<Manager> managers = unitOfWork.ManagerRepository.Get();
-            return View(EntityToDTO(managers));
+            return View(service.Get());
         }
 
         public ActionResult Details(int? id)
@@ -45,7 +28,7 @@ namespace WebLayer.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             
-            return View(EntityToDTO(unitOfWork.ManagerRepository.GetByID(id)));
+            return View(service.GetByID((int)id));
         }
 
         [Authorize(Roles = "admin")]
@@ -54,14 +37,7 @@ namespace WebLayer.Controllers
             return View();
         }
 
-        private Manager DTOToEntity(ManagerView managerView)
-        {
-            return new Manager() { ManagerSurname = managerView.Name };
-        }
-        private Manager DTOToEntityFull(ManagerView managerView)
-        {
-            return new Manager() {Id=managerView.Id, ManagerSurname = managerView.Name };
-        }
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -72,8 +48,7 @@ namespace WebLayer.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.ManagerRepository.Insert(DTOToEntity(managerView));
-                    unitOfWork.Save();
+                    service.Insert(managerView);
                     return RedirectToAction("Index");
                 }
             }
@@ -91,7 +66,7 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(EntityToDTO(unitOfWork.ManagerRepository.GetByID(id)));
+            return View(service.GetByID((int)id));
         }
 
         [HttpPost]
@@ -103,9 +78,8 @@ namespace WebLayer.Controllers
          {
             if (ModelState.IsValid)
             {
-               unitOfWork.ManagerRepository.Update(DTOToEntityFull(managerView));
-               unitOfWork.Save();
-               return RedirectToAction("Index");
+                service.Update(managerView);
+                return RedirectToAction("Index");
             }
          }
          catch (DataException /* dex */)
@@ -122,16 +96,7 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Manager manager = unitOfWork.ManagerRepository.GetByID(id);
-            if (manager == null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
-                return View(EntityToDTO(manager));
-            }
-             
+            return View(service.GetByID((int)id));
         }
 
         [HttpPost, ActionName("Delete")]
@@ -139,29 +104,20 @@ namespace WebLayer.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult DeleteConfirmed(int id)
         {
-         //Manager manager = unitOfWork.ManagerRepository.GetByID(id);
-         unitOfWork.ManagerRepository.Delete(id);
-         unitOfWork.Save();
-         return RedirectToAction("Index");
+            service.Delete(id);
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            unitOfWork.Dispose();
-         base.Dispose(disposing);
+            service.Dispose();
+            base.Dispose(disposing);
             
         }
-
-
+        
         public ActionResult ManagerSearch(string name)
         {
-            var allManagers = unitOfWork.ManagerRepository.Get(a => a.ManagerSurname.Contains(name));
-            List<ManagerView> managersv = new List<ManagerView>();
-            foreach (var item in allManagers)
-            {
-                managersv.Add(new ManagerView { Id = item.Id, Name = item.ManagerSurname });
-            }
-            return PartialView(managersv);
+            return PartialView(service.Get(a => a.Name.Contains(name)));
         }
          
     }

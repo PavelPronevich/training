@@ -22,8 +22,7 @@ namespace RepositoryLayer
 
         public virtual IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>> filter = null,
-            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null,
-            string includeProperties = "")
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>> orderBy = null)
         {
             IQueryable<TEntity> query = dbSet;
 
@@ -32,11 +31,12 @@ namespace RepositoryLayer
                 query = query.Where(filter);
             }
 
-            foreach (var includeProperty in includeProperties.Split
+            /*foreach (var includeProperty in includeProperties.Split
                 (new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
             {
                 query = query.Include(includeProperty);
             }
+             */
 
             if (orderBy != null)
             {
@@ -77,6 +77,7 @@ namespace RepositoryLayer
         {
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;
+
         }
     }
 }

@@ -6,43 +6,19 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using DBLayer;
-using WebLayer.Models.DTOModels;
-using RepositoryLayer;
+using ServiceLayer.DTOModels;
+using ServiceLayer;
 
 namespace WebLayer.Controllers
 {
     [Authorize]
     public class ProductController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
-
-        private ProductView EntityToDTO(Product product)
-        {
-            return (new ProductView { Id = product.Id, Name = product.ProductName });
-        }
-        private List<ProductView> EntityToDTO(IEnumerable<Product> products)
-        {
-            List<ProductView> productsv = new List<ProductView>();
-            foreach (var item in products)
-            {
-                productsv.Add(EntityToDTO(item));
-            }
-            return productsv;
-        }
-        private Product DTOToEntity(ProductView productView)
-        {
-            return new Product() { ProductName = productView.Name };
-        }
-        private Product DTOToEntityFull(ProductView productView)
-        {
-            return new Product() { Id = productView.Id, ProductName = productView.Name };
-        }
-
+        private ProductService service = new ProductService();
 
         public ViewResult Index()
         {
-            return View(EntityToDTO(unitOfWork.ProductRepository.Get()));
+            return View(service.Get());
         }
 
         public ActionResult Details(int? id)
@@ -51,8 +27,8 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            return View(EntityToDTO(unitOfWork.ProductRepository.GetByID(id)));
+            
+            return View(service.GetByID((int)id));
         }
 
         [Authorize(Roles = "admin")]
@@ -62,6 +38,7 @@ namespace WebLayer.Controllers
         }
 
         
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
@@ -71,8 +48,7 @@ namespace WebLayer.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.ProductRepository.Insert(DTOToEntity(productView));
-                    unitOfWork.Save();
+                    service.Insert(productView);
                     return RedirectToAction("Index");
                 }
             }
@@ -80,7 +56,7 @@ namespace WebLayer.Controllers
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
-            return View(productView);
+         return View(productView);
         }
 
         [Authorize(Roles = "admin")]
@@ -90,7 +66,7 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(EntityToDTO(unitOfWork.ProductRepository.GetByID(id)));
+            return View(service.GetByID((int)id));
         }
 
         [HttpPost]
@@ -102,16 +78,15 @@ namespace WebLayer.Controllers
          {
             if (ModelState.IsValid)
             {
-               unitOfWork.ProductRepository.Update(DTOToEntityFull(productView));
-               unitOfWork.Save();
-               return RedirectToAction("Index");
+                service.Update(productView);
+                return RedirectToAction("Index");
             }
          }
          catch (DataException /* dex */)
          {
               ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
          }
-            return View(productView);
+         return View(productView);
         }
 
         [Authorize(Roles = "admin")]
@@ -121,7 +96,9 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = unitOfWork.ProductRepository.GetByID(id);
+            return View(service.GetByID((int)id));
+            
+            /*Product product = unitOfWork.ProductRepository.GetByID(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -130,6 +107,7 @@ namespace WebLayer.Controllers
             {
                 return View(EntityToDTO(product));
             }
+             */
              
         }
 
@@ -138,22 +116,20 @@ namespace WebLayer.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult DeleteConfirmed(int id)
         {
-         unitOfWork.ProductRepository.Delete(id);
-         unitOfWork.Save();
-         return RedirectToAction("Index");
+            service.Delete(id);
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            unitOfWork.Dispose();
+            service.Dispose();
             base.Dispose(disposing);
             
         }
-
-
+        
         public ActionResult ProductSearch(string name)
         {
-            return PartialView(EntityToDTO(unitOfWork.ProductRepository.Get(a => a.ProductName.Contains(name))));
+            return PartialView(service.Get(a => a.Name.Contains(name)));
         }
          
     }

@@ -6,36 +6,19 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using DBLayer;
-using WebLayer.Models.DTOModels;
-using RepositoryLayer;
+using ServiceLayer.DTOModels;
+using ServiceLayer;
 
 namespace WebLayer.Controllers
 {
     [Authorize]
     public class CustomerController : Controller
     {
-        private UnitOfWork unitOfWork = new UnitOfWork();
-
-        private CustomerView EntityToDTO(Customer customer)
-        {
-            return (new CustomerView { Id = customer.Id, Name = customer.CustomerName });
-        }
-        private List<CustomerView> EntityToDTO(IEnumerable<Customer> customers)
-        {
-            List<CustomerView> customersv = new List<CustomerView>();
-            foreach (var item in customers)
-            {
-                customersv.Add(EntityToDTO(item));
-            }
-            return customersv;
-        }
-
+        private CustomerService service = new CustomerService();
 
         public ViewResult Index()
         {
-            IEnumerable<Customer> customers = unitOfWork.CustomerRepository.Get();
-            return View(EntityToDTO(customers));
+            return View(service.Get());
         }
 
         public ActionResult Details(int? id)
@@ -45,7 +28,7 @@ namespace WebLayer.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             
-            return View(EntityToDTO(unitOfWork.CustomerRepository.GetByID(id)));
+            return View(service.GetByID((int)id));
         }
 
         [Authorize(Roles = "admin")]
@@ -54,14 +37,7 @@ namespace WebLayer.Controllers
             return View();
         }
 
-        private Customer DTOToEntity(CustomerView customerView)
-        {
-            return new Customer() { CustomerName = customerView.Name };
-        }
-        private Customer DTOToEntityFull(CustomerView customerView)
-        {
-            return new Customer() {Id=customerView.Id, CustomerName = customerView.Name };
-        }
+        
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -72,8 +48,7 @@ namespace WebLayer.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    unitOfWork.CustomerRepository.Insert(DTOToEntity(customerView));
-                    unitOfWork.Save();
+                    service.Insert(customerView);
                     return RedirectToAction("Index");
                 }
             }
@@ -91,7 +66,7 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(EntityToDTO(unitOfWork.CustomerRepository.GetByID(id)));
+            return View(service.GetByID((int)id));
         }
 
         [HttpPost]
@@ -103,9 +78,8 @@ namespace WebLayer.Controllers
          {
             if (ModelState.IsValid)
             {
-               unitOfWork.CustomerRepository.Update(DTOToEntityFull(customerView));
-               unitOfWork.Save();
-               return RedirectToAction("Index");
+                service.Update(customerView);
+                return RedirectToAction("Index");
             }
          }
          catch (DataException /* dex */)
@@ -122,7 +96,9 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Customer customer = unitOfWork.CustomerRepository.GetByID(id);
+            return View(service.GetByID((int)id));
+            
+            /*Customer customer = unitOfWork.CustomerRepository.GetByID(id);
             if (customer == null)
             {
                 return HttpNotFound();
@@ -131,6 +107,7 @@ namespace WebLayer.Controllers
             {
                 return View(EntityToDTO(customer));
             }
+             */
              
         }
 
@@ -139,29 +116,20 @@ namespace WebLayer.Controllers
         [Authorize(Roles = "admin")]
         public ActionResult DeleteConfirmed(int id)
         {
-         //Customer customer = unitOfWork.CustomerRepository.GetByID(id);
-         unitOfWork.CustomerRepository.Delete(id);
-         unitOfWork.Save();
-         return RedirectToAction("Index");
+            service.Delete(id);
+            return RedirectToAction("Index");
         }
 
         protected override void Dispose(bool disposing)
         {
-            unitOfWork.Dispose();
-         base.Dispose(disposing);
+            service.Dispose();
+            base.Dispose(disposing);
             
         }
-
-
+        
         public ActionResult CustomerSearch(string name)
         {
-            var allCustomers = unitOfWork.CustomerRepository.Get(a => a.CustomerName.Contains(name));
-            List<CustomerView> customersv = new List<CustomerView>();
-            foreach (var item in allCustomers)
-            {
-                customersv.Add(new CustomerView { Id = item.Id, Name = item.CustomerName });
-            }
-            return PartialView(customersv);
+            return PartialView(service.Get(a => a.Name.Contains(name)));
         }
          
     }
