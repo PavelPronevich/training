@@ -46,6 +46,7 @@
     <Compile Include="DTOModels\OrderView.cs" />
     <Compile Include="DTOModels\ProductView.cs" />
     <Compile Include="ManagerService.cs" />
+    <Compile Include="OrderService.cs" />
     <Compile Include="ProductService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

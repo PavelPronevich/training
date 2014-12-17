@@ -27,7 +27,7 @@
                     <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Products", "Index", "Product");}</li>
                     <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Managers", "Index", "Manager");}</li>
                     <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Customers","Index","Customer");}</li>
-                    <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Orders", "Index", "Orders");}</li>
+                    <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Orders", "Index", "Order");}</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

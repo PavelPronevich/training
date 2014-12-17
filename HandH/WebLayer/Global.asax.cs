@@ -1,4 +1,5 @@
-﻿using System;
+﻿//using DBLayer;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -15,6 +16,12 @@ namespace WebLayer
         protected void Application_Start()
         {
             //Database.SetInitializer<ApplicationDbContext>(new AppDbInitializer());
+            //DataCollectManager _dataManager;
+            //_dataManager = new DataCollectManager();
+            //_dataManager.Init(Server.MapPath("~/App_Data/uploads"));
+            //_dataManager.Start();
+
+
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

@@ -12,8 +12,8 @@ namespace ServiceLayer.DTOModels
         public int ManagerID { get; set; }
         public string ManagerName { get; set; }
         public int ProductID { get; set; }
-        public int ProductName { get; set; }
+        public string ProductName { get; set; }
         public int CustomerID { get; set; }
-        public int CustomerName { get; set; }
+        public string CustomerName { get; set; }
     }
 }

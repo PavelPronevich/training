@@ -1,0 +1,61 @@
+﻿@model ServiceLayer.DTOModels.OrderView
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Order</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ManagerName)
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Html.DisplayFor(model => model.ManagerName).ToString(),
+            "../Manager/Details",  new { id = Model.ManagerID })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CustomerName)
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Html.DisplayFor(model => model.CustomerName).ToString(),
+            "../Customer/Details", new { id = Model.CustomerID })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </dt>
+
+        <dd>
+            @Html.ActionLink(Html.DisplayFor(model => model.ProductName).ToString(),
+            "../Product/Details", new { id = Model.ProductID })
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @if (User.IsInRole("admin")){@Html.ActionLink("Edit", "Edit", new { id = Model.Id })} 
+    @Html.ActionLink("Back to List", "Index")
+</p>
