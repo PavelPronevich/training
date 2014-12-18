@@ -16,6 +16,9 @@ namespace WebLayer.Controllers
     public class OrderController : Controller
     {
         private OrderService service = new OrderService();
+        private ManagerService serviceManager = new ManagerService();
+        private CustomerService serviceCustomer = new CustomerService();
+        private ProductService serviceProduct = new ProductService();
 
         public ViewResult Index()
         {
@@ -38,9 +41,38 @@ namespace WebLayer.Controllers
         {
             return View();
         }
+         */
 
-        
+        [Authorize(Roles = "admin")]
+        public ActionResult Create()
+        {
+            ViewBag.CustomerID = new SelectList(serviceCustomer.Get(), "Id", "Name");
+            ViewBag.ManagerID = new SelectList(serviceManager.Get(), "Id", "Name");
+            ViewBag.ProductID = new SelectList(serviceProduct.Get(), "Id", "Name");
+            return View();
+        }
 
+        [Authorize(Roles = "admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Create([Bind(Include = "Id,ManagerID,CustomerID,ProductID,Price")] OrderView orderView)
+        {
+            if (ModelState.IsValid)
+            {
+                orderView.OrderDate = DateTime.Now;
+                service.Insert(orderView);
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.CustomerID = new SelectList(serviceCustomer.Get(), "Id", "Name", orderView.CustomerID);
+            ViewBag.ManagerID = new SelectList(serviceManager.Get(), "Id", "Name", orderView.ManagerID);
+            ViewBag.ProductID = new SelectList(serviceProduct.Get(), "Id", "Name", orderView.ProductID);
+            return View(orderView);
+        }
+
+
+
+        /*
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
@@ -60,6 +92,7 @@ namespace WebLayer.Controllers
             }
          return View(managerView);
         }
+         */
 
         [Authorize(Roles = "admin")]
         public ActionResult Edit(int? id)
@@ -68,19 +101,28 @@ namespace WebLayer.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            return View(service.GetByID((int)id));
+            OrderView orderView=service.GetByID((int)id);
+            if (orderView == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.CustomerID = new SelectList(serviceCustomer.Get(), "Id", "Name", orderView.CustomerID);
+            ViewBag.ManagerID = new SelectList(serviceManager.Get(), "Id", "Name", orderView.ManagerID);
+            ViewBag.ProductID = new SelectList(serviceProduct.Get(), "Id", "Name", orderView.ProductID);
+            return View(orderView);
         }
 
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
-        public ActionResult Edit([Bind(Include = "Id,Name")] ManagerView managerView)
+        public ActionResult Edit([Bind(Include="Id,OrderDate,Price,ManagerID,ProductID,CustomerID")] OrderView orderView)
         {
             try
          {
             if (ModelState.IsValid)
             {
-                service.Update(managerView);
+                service.Update(orderView);
                 return RedirectToAction("Index");
             }
          }
@@ -88,8 +130,12 @@ namespace WebLayer.Controllers
          {
               ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
          }
-         return View(managerView);
+            ViewBag.CustomerID = new SelectList(serviceCustomer.Get(), "Id", "Name", orderView.CustomerID);
+            ViewBag.ManagerID = new SelectList(serviceManager.Get(), "Id", "Name", orderView.ManagerID);
+            ViewBag.ProductID = new SelectList(serviceProduct.Get(), "Id", "Name", orderView.ProductID);
+         return View(orderView);
         }
+         
 
         [Authorize(Roles = "admin")]
         public ActionResult Delete(int? id)
@@ -109,7 +155,7 @@ namespace WebLayer.Controllers
             service.Delete(id);
             return RedirectToAction("Index");
         }
-*/
+
         protected override void Dispose(bool disposing)
         {
             service.Dispose();

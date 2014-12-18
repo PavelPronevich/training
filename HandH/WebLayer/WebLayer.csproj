@@ -242,6 +242,9 @@
     <Content Include="Views\Order\Index.cshtml" />
     <Content Include="Views\Order\OrderSearch.cshtml" />
     <Content Include="Views\Order\Details.cshtml" />
+    <Content Include="Views\Order\Delete.cshtml" />
+    <Content Include="Views\Order\Edit.cshtml" />
+    <Content Include="Views\Order\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

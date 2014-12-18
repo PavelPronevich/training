@@ -1,0 +1,67 @@
+﻿@model ServiceLayer.DTOModels.OrderView
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Order</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+       
+        <div class="form-group">
+            @Html.LabelFor(model => model.ManagerID, "Manager", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ManagerID", String.Empty)
+                @Html.ValidationMessageFor(model => model.ManagerID)
+            </div>
+        </div>
+    
+        <div class="form-group">
+            @Html.LabelFor(model => model.CustomerID, "Customer", new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("CustomerID", String.Empty)
+                @Html.ValidationMessageFor(model => model.CustomerID)
+            </div>
+        </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ProductID, "Product", new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("ProductID", String.Empty)
+                    @Html.ValidationMessageFor(model => model.ProductID)
+                </div>
+            </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Price)
+                @Html.ValidationMessageFor(model => model.Price)
+            </div>
+        </div>
+            
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+
+       </div>
+    
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

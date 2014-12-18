@@ -43,22 +43,28 @@ namespace ServiceLayer
             return ordersv;
         }
 
-        
-        /*private Order DTOToEntity(OrderView orderView)
+        private Order DTOToEntity(OrderView orderView)
         {
+            Order order = new Order();
+                order.ManagerID = orderView.ManagerID;
+                order.ProductID = orderView.ProductID;
+                order.CustomerID = orderView.CustomerID;
+                order.Price = orderView.Price;
+                order.OrderDate = orderView.OrderDate;
+                order.ReportDate = orderView.OrderDate;
+            return order;
+        }
 
-            return new Product() {ProductName = productView.Name };
-        }
-        */
-         
-        /*
-        private Product DTOToEntityFull(ProductView productView)
+        private Order DTOToEntityFull(OrderView orderView)
         {
-            Product _product = unitOfWork.ProductRepository.GetByID(productView.Id);
-            _product.ProductName = productView.Name;
-            return _product;
+            Order order = unitOfWork.OrderRepository.GetByID(orderView.Id);
+            order.CustomerID=orderView.CustomerID;
+            order.ProductID=orderView.ProductID;
+            order.ManagerID=orderView.ManagerID;
+            order.Price=orderView.Price;
+            return order;
         }
-         */
+         
 
         public virtual List<OrderView> Get(Func<OrderView, bool> filter = null,
             Func<IEnumerable<OrderView>, IOrderedEnumerable<OrderView>> orderBy = null)
@@ -84,43 +90,30 @@ namespace ServiceLayer
             return EntityToDTO(unitOfWork.OrderRepository.GetByID(id));
         }
 
-        /*
-        
+          
         public virtual void Insert(OrderView orderView)
         {
-            IEnumerable<OrderView> allOrdersView = Get();
+            List<OrderView> allOrdersView = Get(a=>(a.ManagerID==orderView.ManagerID)
+                &&(a.CustomerID==orderView.CustomerID)&&(a.ProductID==orderView.ProductID)&&(a.Price==orderView.Price)
+                &&(a.OrderDate==orderView.OrderDate));
             bool isNew=true;
-            List<OrderView> ordersView=Get(a=>(a.ManagerName==orderView.ManagerName)&&(a.CustomerName==orderView.CustomerName)&&
-                (a.ProductName==orderView.ProductName)&&(a.OrderDate==orderView.OrderDate)&&(a.Price==orderView.Price));
-            
-            if (ordersView.Count==0)
+
+            if (allOrdersView.Count>0)
                 {
                     isNew=false;
                 }
-
-            //foreach (var item in allOrdersView)
-            //{
-            //    if ((item.ManagerName==orderView.ManagerName)&&(item.CustomerName==orderView.CustomerName)
-            //        &&(item.ProductName==orderView.ProductName)&&(item.OrderDate==orderView.OrderDate)
-            //        &&(item.Price==orderView.Price))
-            //    {
-            //        isNew=false;
-            //        break;
-            //    }
-            //}
-          
-
             if (isNew)
             {
-                if (managerService.Get(a=>a.))
-                unitOfWork.ProductRepository.Insert(DTOToEntity(productView));
+                Order order=DTOToEntity(orderView);
+                unitOfWork.OrderRepository.Insert(order);
                 unitOfWork.Save();
             }
         }
+        
 
         public virtual void Delete(int id)
         {
-            unitOfWork.ProductRepository.Delete(unitOfWork.ProductRepository.GetByID(id));
+            unitOfWork.OrderRepository.Delete(unitOfWork.OrderRepository.GetByID(id));
             unitOfWork.Save();
         }
 
@@ -128,25 +121,25 @@ namespace ServiceLayer
         {
             Delete(entityViewToDelete.Id);
         }
-        public virtual void Update(ProductView entityToUpdate)
+
+        public virtual void Update(OrderView entityToUpdate)
         {
-            IEnumerable<ProductView> allProductsView = Get();
+            List<OrderView> allOrdersView = Get(a=>(a.ManagerID==entityToUpdate.ManagerID)
+                &&(a.CustomerID==entityToUpdate.CustomerID)&&(a.ProductID==entityToUpdate.ProductID)&&(a.Price==entityToUpdate.Price)
+                &&(a.OrderDate==entityToUpdate.OrderDate));
             bool isNew=true;
-            foreach (var item in allProductsView)
-            {
-                if (item.Name == entityToUpdate.Name)
+
+            if (allOrdersView.Count>0)
                 {
                     isNew=false;
-                    break;
                 }
-            }
             if (isNew)
             {
-                unitOfWork.ProductRepository.Update(DTOToEntityFull(entityToUpdate));
+                unitOfWork.OrderRepository.Update(DTOToEntityFull(entityToUpdate));
                 unitOfWork.Save();
             }
         }
-        */
+                 
 
         private bool disposed = false;
 
