@@ -9,6 +9,7 @@ using System.Web.Mvc;
 using ServiceLayer.DTOModels;
 using ServiceLayer;
 using System.IO;
+using System.Linq.Expressions;
 
 namespace WebLayer.Controllers
 {
@@ -20,9 +21,88 @@ namespace WebLayer.Controllers
         private CustomerService serviceCustomer = new CustomerService();
         private ProductService serviceProduct = new ProductService();
 
-        public ViewResult Index()
+        public ViewResult Index(string sortOrder, string searchManagerString, string searchCustomerString, 
+            string searchProductString)
         {
-            return View(service.Get());
+            ViewBag.ManagerSortParm = String.IsNullOrEmpty(sortOrder) ? "Manager_desc" : "";
+            ViewBag.CustomerSortParm = sortOrder == "Customer" ? "Customer_desc" : "Customer";
+            ViewBag.ProductSortParm = sortOrder == "Product" ? "Product_desc" : "Product";
+            ViewBag.DateSortParm = sortOrder == "OrderDate" ? "OrderDate_desc" : "OrderDate";
+            ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
+            
+            
+            
+            Func<OrderView, bool> filter;
+
+            if (!String.IsNullOrEmpty(searchManagerString))
+            {
+                Expression<Func<OrderView,bool>> filter1 = x=>(x.ManagerName.ToUpper().Contains(searchManagerString.ToUpper()));
+            }
+            else 
+            {
+                Expression<Func<OrderView,bool>> filter1 = x=>true;
+            }
+
+            if (!String.IsNullOrEmpty(searchCustomerString))
+            {
+                Expression<Func<OrderView,bool>> filter2 = x=>(x.CustomerName.ToUpper().Contains(searchCustomerString.ToUpper()));
+            }
+            else 
+            {
+                Expression<Func<OrderView,bool>> filter2 = x=>true;
+            }
+
+            if (!String.IsNullOrEmpty(searchProductString))
+            {
+                Expression<Func<OrderView,bool>> filter3 = x=>(x.ProductName.ToUpper().Contains(searchProductString.ToUpper()));
+            }
+            else 
+            {
+                Expression<Func<OrderView,bool>> filter3 = x=>true;
+            }
+            
+            flter = x=> filter1
+
+
+            IEnumerable<OrderView> ordersView; 
+            switch (sortOrder)
+            {
+                case "Manager_desc":
+                    ordersView = service.Get(filter,
+                        x=>x.OrderByDescending(s => s.ManagerName));
+                    break;
+                case "Customer_desc":
+                    ordersView = service.Get(filter,x=>x.OrderByDescending(s => s.CustomerName));
+                    break;
+                case "Customer":
+                    ordersView = service.Get(filter,x=>x.OrderBy(s => s.CustomerName));
+                    break;
+                case "Product":
+                    ordersView = service.Get(filter,x=>x.OrderBy(s => s.ProductName));
+                    break;
+                case "Product_desc":
+                    ordersView = service.Get(filter,x=>x.OrderByDescending(s => s.ProductName));
+                    break;
+                case "OrderDate_desc":
+                    ordersView = service.Get(filter,x=>x.OrderByDescending(s => s.OrderDate));
+                    break;
+                case "OrderDate":
+                    ordersView = service.Get(filter,x=>x.OrderBy(s => s.OrderDate));
+                    break;
+                case "Price":
+                    ordersView = service.Get(filter,x=>x.OrderBy(s => s.Price));
+                    break;
+                case "Price_desc":
+                    ordersView = service.Get(filter, x => x.OrderByDescending(s => s.Price));
+                    break;
+                default:
+                    ordersView = service.Get(filter, x => x.OrderBy(s => s.ManagerName));
+                    break;
+            }
+
+            
+
+            return View(ordersView);
         }
 
         public ActionResult Details(int? id)

@@ -8,11 +8,6 @@
     @if (User.IsInRole("admin")){@Html.ActionLink("Create New", "Create")}
 </p>
 <div>
-    @using (Ajax.BeginForm("ManagerSearch", "Manager", new AjaxOptions { UpdateTargetId = "searchresults" }))
-    {
-        <input type="text" name="name" />
-        <input type="submit" value="Search" />
-    }
     @Html.Partial("ManagerSearch")
 </div>
 

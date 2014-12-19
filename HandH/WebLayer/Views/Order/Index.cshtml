@@ -9,6 +9,18 @@
 </p>
 
 <div>
+    @using (Html.BeginForm())
+{
+    <p>
+        Find Manager: @Html.TextBox("searchManagerString")
+        Find Customer: @Html.TextBox("searchCustomerString")
+        Find Product: @Html.TextBox("searchProductString")
+        <input type="submit" value="Search" />
+    </p>
+}
+ </div>
+
+<div>
    
     @Html.Partial("OrderSearch")
 </div>

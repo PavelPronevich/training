@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using ServiceLayer.DTOModels;
 using ServiceLayer;
+using PagedList;
 
 namespace WebLayer.Controllers
 {
@@ -115,10 +116,17 @@ namespace WebLayer.Controllers
             
         }
         
-        public ActionResult ManagerSearch(string name)
-        {
-            return PartialView(service.Get(a => a.Name.Contains(name)));
-        }
+        //public ActionResult ManagerSearch(string name)
+        //{
+        //    return PartialView(service.Get(a => a.Name.Contains(name)));
+        //}
+       
+        //to View
+       /* @using (Ajax.BeginForm("ManagerSearch", "Manager", new AjaxOptions { UpdateTargetId = "searchresults" }))
+         {
+        <input type="text" name="name" />
+        <input type="submit" value="Search" />
+         }*/
          
     }
 }

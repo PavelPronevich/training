@@ -62,6 +62,7 @@ namespace ServiceLayer
             order.ProductID=orderView.ProductID;
             order.ManagerID=orderView.ManagerID;
             order.Price=orderView.Price;
+            order.OrderDate = orderView.OrderDate;
             return order;
         }
          

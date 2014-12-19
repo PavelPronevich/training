@@ -8,19 +8,19 @@
             <table class="table">
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.ManagerName)
+                        @Html.ActionLink(@Html.DisplayNameFor(model => model.ManagerName).ToString(), "Index", new { sortOrder = ViewBag.ManagerSortParm})
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.CustomerName)
+                        @Html.ActionLink(@Html.DisplayNameFor(model => model.CustomerName).ToString(), "Index", new { sortOrder = ViewBag.CustomerSortParm })
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.ProductName)
+                        @Html.ActionLink(@Html.DisplayNameFor(model => model.ProductName).ToString(), "Index", new { sortOrder = ViewBag.ProductSortParm })
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.OrderDate)
+                        @Html.ActionLink(@Html.DisplayNameFor(model => model.OrderDate).ToString(), "Index", new { sortOrder = ViewBag.DateSortParm })
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Price)
+                        @Html.ActionLink(@Html.DisplayNameFor(model => model.Price).ToString(), "Index", new { sortOrder = ViewBag.PriceSortParm })
                     </th>
                     <th></th>
                 </tr>
