@@ -22,19 +22,35 @@ namespace WebLayer.Controllers
         private ProductService serviceProduct = new ProductService();
 
         public ViewResult Index(string sortOrder, string searchManagerString, string searchCustomerString, 
-            string searchProductString)
+            string searchProductString, string beginTime, string endTime, string minPrice, string maxPrice)
         {
+            if (string.IsNullOrEmpty(searchManagerString)) searchManagerString="";
+            if (string.IsNullOrEmpty(searchCustomerString)) searchCustomerString="";
+            if (string.IsNullOrEmpty(searchProductString)) searchProductString="";
+            DateTime beginDateTime;
+            DateTime endDateTime;
+            if (!DateTime.TryParse(beginTime,out beginDateTime)) beginDateTime=new DateTime();
+            if (!DateTime.TryParse(endTime,out endDateTime)) endDateTime=DateTime.Now;
+            decimal minOrderPrice;
+            decimal maxOrderPrice;
+            if (!decimal.TryParse(minPrice,out minOrderPrice)) minOrderPrice=decimal.MinValue;
+            if (!decimal.TryParse(maxPrice,out maxOrderPrice)) maxOrderPrice=decimal.MaxValue;
+
+            Func<OrderView, bool> filter=x=>((x.ManagerName.ToUpper().Contains(searchManagerString.ToUpper()))
+                && (x.CustomerName.ToUpper().Contains(searchCustomerString.ToUpper()))
+                && (x.ProductName.ToUpper().Contains(searchProductString.ToUpper())) 
+                && (x.OrderDate<=endDateTime) 
+                && (beginDateTime<=x.OrderDate)
+                && ((decimal)x.Price<=maxOrderPrice)
+                && ((decimal)x.Price>=minOrderPrice));
+            
             ViewBag.ManagerSortParm = String.IsNullOrEmpty(sortOrder) ? "Manager_desc" : "";
             ViewBag.CustomerSortParm = sortOrder == "Customer" ? "Customer_desc" : "Customer";
             ViewBag.ProductSortParm = sortOrder == "Product" ? "Product_desc" : "Product";
             ViewBag.DateSortParm = sortOrder == "OrderDate" ? "OrderDate_desc" : "OrderDate";
             ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
             
-            
-            
-            Func<OrderView, bool> filter;
-
-            if (!String.IsNullOrEmpty(searchManagerString))
+            /*if (!String.IsNullOrEmpty(searchManagerString))
             {
                 Expression<Func<OrderView,bool>> filter1 = x=>(x.ManagerName.ToUpper().Contains(searchManagerString.ToUpper()));
             }
@@ -60,8 +76,9 @@ namespace WebLayer.Controllers
             {
                 Expression<Func<OrderView,bool>> filter3 = x=>true;
             }
+             */
             
-            flter = x=> filter1
+            //flter = x=> filter1
 
 
             IEnumerable<OrderView> ordersView; 
