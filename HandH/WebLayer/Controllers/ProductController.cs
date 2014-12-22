@@ -37,8 +37,6 @@ namespace WebLayer.Controllers
             return View();
         }
 
-        
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "admin")]
@@ -97,18 +95,6 @@ namespace WebLayer.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             return View(service.GetByID((int)id));
-            
-            /*Product product = unitOfWork.ProductRepository.GetByID(id);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
-                return View(EntityToDTO(product));
-            }
-             */
-             
         }
 
         [HttpPost, ActionName("Delete")]

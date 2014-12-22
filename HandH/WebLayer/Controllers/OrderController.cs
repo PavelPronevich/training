@@ -50,37 +50,6 @@ namespace WebLayer.Controllers
             ViewBag.DateSortParm = sortOrder == "OrderDate" ? "OrderDate_desc" : "OrderDate";
             ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_desc" : "Price";
             
-            /*if (!String.IsNullOrEmpty(searchManagerString))
-            {
-                Expression<Func<OrderView,bool>> filter1 = x=>(x.ManagerName.ToUpper().Contains(searchManagerString.ToUpper()));
-            }
-            else 
-            {
-                Expression<Func<OrderView,bool>> filter1 = x=>true;
-            }
-
-            if (!String.IsNullOrEmpty(searchCustomerString))
-            {
-                Expression<Func<OrderView,bool>> filter2 = x=>(x.CustomerName.ToUpper().Contains(searchCustomerString.ToUpper()));
-            }
-            else 
-            {
-                Expression<Func<OrderView,bool>> filter2 = x=>true;
-            }
-
-            if (!String.IsNullOrEmpty(searchProductString))
-            {
-                Expression<Func<OrderView,bool>> filter3 = x=>(x.ProductName.ToUpper().Contains(searchProductString.ToUpper()));
-            }
-            else 
-            {
-                Expression<Func<OrderView,bool>> filter3 = x=>true;
-            }
-             */
-            
-            //flter = x=> filter1
-
-
             IEnumerable<OrderView> ordersView; 
             switch (sortOrder)
             {
@@ -117,8 +86,6 @@ namespace WebLayer.Controllers
                     break;
             }
 
-            
-
             return View(ordersView);
         }
 
@@ -132,14 +99,7 @@ namespace WebLayer.Controllers
             return View(service.GetByID((int)id));
         }
         
-        /*
-        [Authorize(Roles = "admin")]
-        public ActionResult Create()
-        {
-            return View();
-        }
-         */
-
+        
         [Authorize(Roles = "admin")]
         public ActionResult Create()
         {
@@ -166,30 +126,6 @@ namespace WebLayer.Controllers
             ViewBag.ProductID = new SelectList(serviceProduct.Get(), "Id", "Name", orderView.ProductID);
             return View(orderView);
         }
-
-
-
-        /*
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "admin")]
-        public ActionResult Create([Bind(Include = "Name")] ManagerView managerView)
-        {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    service.Insert(managerView);
-                    return RedirectToAction("Index");
-                }
-            }
-            catch (DataException )
-            {
-                ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
-            }
-         return View(managerView);
-        }
-         */
 
         [Authorize(Roles = "admin")]
         public ActionResult Edit(int? id)
@@ -259,40 +195,6 @@ namespace WebLayer.Controllers
             base.Dispose(disposing);
             
         }
-        
-        //public ActionResult ManagerSearch(string name)
-        //{
-        //    return PartialView(service.Get(a => a.Name.Contains(name)));
-        //}
-
-        /*[HttpPost]
-        [Authorize(Roles = "admin")]
-        public ActionResult AddFileToServer(HttpPostedFileBase file)
-        {
-            // Verify that the user selected a file
-            if (file != null && file.ContentLength > 0)
-            {
-                // extract only the fielname
-                var fileName = Path.GetFileName(file.FileName);
-                // store the file inside ~/App_Data/uploads folder
-                var path = Path.Combine(Server.MapPath("~/App_Data/uploads"), fileName);
-                file.SaveAs(path);
-            }
-            // redirect back to the index action to show the form once again
-            return RedirectToAction("Index");
-        }
-         <p>
-    @if (User.IsInRole("admin"))
-    {
-        using (Html.BeginForm("AddFileToServer", "Order", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
-            <input type="file" name="file" />
-            <input type="submit" value="OK" />
-        }
-    }
-
-</p>
-         */
-
+ 
     }
 }

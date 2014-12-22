@@ -387,5 +387,14 @@ namespace WebLayer.Controllers
             
             return View(orders.ToList());
         }
+        protected override void Dispose(bool disposing)
+        {
+            managerStatService.Dispose();
+            customerStatService.Dispose();
+            productStatService.Dispose();
+            orderStatService.Dispose();
+            base.Dispose(disposing);
+
+        }
 	}
 }

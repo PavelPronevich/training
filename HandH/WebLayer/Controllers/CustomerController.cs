@@ -52,7 +52,7 @@ namespace WebLayer.Controllers
                     return RedirectToAction("Index");
                 }
             }
-            catch (DataException /* dex */)
+            catch (DataException )
             {
                 ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
             }
@@ -82,7 +82,7 @@ namespace WebLayer.Controllers
                 return RedirectToAction("Index");
             }
          }
-         catch (DataException /* dex */)
+         catch (DataException )
          {
               ModelState.AddModelError("", "Unable to save changes. Try again, and if the problem persists, see your system administrator.");
          }
@@ -98,17 +98,6 @@ namespace WebLayer.Controllers
             }
             return View(service.GetByID((int)id));
             
-            /*Customer customer = unitOfWork.CustomerRepository.GetByID(id);
-            if (customer == null)
-            {
-                return HttpNotFound();
-            }
-            else
-            {
-                return View(EntityToDTO(customer));
-            }
-             */
-             
         }
 
         [HttpPost, ActionName("Delete")]
@@ -124,7 +113,6 @@ namespace WebLayer.Controllers
         {
             service.Dispose();
             base.Dispose(disposing);
-            
         }
         
         public ActionResult CustomerSearch(string name)
