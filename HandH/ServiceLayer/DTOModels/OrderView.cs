@@ -9,10 +9,12 @@ namespace ServiceLayer.DTOModels
     public class OrderView : BaseView
     {
         [Required]
+        [Display(Name = "Order Date")]
         [DataType(DataType.Date)]
         public DateTime OrderDate { get; set; }
 
         [Required]
+        [Display(Name = "Price")]
         [DataType(DataType.Currency)]
         public double Price { get; set; }
         
@@ -24,8 +26,8 @@ namespace ServiceLayer.DTOModels
         
         [Required]
         public int ProductID { get; set; }
+        
         [Display(Name = "Product")]
-
         public string ProductName { get; set; }
         
         [Required]

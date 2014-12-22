@@ -1,15 +1,12 @@
 ﻿@{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Orders";
 }
 
-<h2>Index</h2>
+<h2>Orders</h2>
 
-<p>
-    @if (User.IsInRole("admin")){@Html.ActionLink("Create New Order", "Create")}
-</p>
 
 <div>
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Orders", "Statistics"))
 {
     <p>
         <span><strong>Manager:</strong> @Html.TextBox("searchManagerString")</span>
@@ -21,6 +18,10 @@
     <p>
         <span><strong>Date From</strong> @Html.TextBox("beginTime") <strong>To</strong> @Html.TextBox("endTime")</span>
         <span><strong>Price From</strong> @Html.TextBox("minPrice") <strong>To</strong> @Html.TextBox("maxPrice")</span>
+    </p>
+    <p>
+        <span><strong> Percentage From</strong> @Html.TextBox("minPercentage") <strong>To</strong> @Html.TextBox("maxPercentage")</span>
+        <strong> Sort</strong> @Html.DropDownList("orderBy", (IEnumerable<SelectListItem>)ViewBag.orderBy)
     </p>
     <p>    
         <input type="submit" value="Search" />

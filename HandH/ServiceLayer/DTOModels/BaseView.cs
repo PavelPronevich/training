@@ -11,9 +11,5 @@ namespace ServiceLayer.DTOModels
     {
         [HiddenInput(DisplayValue = false)]
         public int Id { get; set; }
-        protected BaseView()
-        {
-            Id = -1;
-        }
     }
 }

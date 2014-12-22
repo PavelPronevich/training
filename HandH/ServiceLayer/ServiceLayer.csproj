@@ -47,8 +47,14 @@
     <Compile Include="DTOModels\ManagerView.cs" />
     <Compile Include="DTOModels\OrderView.cs" />
     <Compile Include="DTOModels\ProductView.cs" />
+    <Compile Include="DTOStat\CustomerStat.cs" />
+    <Compile Include="DTOStat\ManagerStat.cs" />
+    <Compile Include="DTOStat\OrderStat.cs" />
+    <Compile Include="DTOStat\ProductStat.cs" />
     <Compile Include="ManagerService.cs" />
+    <Compile Include="ManagerStatService.cs" />
     <Compile Include="OrderService.cs" />
+    <Compile Include="OrderStatService.cs" />
     <Compile Include="ProductService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -62,6 +68,7 @@
       <Name>RepositoryLayer</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

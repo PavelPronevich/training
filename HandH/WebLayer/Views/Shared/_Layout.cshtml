@@ -28,6 +28,8 @@
                     <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Managers", "Index", "Manager");}</li>
                     <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Customers","Index","Customer");}</li>
                     <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Orders", "Index", "Order");}</li>
+                    <li>@if (User.IsInRole("admin") || User.IsInRole("user")){@Html.ActionLink("Statistics", "Index", "Statistics");
+                    }</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
