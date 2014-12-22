@@ -11,7 +11,7 @@ using ServiceLayer.DTOStat;
 
 namespace ServiceLayer
 {
-    public class ProdustStatService : IDisposable
+    public class ProductStatService : IDisposable
     {
         private ProductStat ToProductStat(string product, int id, IEnumerable<OrderView> orders, double totalPrice)
         {

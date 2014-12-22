@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CustomerService.cs" />
-    <Compile Include="CustomerStatService.cs" />
+    <Compile Include="Services\CustomerService.cs" />
+    <Compile Include="Services\CustomerStatService.cs" />
     <Compile Include="DTOModels\BaseView.cs" />
     <Compile Include="DTOModels\CustomerView.cs" />
     <Compile Include="DTOModels\ManagerView.cs" />
@@ -52,12 +52,12 @@
     <Compile Include="DTOStat\ManagerStat.cs" />
     <Compile Include="DTOStat\OrderStat.cs" />
     <Compile Include="DTOStat\ProductStat.cs" />
-    <Compile Include="ManagerService.cs" />
-    <Compile Include="ManagerStatService.cs" />
-    <Compile Include="OrderService.cs" />
-    <Compile Include="OrderStatService.cs" />
-    <Compile Include="ProductService.cs" />
-    <Compile Include="ProdustStatService.cs" />
+    <Compile Include="Services\ManagerService.cs" />
+    <Compile Include="Services\ManagerStatService.cs" />
+    <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\OrderStatService.cs" />
+    <Compile Include="Services\ProductService.cs" />
+    <Compile Include="Services\ProductStatService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

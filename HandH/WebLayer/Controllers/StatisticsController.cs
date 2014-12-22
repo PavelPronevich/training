@@ -188,11 +188,11 @@ namespace WebLayer.Controllers
 
             return View(customers);
         }
-        private ProdustStatService productStatService = new ProdustStatService();
-        public ActionResult Produsts(string searchProdustString, string beginTime, string endTime, string minPrice, string maxPrice,
+        private ProductStatService productStatService = new ProductStatService();
+        public ActionResult Products(string searchProductString, string beginTime, string endTime, string minPrice, string maxPrice,
             string minPercentage, string maxPercentage, string minAverageOrderPrice, string maxinAverageOrderPrice, string orderBy)
         {
-            if (string.IsNullOrEmpty(searchProdustString)) searchProdustString = "";
+            if (string.IsNullOrEmpty(searchProductString)) searchProductString = "";
             DateTime beginDateTime;
             DateTime endDateTime;
             if (!DateTime.TryParse(beginTime, out beginDateTime)) beginDateTime = new DateTime();
@@ -219,8 +219,8 @@ namespace WebLayer.Controllers
             if (!double.TryParse(minAverageOrderPrice, out minTotalAverageOrderPrice)) minTotalAverageOrderPrice = 0;
             if (!double.TryParse(maxinAverageOrderPrice, out maxTotalAverageOrderPricee)) maxTotalAverageOrderPricee = double.MaxValue;
             List<SelectListItem> sortBy = new List<SelectListItem>();
-            sortBy.Add(new SelectListItem { Value = "1", Text = "Produst" });
-            sortBy.Add(new SelectListItem { Value = "2", Text = "Produst Descending" });
+            sortBy.Add(new SelectListItem { Value = "1", Text = "Product" });
+            sortBy.Add(new SelectListItem { Value = "2", Text = "Product Descending" });
             sortBy.Add(new SelectListItem { Value = "3", Text = "Total Order Price" });
             sortBy.Add(new SelectListItem { Value = "4", Text = "Total Order Price Descending" });
             sortBy.Add(new SelectListItem { Value = "5", Text = "Percentage" });
@@ -230,7 +230,7 @@ namespace WebLayer.Controllers
 
             ViewBag.orderBy = new SelectList(sortBy, "Value", "Text");
 
-            Func<OrderView, bool> filter = x => ((x.ProductName.ToUpper().Contains(searchProdustString.ToUpper()))
+            Func<OrderView, bool> filter = x => ((x.ProductName.ToUpper().Contains(searchProductString.ToUpper()))
                 && (x.OrderDate <= endDateTime)
                 && (beginDateTime <= x.OrderDate));
 
