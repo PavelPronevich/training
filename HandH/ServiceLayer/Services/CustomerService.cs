@@ -56,7 +56,7 @@ namespace ServiceLayer
             }
         }
 
-        public virtual CustomerView GetByID(int id)//?
+        public virtual CustomerView GetByID(int id)
         {
             return EntityToDTO(unitOfWork.CustomerRepository.GetByID(id));
         }

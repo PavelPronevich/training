@@ -83,8 +83,7 @@ namespace WebLayer.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded & model.UserRole!=null)
                 {
-                     UserManager.AddToRole(user.Id, model.UserRole);
-                    //await SignInAsync(user, isPersistent: false);
+                    UserManager.AddToRole(user.Id, model.UserRole);
                     return RedirectToAction("Index", "Home");
 
                 }
@@ -101,7 +100,8 @@ namespace WebLayer.Controllers
         public async Task<ActionResult> Disassociate(string loginProvider, string providerKey)
         {
             ManageMessageId? message = null;
-            IdentityResult result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(), new UserLoginInfo(loginProvider, providerKey));
+            IdentityResult result = await UserManager.RemoveLoginAsync(User.Identity.GetUserId(), 
+                new UserLoginInfo(loginProvider, providerKey));
             if (result.Succeeded)
             {
                 message = ManageMessageId.RemoveLoginSuccess;
@@ -240,7 +240,6 @@ namespace WebLayer.Controllers
 
             if (ModelState.IsValid)
             {
-                // Get the information about the user from the external login provider
                 var info = await AuthenticationManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
@@ -264,8 +263,7 @@ namespace WebLayer.Controllers
             return View(model);
         }
 
-        //
-        // POST: /Account/LogOff
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
@@ -274,8 +272,6 @@ namespace WebLayer.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        //
-        // GET: /Account/ExternalLoginFailure
         [AllowAnonymous]
         public ActionResult ExternalLoginFailure()
         {

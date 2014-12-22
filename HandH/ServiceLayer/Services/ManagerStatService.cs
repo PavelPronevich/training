@@ -52,14 +52,12 @@ namespace ServiceLayer
                 totalPrice = allOrders.Sum(s => s.Price);
 
                 var groupJoinQuery2 = from manager in allManagers
-                                      //orderby manager.Id
                                       join order in allOrders on manager.Id equals order.ManagerID into orderGroup
                                       select new
                                       {
                                           Manager = manager.Name,
                                           Id = manager.Id,
                                           Orders = from order2 in orderGroup
-                                                   //orderby order2.prod2.Name
                                                    select order2
                                       };
 
