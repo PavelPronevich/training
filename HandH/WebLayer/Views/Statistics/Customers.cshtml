@@ -1,0 +1,34 @@
+﻿@{
+    ViewBag.Title = "Customers";
+}
+
+<h2>Customers</h2>
+
+
+<div>
+    @using (Html.BeginForm("Customers", "Statistics"))
+{
+    <p>
+        <span><strong>Customer:</strong> @Html.TextBox("searchCustomerString")</span> 
+        <span><strong>Date From</strong> @Html.TextBox("beginTime") <strong>To</strong> @Html.TextBox("endTime")</span>
+    </p>
+    <p>
+        <span><strong>Total Price From</strong> @Html.TextBox("minPrice") <strong>To</strong> @Html.TextBox("maxPrice")</span>
+        <span><strong> Percentage From</strong> @Html.TextBox("minPercentage") <strong>To</strong> @Html.TextBox("maxPercentage")</span>
+    </p>
+    <p>
+        <span><strong> Average Order Price From</strong> @Html.TextBox("minAverageOrderPrice") <strong>To</strong> @Html.TextBox("maxinAverageOrderPrice")</span>    
+        <strong> Sort</strong> @Html.DropDownList("orderBy", (IEnumerable<SelectListItem>)ViewBag.orderBy)
+    </p>
+    <p>    
+        <input type="submit" value="Search" />
+    </p>
+}
+ </div>
+
+<div>
+   
+    @Html.Partial("CustomerSearch")
+</div>
+
+

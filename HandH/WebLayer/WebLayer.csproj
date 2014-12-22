@@ -259,6 +259,10 @@
     <Content Include="Views\Statistics\OrderSearch.cshtml" />
     <Content Include="Views\Statistics\ManagerSearch.cshtml" />
     <Content Include="Views\Statistics\Managers.cshtml" />
+    <Content Include="Views\Statistics\Customers.cshtml" />
+    <Content Include="Views\Statistics\CustomerSearch.cshtml" />
+    <Content Include="Views\Statistics\Products.cshtml" />
+    <Content Include="Views\Statistics\ProductSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

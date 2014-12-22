@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomerService.cs" />
+    <Compile Include="CustomerStatService.cs" />
     <Compile Include="DTOModels\BaseView.cs" />
     <Compile Include="DTOModels\CustomerView.cs" />
     <Compile Include="DTOModels\ManagerView.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="OrderService.cs" />
     <Compile Include="OrderStatService.cs" />
     <Compile Include="ProductService.cs" />
+    <Compile Include="ProdustStatService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

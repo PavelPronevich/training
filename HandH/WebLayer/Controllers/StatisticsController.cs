@@ -103,13 +103,175 @@ namespace WebLayer.Controllers
 
             return View(managers);
         }
-        public ActionResult Customers()
+        private CustomerStatService customerStatService = new CustomerStatService();
+        public ActionResult Customers(string searchCustomerString, string beginTime, string endTime, string minPrice, string maxPrice,
+            string minPercentage, string maxPercentage, string minAverageOrderPrice, string maxinAverageOrderPrice, string orderBy)
         {
-            return View();
+            if (string.IsNullOrEmpty(searchCustomerString)) searchCustomerString = "";
+            DateTime beginDateTime;
+            DateTime endDateTime;
+            if (!DateTime.TryParse(beginTime, out beginDateTime)) beginDateTime = new DateTime();
+            if (!DateTime.TryParse(endTime, out endDateTime))
+            {
+                endDateTime = DateTime.Now;
+            }
+            else
+            {
+                endDateTime = endDateTime.AddDays(1);
+            }
+            decimal minTotalPrice;
+            decimal maxTotalPrice;
+            if (!decimal.TryParse(minPrice, out minTotalPrice)) minTotalPrice = decimal.MinValue;
+            if (!decimal.TryParse(maxPrice, out maxTotalPrice)) maxTotalPrice = decimal.MaxValue;
+            double minTotalPercentage;
+            double maxTotalPercentage;
+            if (!double.TryParse(minPercentage, out minTotalPercentage)) minTotalPercentage = 0;
+            if (!double.TryParse(maxPercentage, out maxTotalPercentage)) maxTotalPercentage = 100;
+            minTotalPercentage /= 100;
+            maxTotalPercentage /= 100;
+            double minTotalAverageOrderPrice;
+            double maxTotalAverageOrderPricee;
+            if (!double.TryParse(minAverageOrderPrice, out minTotalAverageOrderPrice)) minTotalAverageOrderPrice = 0;
+            if (!double.TryParse(maxinAverageOrderPrice, out maxTotalAverageOrderPricee)) maxTotalAverageOrderPricee = double.MaxValue;
+            List<SelectListItem> sortBy = new List<SelectListItem>();
+            sortBy.Add(new SelectListItem { Value = "1", Text = "Customer" });
+            sortBy.Add(new SelectListItem { Value = "2", Text = "Customer Descending" });
+            sortBy.Add(new SelectListItem { Value = "3", Text = "Total Order Price" });
+            sortBy.Add(new SelectListItem { Value = "4", Text = "Total Order Price Descending" });
+            sortBy.Add(new SelectListItem { Value = "5", Text = "Percentage" });
+            sortBy.Add(new SelectListItem { Value = "6", Text = "Percentage Descending" });
+            sortBy.Add(new SelectListItem { Value = "7", Text = "Average Order Price" });
+            sortBy.Add(new SelectListItem { Value = "8", Text = "Average Order Price Descending" });
+
+            ViewBag.orderBy = new SelectList(sortBy, "Value", "Text");
+
+            Func<OrderView, bool> filter = x => ((x.CustomerName.ToUpper().Contains(searchCustomerString.ToUpper()))
+                && (x.OrderDate <= endDateTime)
+                && (beginDateTime <= x.OrderDate));
+
+            double totalPrice;
+
+            IEnumerable<CustomerStat> customers = customerStatService.Get(minTotalPercentage, maxTotalPercentage,
+                minTotalPrice, maxTotalPrice, minTotalAverageOrderPrice, maxTotalAverageOrderPricee,
+                out totalPrice, filter);
+            @ViewBag.totalPrice = string.Format("{0:C2}", totalPrice);
+            switch (orderBy)
+            {
+                case "1":
+                    customers = customers.OrderBy(s => s.Name);
+                    break;
+                case "2":
+                    customers = customers.OrderByDescending(s => s.Name);
+                    break;
+                case "3":
+                    customers = customers.OrderBy(s => s.TotalOrderPrice);
+                    break;
+                case "4":
+                    customers = customers.OrderByDescending(s => s.TotalOrderPrice);
+                    break;
+                case "5":
+                    customers = customers.OrderBy(s => s.Percentage);
+                    break;
+                case "6":
+                    customers = customers.OrderByDescending(s => s.Percentage);
+                    break;
+                case "7":
+                    customers = customers.OrderBy(s => s.AverageOrderPrice);
+                    break;
+                case "8":
+                    customers = customers.OrderByDescending(s => s.AverageOrderPrice);
+                    break;
+                default:
+                    customers = customers.OrderBy(s => s.Name);
+                    break;
+            }
+
+            return View(customers);
         }
-        public ActionResult Products()
+        private ProdustStatService productStatService = new ProdustStatService();
+        public ActionResult Produsts(string searchProdustString, string beginTime, string endTime, string minPrice, string maxPrice,
+            string minPercentage, string maxPercentage, string minAverageOrderPrice, string maxinAverageOrderPrice, string orderBy)
         {
-            return View();
+            if (string.IsNullOrEmpty(searchProdustString)) searchProdustString = "";
+            DateTime beginDateTime;
+            DateTime endDateTime;
+            if (!DateTime.TryParse(beginTime, out beginDateTime)) beginDateTime = new DateTime();
+            if (!DateTime.TryParse(endTime, out endDateTime))
+            {
+                endDateTime = DateTime.Now;
+            }
+            else
+            {
+                endDateTime = endDateTime.AddDays(1);
+            }
+            decimal minTotalPrice;
+            decimal maxTotalPrice;
+            if (!decimal.TryParse(minPrice, out minTotalPrice)) minTotalPrice = decimal.MinValue;
+            if (!decimal.TryParse(maxPrice, out maxTotalPrice)) maxTotalPrice = decimal.MaxValue;
+            double minTotalPercentage;
+            double maxTotalPercentage;
+            if (!double.TryParse(minPercentage, out minTotalPercentage)) minTotalPercentage = 0;
+            if (!double.TryParse(maxPercentage, out maxTotalPercentage)) maxTotalPercentage = 100;
+            minTotalPercentage /= 100;
+            maxTotalPercentage /= 100;
+            double minTotalAverageOrderPrice;
+            double maxTotalAverageOrderPricee;
+            if (!double.TryParse(minAverageOrderPrice, out minTotalAverageOrderPrice)) minTotalAverageOrderPrice = 0;
+            if (!double.TryParse(maxinAverageOrderPrice, out maxTotalAverageOrderPricee)) maxTotalAverageOrderPricee = double.MaxValue;
+            List<SelectListItem> sortBy = new List<SelectListItem>();
+            sortBy.Add(new SelectListItem { Value = "1", Text = "Produst" });
+            sortBy.Add(new SelectListItem { Value = "2", Text = "Produst Descending" });
+            sortBy.Add(new SelectListItem { Value = "3", Text = "Total Order Price" });
+            sortBy.Add(new SelectListItem { Value = "4", Text = "Total Order Price Descending" });
+            sortBy.Add(new SelectListItem { Value = "5", Text = "Percentage" });
+            sortBy.Add(new SelectListItem { Value = "6", Text = "Percentage Descending" });
+            sortBy.Add(new SelectListItem { Value = "7", Text = "Average Order Price" });
+            sortBy.Add(new SelectListItem { Value = "8", Text = "Average Order Price Descending" });
+
+            ViewBag.orderBy = new SelectList(sortBy, "Value", "Text");
+
+            Func<OrderView, bool> filter = x => ((x.ProductName.ToUpper().Contains(searchProdustString.ToUpper()))
+                && (x.OrderDate <= endDateTime)
+                && (beginDateTime <= x.OrderDate));
+
+            double totalPrice;
+
+            IEnumerable<ProductStat> products = productStatService.Get(minTotalPercentage, maxTotalPercentage,
+                minTotalPrice, maxTotalPrice, minTotalAverageOrderPrice, maxTotalAverageOrderPricee,
+                out totalPrice, filter);
+            @ViewBag.totalPrice = string.Format("{0:C2}", totalPrice);
+            switch (orderBy)
+            {
+                case "1":
+                    products = products.OrderBy(s => s.Name);
+                    break;
+                case "2":
+                    products = products.OrderByDescending(s => s.Name);
+                    break;
+                case "3":
+                    products = products.OrderBy(s => s.TotalOrderPrice);
+                    break;
+                case "4":
+                    products = products.OrderByDescending(s => s.TotalOrderPrice);
+                    break;
+                case "5":
+                    products = products.OrderBy(s => s.Percentage);
+                    break;
+                case "6":
+                    products = products.OrderByDescending(s => s.Percentage);
+                    break;
+                case "7":
+                    products = products.OrderBy(s => s.AverageOrderPrice);
+                    break;
+                case "8":
+                    products = products.OrderByDescending(s => s.AverageOrderPrice);
+                    break;
+                default:
+                    products = products.OrderBy(s => s.Name);
+                    break;
+            }
+
+            return View(products);
         }
         private OrderStatService orderStatService = new OrderStatService();
 
